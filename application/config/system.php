@@ -1,6 +1,7 @@
 <?php
 $config['system_site_short_name']='ems';
 $config['offline_controllers']=array('home','sys_site_offline');
+$config['system_image_base_url']='http://localhost/ems/';
 
 $config['system_status_yes']='Yes';
 $config['system_status_no']='No';
@@ -10,6 +11,7 @@ $config['system_status_delete']='Deleted';
 $config['system_status_pending']='Pending';
 $config['system_status_approved']='Approved';
 $config['system_status_rejected']='Rejected';
+$config['system_status_requested']='Requested';
 
 $config['system_status_not_done']='Not Done';
 $config['system_status_done']='Done';
@@ -33,7 +35,10 @@ $config['system_payment_way_online_payment']='Online Payment';
 $config['system_po_no_length']=6;
 $config['system_status_po_request_pending']='Pending';
 $config['system_status_po_request_requested']='Requested';
+$config['system_status_po_request_rejected']='Rejected';
+$config['system_status_fdb_request']='Request for Approval';
 $config['system_status_po_approval_pending']='Pending';
+$config['system_status_po_request_approved']='Approved';
 $config['system_status_po_approval_approved']='Approved';
 $config['system_status_po_approval_rejected']='Rejected';
 $config['system_status_po_delivery_pending']='Pending';
