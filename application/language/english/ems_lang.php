@@ -4,11 +4,11 @@
 $lang['MSG_USERNAME_PASSWORD_INVALID'] = 'Username and Password did not match or Invalid';
 $lang['MSG_LOGIN_SUCCESS'] = 'Successfully Logged In';
 $lang['MSG_LOGOUT_SUCCESS'] = 'Successfully Logged out';
-$lang['MSG_NOT_ASSIGNED_GROUP'] = 'Please Contact with Admin(09666775544.Ext.901) to assign some task.';
-$lang['MSG_LOCATION_INVALID'] = 'Your assigned Location is invalid.Please contact with admin(09666775544.Ext.901).';
-$lang['MSG_LOCATION_NOT_ASSIGNED'] = 'No Location assigned for you.Please contact with admin(09666775544.Ext.901).';
-$lang['MSG_SITE_OFFLINE'] = 'Site is Currently Offline.Please contact with admin(09666775544.Ext.901).';
-$lang['MSG_PRICE_NOT_SET'] = 'Variety Price Not set.Please contact with admin(09666775544.Ext.901).';
+$lang['MSG_NOT_ASSIGNED_GROUP'] = 'Please Contact with Admin(01777709208) to assign some task.';
+$lang['MSG_LOCATION_INVALID'] = 'Your assigned Location is invalid.Please contact with admin(01777709208).';
+$lang['MSG_LOCATION_NOT_ASSIGNED'] = 'No Location assigned for you.Please contact with admin(01777709208).';
+$lang['MSG_SITE_OFFLINE'] = 'Site is Currently Offline.Please contact with admin(01777709208).';
+$lang['MSG_PRICE_NOT_SET'] = 'Variety Price Not set.Please contact with admin(01777709208).';
 
 //Action buttons
 $lang['ACTION_DASHBOARD'] = 'Dashboard';
@@ -27,6 +27,7 @@ $lang['ACTION_REQUEST_PO_APPROVE'] = 'Request Approve';
 $lang['ACTION_PRINT'] = 'Print';
 $lang['ACTION_CSV'] = 'Download as CSV';
 $lang['ACTION_APPROVE_REJECT'] = 'Approve/Reject';
+$lang['ACTION_REQUEST_REJECT'] = 'Request/Reject';
 $lang['ACTION_REPORT'] = 'View Report';
 $lang['LABEL_ACTION'] = 'Action';
 
@@ -68,6 +69,7 @@ $lang['LABEL_FISCAL_YEAR'] = 'Fiscal Year';
 $lang['LABEL_NAME'] = 'Name';
 $lang['LABEL_ORDER'] = 'Ordering';
 $lang['LABEL_REMARKS'] = 'Remarks';
+$lang['LABEL_RECOMMENDATION'] = 'Recommendation';
 $lang['SELECT_ONE_ITEM'] = 'Select an item';
 $lang['LABEL_ADD_MORE'] = 'Add more';
 $lang['LABEL_QUANTITY'] = 'Quantity';
@@ -158,19 +160,30 @@ $lang['MSG_MIN_ONE_PO_REQUIRED'] = 'Minimum One PO required';
 $lang['MSG_UNFINISHED_PO'] = 'Unfinished PO';
 $lang['LABEL_PO_NO'] = 'PO NO';
 
+
 $lang['LABEL_REQUESTED'] = 'Request';
 $lang['LABEL_APPROVAL'] = 'Approval';
 $lang['LABEL_DELIVERY'] = 'Delivery';
 $lang['LABEL_RECEIVED'] = 'Receive';
 $lang['MSG_PO_EDIT_UNABLE'] = 'This po already requested for approval.You cannot edit it';
+$lang['MSG_FDB_EDIT_UNABLE'] = 'This Field Day Budget already requested for approval.You cannot edit it';
+$lang['MSG_FDB_EDIT_UNABLE_FOR_REJECT'] = 'This Field Day Budget rejected already.You cannot edit it';
 $lang['MSG_PO_REQUESTED_UNABLE'] = 'This po already requested for approval.';
+$lang['MSG_FDB_APPROVED_UNABLE'] = 'This Field Day Budget approved already.';
+$lang['MSG_FDB_REQUESTED_UNABLE'] = 'This Field Day Budget already requested for approval.';
 $lang['MSG_PO_EDIT_WARNING'] = 'If Any products price or bonus rule changed please delete that prodcut and re-enter it to get lastest price or bonus.<br>Ignore it if price or bonus rule unchanged';
 $lang['LABEL_PO_TIME_CREATED'] = 'Po Created Time';
+$lang['LABEL_FDB_TIME_CREATED'] = 'FDB Created Time';
 $lang['LABEL_PO_USER_CREATED'] = 'Po Created By';
+$lang['LABEL_FDB_USER_CREATED'] = 'FDB Created By';
 $lang['LABEL_PO_TIME_REQUESTED'] = 'Po Approval Request Time';
+$lang['LABEL_FDB_TIME_REQUESTED'] = 'FDB Approval Request Time';
 $lang['LABEL_PO_USER_REQUESTED'] = 'Po Requested By';
+$lang['LABEL_FDB_USER_REQUESTED'] = 'FDB Requested By';
 $lang['LABEL_PO_TIME_APPROVED'] = 'Po Approval Time';
+$lang['LABEL_FDB_TIME_APPROVED'] = 'FDB Approval Time';
 $lang['LABEL_PO_USER_APPROVED'] = 'Po Approval User';
+$lang['LABEL_FDB_USER_APPROVED'] = 'FDB Approval User';
 $lang['LABEL_PO_TIME_DELIVERED'] = 'Po Delivered Time';
 $lang['LABEL_PO_USER_DELIVERED'] = 'Po Delivered By';
 $lang['LABEL_PO_TIME_RECEIVED'] = 'Po Received Time';
@@ -233,4 +246,39 @@ $lang['LABEL_DAY'] = 'Day';
 $lang['LABEL_SHIFT'] = 'Shift';
 $lang['LABEL_LOCATIONS'] = 'Locations';
 $lang['LABEL_ACCOUNT_TYPE'] = 'Account Type';
-$lang['LABEL_BAR_CODE'] = 'Bar Code';
+$lang['LABEL_CATEGORY'] = 'Category';
+
+// Field Day Budget start
+$lang['LABEL_FDB_NO'] = 'FDB NO';
+
+$lang['LABEL_COMPETITOR_VARIETY'] = 'Competitor Variety';
+$lang['LABEL_ADDRESS'] = 'Address';
+$lang['LABEL_PRESENT_CONDITION'] = 'Present Condition';
+$lang['LABEL_FARMERS_EVALUATION'] = 'Farmers Evaluation';
+$lang['LABEL_SPECIFIC_DIFFERENCE'] = 'Specific Difference with Competitors Leading Variety';
+$lang['LABEL_EXPECTED_DATE'] = 'Expected Date of Field Day';
+$lang['LABEL_EXPECTED_PARTICIPANT'] = 'Expected No. of participant';
+$lang['LABEL_FIELD_DAY_BUDGET'] = 'Budget For Field Day (Tk.) :';
+$lang['LABEL_NEXT_SALES_TARGET'] = 'Next Year Sales Target';
+$lang['LABEL_UPLOAD_IMAGES'] = 'Upload Images';
+$lang['LABEL_UPLOAD_VIDEO'] = 'Upload Video';
+$lang['LABEL_TOTAL_BUDGET'] = 'Total Budget';
+
+//Leading Farmer setup
+$lang['LABEL_FARMER_ID'] = 'Farmer ID';
+$lang['LABEL_FARMER_NAME'] = 'Farmer Name';
+$lang['LABEL_CELL_NO'] = 'Cell No.';
+$lang['LABEL_PARTICIPANT'] = 'No. of Participant';
+$lang['LABEL_PARTICIPANT_COMMENT'] = 'Participants Comment';
+$lang['LABEL_GUEST'] = 'No. of Guest';
+$lang['MSG_FDB_REJECTED_UNABLE'] = 'This Field Day Budget rejected already.';
+$lang['SET_LEADING_FARMER'] = 'Go to SETUP menu and SET leading farmers information';
+$lang['LABEL_PARTICIPANT_THROUGH_LEAD_FARMER'] = 'Participant Through Leading Farmer :';
+$lang['LABEL_NOT_EDITABLE'] = 'You cannot edit it';
+$lang['LABEL_REPORTING'] = 'Reporting';
+$lang['LABEL_TOTAL_EXPENSE'] = 'Total Expense';
+$lang['YOU_HAVE_TO_COMPLETE'] = 'No Report Exists';
+$lang['LABEL_FIELD_DAY_DATE'] = 'Date of Field Day';
+$lang['LABEL_REPORTING_DATE'] = 'Reporting Date';
+$lang['LABEL_FDR_TIME_CREATED'] = 'Field Day Report Created Time';
+$lang['LABEL_FDR_USER_CREATED'] = 'Field Day Report Created By';
