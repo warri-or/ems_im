@@ -1,7 +1,7 @@
 <?php
 $config['system_site_short_name']='ems';
 $config['offline_controllers']=array('home','sys_site_offline');
-$config['system_image_base_url']='http://localhost/ems/';
+$config['system_image_base_url']='http://localhost/ems_im/';
 
 $config['system_status_yes']='Yes';
 $config['system_status_no']='No';
