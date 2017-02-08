@@ -23,7 +23,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/ems/';
+$config['base_url'] = 'http://localhost/ems_im/';
 /*if(strpos($_SERVER['HTTP_HOST'],'www')===false)
 {
     $config['base_url'] = 'http://ems.malikseeds.com/';
