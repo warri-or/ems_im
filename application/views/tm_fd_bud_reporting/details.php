@@ -296,7 +296,7 @@ foreach($info_details as $revision=>$info)
                                 <video width="300" controls>
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" type="video/mp4">
                                 </video>
-                                    </div>
+                                 </div>
                             </td>
                             <td style="max-width: 300px;max-height: 300px;">
                                 <h5><?php echo $video_file_details['file_remarks']?></h5>

@@ -146,9 +146,9 @@ class Tm_fd_bud_budget extends Root_Controller
             $data['crops']=Query_helper::get_info($this->config->item('table_setup_classification_crops'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['participants']=array();
             $data['leading_farmers']=array();
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
-            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['file_details']=array();
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
             $ajax['status']=true;
@@ -242,7 +242,7 @@ class Tm_fd_bud_budget extends Root_Controller
             $data['crop_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id']));
             $data['competitor_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id'],'whose ="Competitor"'));
 
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
@@ -258,7 +258,7 @@ class Tm_fd_bud_budget extends Root_Controller
                 $data['participants'][$result['farmer_id']]=$result;
             }
 
-            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['file_details']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1','status ="'.$this->config->item('system_status_active').'"'));
             foreach($results as $result)
@@ -394,9 +394,9 @@ class Tm_fd_bud_budget extends Root_Controller
                 $data['participant_details'][$participant['revision']][]=$participant;
             }
 
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
-            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 
             $data['file_details']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1','status ="'.$this->config->item('system_status_active').'"'));
@@ -588,8 +588,8 @@ class Tm_fd_bud_budget extends Root_Controller
             {
                 mkdir($dir, 0777);
             }
-            $types='gif|jpg|png|jpeg';
-            $uploaded_files = System_helper::upload_field_day_file($file_folder,$types);
+//            $types='gif|jpg|png|jpeg';
+            $uploaded_files = System_helper::upload_file($file_folder);
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -602,7 +602,6 @@ class Tm_fd_bud_budget extends Root_Controller
                 }
             }
             $arm_file_details_remarks=$this->input->post('arm_file_details_remarks');
-            $com_file_details_remarks=$this->input->post('com_file_details_remarks');
             foreach($arm_file_details_remarks as $item_id=>$remarks)
             {
                 $data=array();
@@ -628,6 +627,7 @@ class Tm_fd_bud_budget extends Root_Controller
                     $data['competitor_file_location']=$image_info[$item_id]['competitor_file_location'];
                     $data['competitor_file_name']=$image_info[$item_id]['competitor_file_name'];
                 }
+                exit;
                 $data['arm_file_remarks']=$remarks;
                 $data['competitor_file_remarks']=$com_file_details_remarks[$item_id];
                 $data['user_created'] = $user->user_id;

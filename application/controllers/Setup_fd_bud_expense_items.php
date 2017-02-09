@@ -66,7 +66,7 @@ class Setup_fd_bud_expense_items extends Root_Controller
     }
     private function system_get_items()
     {
-        $items=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id','name','description','ordering','status'),array('status !="'.$this->config->item('system_status_delete').'"'));
+        $items=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id','name','description','ordering','status'),array('status !="'.$this->config->item('system_status_delete').'"'),0,0,array('ordering ASC'));
         $this->jsonReturn($items);
     }
 

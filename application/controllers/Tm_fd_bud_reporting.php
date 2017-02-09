@@ -208,7 +208,7 @@ class Tm_fd_bud_reporting extends Root_Controller
             $this->jsonReturn($ajax);
         }
 
-        $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+        $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
         $data['expense_budget']=array();
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
         foreach($results as $result)
@@ -458,8 +458,8 @@ class Tm_fd_bud_reporting extends Root_Controller
             {
                 mkdir($dir, 0777);
             }
-            $types='gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp';
-            $uploaded_files = System_helper::upload_field_day_file($file_folder,$types);
+            //$types='gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp';
+            $uploaded_files = System_helper::upload_file($file_folder);
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -678,7 +678,7 @@ class Tm_fd_bud_reporting extends Root_Controller
 //            print_r($data['info_details']);
 //            echo '</pre>';exit;
 
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
