@@ -602,6 +602,7 @@ class Tm_fd_bud_budget extends Root_Controller
                 }
             }
             $arm_file_details_remarks=$this->input->post('arm_file_details_remarks');
+            $com_file_details_remarks=$this->input->post('com_file_details_remarks');
             foreach($arm_file_details_remarks as $item_id=>$remarks)
             {
                 $data=array();
@@ -627,7 +628,6 @@ class Tm_fd_bud_budget extends Root_Controller
                     $data['competitor_file_location']=$image_info[$item_id]['competitor_file_location'];
                     $data['competitor_file_name']=$image_info[$item_id]['competitor_file_name'];
                 }
-                exit;
                 $data['arm_file_remarks']=$remarks;
                 $data['competitor_file_remarks']=$com_file_details_remarks[$item_id];
                 $data['user_created'] = $user->user_id;
