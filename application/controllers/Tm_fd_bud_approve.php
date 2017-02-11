@@ -370,10 +370,6 @@ class Tm_fd_bud_approve extends Root_Controller
                     $this->jsonReturn($ajax);
                     die();
                 }
-                else
-                {
-                    $budget_id=$budget_id;
-                }
             }
             //budget details start
             $this->db->where('budget_id',$budget_id);
@@ -488,16 +484,8 @@ class Tm_fd_bud_approve extends Root_Controller
             if ($this->db->trans_status() === TRUE)
             {
                 $this->db->trans_commit();
-                $save_and_new=$this->input->post('system_save_new_status');
                 $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
-                if($save_and_new==1)
-                {
-                    $this->system_add();
-                }
-                else
-                {
-                    $this->system_list();
-                }
+                $this->system_list();
             }
             else
             {

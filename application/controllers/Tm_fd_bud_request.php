@@ -489,16 +489,8 @@ class Tm_fd_bud_request extends Root_Controller
             if ($this->db->trans_status() === TRUE)
             {
                 $this->db->trans_commit();
-                $save_and_new=$this->input->post('system_save_new_status');
                 $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
-                if($save_and_new==1)
-                {
-                    $this->system_add();
-                }
-                else
-                {
-                    $this->system_list();
-                }
+                $this->system_list();
             }
             else
             {
