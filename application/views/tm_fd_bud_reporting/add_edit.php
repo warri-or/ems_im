@@ -270,7 +270,7 @@ foreach($expense_items as $expense)
     if(sizeof($exp)>0)
     {
         $ext=strtolower($exp[sizeof($exp)-1]);
-        if(($ext=='mkv') || ($ext=='wmv') || ($ext=='mp4') || ($ext=='3gp') || ($ext=='ftv'))
+        if(($ext=='mkv') || ($ext=='wmv') || ($ext=='mp4') || ($ext=='3gp') || ($ext=='ftv') || ($ext=='avi') || ($ext=='mov'))
         {
             $is_video=true;
         }

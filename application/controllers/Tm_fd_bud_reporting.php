@@ -322,6 +322,9 @@ class Tm_fd_bud_reporting extends Root_Controller
     private function system_save()
     {
         $id = $this->input->post("id");
+//        echo '<pre>';
+//        print_r($_FILES);
+//        echo '</pre>';exit;
         $user = User_helper::get_user();
         if($id>0)
         {
@@ -458,8 +461,11 @@ class Tm_fd_bud_reporting extends Root_Controller
             {
                 mkdir($dir, 0777);
             }
-            //$types='gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp';
+            //$types='gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp|avi';
             $uploaded_files = System_helper::upload_file($file_folder);
+//            echo '<pre>';
+//            print_r($uploaded_files);
+//            echo '</pre>';exit;
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -526,7 +532,7 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $exp=explode('.',$video_file);
                 $ext=strtolower($exp[sizeof($exp)-1]);
             }
-            if($ext=='mkv' || $ext=='ftv' || $ext=='mov' || $ext=='mp4' || $ext=='3gp' || $ext=='wmv')
+            if($ext=='mkv' || $ext=='ftv' || $ext=='mov' || $ext=='mp4' || $ext=='3gp' || $ext=='wmv' || $ext=='avi')
             {
                 if(isset($uploaded_files['video']))
                 {

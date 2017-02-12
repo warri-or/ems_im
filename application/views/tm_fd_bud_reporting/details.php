@@ -294,13 +294,45 @@ foreach($info_details as $revision=>$info)
                             <td style="max-width: 300px; max-height: 300px;">
                                 <div class="col-xs-4">
                                 <video width="300" controls>
-                                    <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" type="video/mp4">
+                                    <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
+                                            type="video/<?php
+                                            $exp=explode('.',$video_file_details['file_name']);
+                                            $ext=strtolower($exp[sizeof($exp)-1]);
+                                            if($ext=='mp4')
+                                            {
+                                                echo 'mp4';
+                                            }
+                                            elseif($ext=='3gp')
+                                            {
+                                                echo '3gpp';
+                                            }
+                                            elseif($ext=='mkv')
+                                            {
+                                                echo 'x-matroska';
+                                            }
+                                            elseif($ext=='wmv')
+                                            {
+                                                echo 'x-ms-wmv';
+                                            }
+                                            elseif($ext=='avi')
+                                            {
+                                                echo 'x-msvideo';
+                                            }
+                                            elseif($ext=='mov')
+                                            {
+                                                echo 'quicktime';
+                                            }
+                                            elseif($ext=='ftv')
+                                            {
+                                                echo 'x-flv';
+                                            }
+                                            ?>"
+                                    >
                                 </video>
-                                    <a style="margin-left: 200px;" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" class="btn btn-primary external">Download</a>
+                                    <a style="margin-left: 200px;"  target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
                                  </div>
                             </td>
                             <td style="max-width: 300px;max-height: 300px;">
-
                             </td>
                         </tr>
                         <?php
@@ -495,6 +527,7 @@ foreach($info_details as $revision=>$info)
 </div>
 
 <div class="clearfix"></div>
+
 
 
 <script type="text/javascript">
