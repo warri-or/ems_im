@@ -169,14 +169,14 @@ foreach($info_details as $revision=>$info)
             </div>
         </div>
         <?php
-        foreach($leading_farmers as $key=>$lead_farmer){
+        foreach($participant_details[$index] as $key=>$participant_detail){
             ?>
             <div class="row show-grid">
                 <div class="col-xs-4">
-                    <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?></label>
+                    <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php echo $participant_details[$index][$key]['number'];?></label>
+                    <label class="control-label"><?php echo $participant_detail['number'];?></label>
                 </div>
             </div>
         <?php } ?>
@@ -436,14 +436,14 @@ foreach($info_details as $revision=>$info)
                     </div>
                 </div>
                 <?php
-                foreach($leading_farmers as $key=>$lead_farmer){
+                foreach($participant_details[$index] as $key=>$participant_detail){
                     ?>
                     <div class="row show-grid">
                         <div class="col-xs-4">
-                            <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?></label>
+                            <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                         </div>
                         <div class="col-sm-4 col-xs-8">
-                            <label class="control-label"><?php echo $participant_details[$index][$key]['number'];?></label>
+                            <label class="control-label"><?php echo $participant_detail['number'];?></label>
                         </div>
                     </div>
                 <?php } ?>

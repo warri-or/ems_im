@@ -393,9 +393,10 @@ class Tm_fd_bud_budget extends Root_Controller
             {
                 $data['participant_details'][$participant['revision']][]=$participant;
             }
-
+            //print_r($data['participant_details']);exit;
             $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
+            //print_r($data['leading_farmers']);exit;
             $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 
             $data['file_details']=array();
@@ -417,7 +418,6 @@ class Tm_fd_bud_budget extends Root_Controller
         }
         else
         {
-
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->jsonReturn($ajax);
@@ -427,6 +427,7 @@ class Tm_fd_bud_budget extends Root_Controller
 
     private function check_my_editable($security)
     {
+
         if(($this->locations['division_id']>0)&&($this->locations['division_id']!=$security['division_id']))
         {
             return false;
@@ -450,6 +451,30 @@ class Tm_fd_bud_budget extends Root_Controller
     {
         $id = $this->input->post("id");
         $user = User_helper::get_user();
+        if($id>0)
+        {
+            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
+            $this->db->select('fdb_details.upazilla_id');
+            $this->db->select('u.district_id');
+            $this->db->select('d.territory_id');
+            $this->db->select('t.zone_id zone_id');
+            $this->db->select('zone.division_id division_id');
+
+            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->where('fdb_details.budget_id',$id);
+            $this->db->where('fdb_details.revision',1);
+            $data['item_info']=$this->db->get()->row_array();
+            if(!$this->check_my_editable($data['item_info']))
+            {
+                System_helper::invalid_try($this->config->item('system_edit_others'),$id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+        }
         if($id>0)
         {
             if(!(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))

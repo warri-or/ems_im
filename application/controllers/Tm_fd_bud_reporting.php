@@ -222,7 +222,7 @@ class Tm_fd_bud_reporting extends Root_Controller
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
         foreach($results as $res)
         {
-            $data['participants'][$res['farmer_id']]=$res;
+            $data['participants'][][$res['farmer_id']]=$res;
         }
         $data['farmers']=array();
 
@@ -322,10 +322,31 @@ class Tm_fd_bud_reporting extends Root_Controller
     private function system_save()
     {
         $id = $this->input->post("id");
-//        echo '<pre>';
-//        print_r($_FILES);
-//        echo '</pre>';exit;
         $user = User_helper::get_user();
+        if($id>0)
+        {
+            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
+            $this->db->select('fdb_details.upazilla_id');
+            $this->db->select('u.district_id');
+            $this->db->select('d.territory_id');
+            $this->db->select('t.zone_id zone_id');
+            $this->db->select('zone.division_id division_id');
+
+            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->where('fdb_details.budget_id',$id);
+            $this->db->where('fdb_details.revision',1);
+            $data['item_info']=$this->db->get()->row_array();
+            if(!$this->check_my_editable($data['item_info']))
+            {
+                System_helper::invalid_try($this->config->item('system_edit_others'),$id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+        }
         if($id>0)
         {
             if(!(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))

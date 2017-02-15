@@ -155,19 +155,17 @@ $CI->load->view("action_buttons",$action_data);
     </div>
 </div>
 <?php
-foreach($leading_farmers as $lead_farmer)
-{  ?>
+foreach($participants as $key=>$participant){
+    ?>
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?> :</label>
+            <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
         </div>
         <div class="col-sm-4 col-xs-8">
-            <label class="control-label"><?php if(isset($participants[$lead_farmer['value']])){echo number_format($participants[$lead_farmer['value']]['number']);}?></label>
+            <label class="control-label"><?php echo $participant[$leading_farmers[$key]['value']]['number'];?></label>
         </div>
     </div>
-<?php
-}
-?>
+<?php } ?>
 
 <div class="row show-grid">
     <div class="col-xs-4">

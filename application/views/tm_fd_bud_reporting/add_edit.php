@@ -158,18 +158,18 @@ if($item_info['com_variety_name']){
             </div>
         </div>
         <?php
-        foreach($leading_farmers as $lead_farmer)
+        foreach($participants as $key=>$participant)
         {
             ?>
             <div class="row show-grid">
                 <div class="col-sm-4">
-                    <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?></label>
+                    <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($participants[$lead_farmer['value']])){echo $participants[$lead_farmer['value']]['number'];}?></label>
+                    <label class="control-label"><?php if(isset($participant[$leading_farmers[$key]['value']])){echo $participant[$leading_farmers[$key]['value']]['number'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <input type="text" name="farmers[<?php echo $lead_farmer['value'];?>]" id="farmers[<?php echo $lead_farmer['value'];?>]" class="form-control float_type_positive" value="<?php if(isset($farmers[$lead_farmer['value']])){echo $farmers[$lead_farmer['value']]['number'];}?>"/>
+                    <input type="text" name="farmers[<?php echo $leading_farmers[$key]['value'];?>]" id="farmers[<?php echo $leading_farmers[$key]['value'];?>]" class="form-control float_type_positive" value="<?php if(isset($farmers[$leading_farmers[$key]['value']])){echo $farmers[$leading_farmers[$key]['value']]['number'];}?>"/>
                 </div>
             </div>
         <?php
