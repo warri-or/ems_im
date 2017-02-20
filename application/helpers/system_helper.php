@@ -80,13 +80,13 @@ class System_helper
     }*/
 
 
-    public static function upload_file($save_dir="images")
+    public static function upload_file($save_dir="images",$allowed_types='gif|jpg|png')
     {
         $CI = & get_instance();
         $CI->load->library('upload');
         $config=array();
         $config['upload_path'] = FCPATH.$save_dir;
-        $config['allowed_types'] = 'gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp|avi';
+        $config['allowed_types'] = $allowed_types;
         $config['max_size'] = $CI->config->item("max_file_size");
         $config['overwrite'] = false;
         $config['remove_spaces'] = true;

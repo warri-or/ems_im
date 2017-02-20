@@ -128,6 +128,7 @@ class Reports_arm_variety extends Root_Controller
 
             $keys.="variety_ids:'".json_encode($variety_ids)."',";
             $data['keys']=trim($keys,',');
+            echo $data['keys'];exit;
             $data['title']="Arm Product Characteristics Report";
 
             $ajax['status']=true;
@@ -152,6 +153,7 @@ class Reports_arm_variety extends Root_Controller
     {
         $items=array();
         $variety_ids=json_decode($this->input->post('variety_ids'),true);
+        print_r($variety_ids);exit;
         $this->db->from($this->config->item('table_setup_classification_varieties').' v');
         $this->db->select('sp.*');
         $this->db->select('v.id,v.name variety_name');

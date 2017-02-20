@@ -373,7 +373,7 @@ class Tm_fd_bud_budget extends Root_Controller
             //$this->db->join($this->config->item('table_tm_fd_bud_budget').' fbb','fbb.id =fbde.budget_id','INNER');
             $this->db->where('fbde.budget_id',$budget_id);
             $this->db->order_by('fbde.revision ASC');
-            $this->db->order_by('fbde.id DESC');
+            $this->db->order_by('fbde.id ASC');
             $expense_details=$this->db->get()->result_array();
             $data['expense_details']=array();
             foreach($expense_details as $expense)
@@ -520,6 +520,10 @@ class Tm_fd_bud_budget extends Root_Controller
             $expense_budget=$this->input->post('expense_budget');
             foreach($expense_budget as $amount)
             {
+                if($amount=='')
+                {
+                    $amount=0;
+                }
                 if($amount>0)
                 {
                     $field_budget_details['total_budget']+=$amount;
@@ -609,8 +613,8 @@ class Tm_fd_bud_budget extends Root_Controller
             {
                 mkdir($dir, 0777);
             }
-//            $types='gif|jpg|png|jpeg';
-            $uploaded_files = System_helper::upload_file($file_folder);
+            $types='gif|jpg|png|jpeg';
+            $uploaded_files = System_helper::upload_file($file_folder,$types);
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -690,7 +694,7 @@ class Tm_fd_bud_budget extends Root_Controller
         $this->form_validation->set_rules('item_info[diff_wth_com]',$this->lang->line('LABEL_SPECIFIC_DIFFERENCE'),'required');
         $this->form_validation->set_rules('item_info[expected_date]',$this->lang->line('LABEL_EXPECTED_DATE'),'required');
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
-        $this->form_validation->set_rules('farmer_participant[]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER'),'required');
+        //$this->form_validation->set_rules('farmer_participant[]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER'),'required');
 
         if($this->form_validation->run() == FALSE)
         {

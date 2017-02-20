@@ -186,7 +186,7 @@ if($item_info['com_variety_name']){
         <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
     </div>
     <div class="col-sm-2 col-sm-4">
-        <input type="text" name="new_item[no_of_participant]" id="no_of_participant" class="form-control float_type_positive" value="<?php echo $new_item['no_of_participant']; ?>"/>
+        <input type="text" name="new_item[total_participant]" id="total_participant" class="form-control float_type_positive" value="<?php echo $new_item['total_participant']; ?>"/>
     </div>
 </div>
 <div class="row show-grid">
@@ -265,39 +265,37 @@ foreach($expense_items as $expense)
 
 <div class="row show-grid">
     <?php
-    $exp=explode('.',$video_file_details['file_name']);
+    $type=substr($video_file_details['file_type'],0,5);
     $is_video=false;
-    if(sizeof($exp)>0)
-    {
-        $ext=strtolower($exp[sizeof($exp)-1]);
-        if(($ext=='mkv') || ($ext=='wmv') || ($ext=='mp4') || ($ext=='3gp') || ($ext=='ftv') || ($ext=='avi') || ($ext=='mov'))
+        if($type=='video')
         {
             $is_video=true;
         }
-    }
     ?>
     <div class="col-xs-2">
         <label class="control-label">Upload a Video File</label>
     </div>
-    <div class="col-xs-2">
-        <input type="file" class="browse_button" data-preview-container="#video" name="video">
-        <input type="hidden" name="video_file" value="<?php echo $video_file_details['file_name'];?>">
-    </div>
-    <div class="col-xs-4" id="video">
+    <div class="col-xs-4">
+        <div style="<?php if(isset($video_file_details['file_location'])){echo 'display:block;';}else{echo 'display:none;';}?>" id="video_preview_id">
+        <video width="300" controls id="video_preview_id">
+            <source src="<?php if(isset($video_file_details['file_location'])){ echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];}?>" id="video_here" type="<?php echo $video_file_details['file_type'];?>">
+        </video>
+        </div>
+        <div>
+        <input type="file" class="browse_button file_multi_video" data-preview-container="#video" name="video" class="" accept="video/*">
+        <input type="hidden" name="video_file[file_name]" value="<?php echo $video_file_details['file_name'];?>">
+        <input type="hidden" name="video_file[file_type]" value="<?php echo $video_file_details['file_type'];?>">
+        <h4 id="video">
         <?php
         if($is_video)
         {
             echo $video_file_details['file_name'];
         }
-        else
-        {
-            echo 'Please Upload Video File Only';
-        }
-        ?>
+
+        ?></h4>
+        </div>
     </div>
 </div>
-
-<!--<video style="max-width: 250px;"> <source src="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?><!--"></video>-->
 
 <div id="files_container">
     <div style="overflow-x: auto;" class="row show-grid">
@@ -313,16 +311,12 @@ foreach($expense_items as $expense)
             <?php
             foreach($file_details as $index=>$file)
             {
-                $exp=explode('.',$file['file_name']);
+                $type=substr($file['file_type'],0,5);
                 $is_image=false;
-                if(sizeof($exp)>0)
-                {
-                    $ext=strtolower($exp[sizeof($exp)-1]);
-                    if(($ext=='jpg') || ($ext=='png') || ($ext=='gif') || ($ext=='jpeg'))
+                    if($type=='image')
                     {
                         $is_image=true;
                     }
-                }
                 ?>
                 <tr>
                     <td>
@@ -344,7 +338,8 @@ foreach($expense_items as $expense)
                     <td>
                         <input type="file" id="file_<?php echo $index+1; ?>" name="file_<?php echo $index+1; ?>" data-current-id="<?php echo $index+1;?>" data-preview-container="#preview_container_file_<?php echo $index+1;?>" class="browse_button"><br>
                         <button type="button" class="btn btn-danger system_button_add_delete"><?php echo $CI->lang->line('DELETE'); ?></button>
-                        <input type="hidden" name="files[<?php echo $index+1; ?>]" value="<?php  echo $file['file_name'];?>">
+                        <input type="hidden" name="files[file_<?php echo $index+1;?>]" value="<?php  echo $file['file_name'];?>">
+                        <input type="hidden" name="files[file_type_<?php echo $index+1;?>]" value="<?php  echo $file['file_type'];?>">
                     </td>
                     <td style="max-width: 100px;">
                         <label>Remarks :</label>
@@ -416,12 +411,18 @@ foreach($expense_items as $expense)
     }
 
 </script>
-
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
 <script type="text/javascript">
 
 jQuery(document).ready(function()
 {
     turn_off_triggers();
+    $(document).on("change", ".file_multi_video", function(evt) {
+        $('#video_preview_id').show();
+        var $source = $('#video_here');
+        $source[0].src = URL.createObjectURL(this.files[0]);
+        $source.parent()[0].load();
+    });
     $(".datepicker").datepicker({dateFormat : display_date_format});
     $(".browse_button").filestyle({input: false,icon: false,buttonText: "Upload",buttonName: "btn-primary"});
     $(document).on("click", ".system_button_add_more", function(event)

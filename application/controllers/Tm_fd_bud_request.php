@@ -461,8 +461,8 @@ class Tm_fd_bud_request extends Root_Controller
             {
                 mkdir($dir, 0777);
             }
-            //$types='gif|jpg|png|jpeg';
-            $uploaded_files = System_helper::upload_file($file_folder);
+            $types='gif|jpg|png|jpeg';
+            $uploaded_files = System_helper::upload_file($file_folder,$types);
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -638,7 +638,7 @@ class Tm_fd_bud_request extends Root_Controller
             //$this->db->join($this->config->item('table_tm_fd_bud_budget').' fbb','fbb.id =fbde.budget_id','INNER');
             $this->db->where('fbde.budget_id',$budget_id);
             $this->db->order_by('fbde.revision ASC');
-            $this->db->order_by('fbde.id DESC');
+            $this->db->order_by('fbde.id ASC');
             $expense_details=$this->db->get()->result_array();
             $data['expense_details']=array();
             foreach($expense_details as $expense)

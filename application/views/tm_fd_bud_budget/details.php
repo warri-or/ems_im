@@ -367,7 +367,7 @@ $CI->load->view("action_buttons",$action_data);
                                                         $image=$file_details[$pic_cat['value']]['arm_file_location'];
                                                     }
                                                     ?>
-                                                    <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>"data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></h5>">
+                                                    <img style="max-width: 300px;max-height: 300px;" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></h5>" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                                 </div>
                                             </td>
                                             <td style="max-width: 300px;max-height: 300px;">
@@ -379,9 +379,14 @@ $CI->load->view("action_buttons",$action_data);
                                                         $image=$file_details[$pic_cat['value']]['competitor_file_location'];
                                                     }
                                                     ?>
-                                                    <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></h5>">
+                                                    <img style="max-width: 300px;max-height: 300px;" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></h5>" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                                 </div>
                                             </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td><a style="margin-left: 130px;" href="#" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></h5>">Remarks</a></td>
+                                            <td><a style="margin-left: 130px;" href="#" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></h5>">Remarks</a></td>
                                         </tr>
 
 
@@ -498,10 +503,25 @@ $CI->load->view("action_buttons",$action_data);
     </div>
     <div class="clearfix"></div>
 </div>
-
-    <div class="clearfix"></div>
-
-
+<!------>
+<!--<div class="container">-->
+<!--    <h3>Tooltip Example</h3>-->
+<!--    <p>The data-placement attribute specifies the tooltip position.</p>-->
+<!--    <ul class="list-inline">-->
+<!--        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="My name is kiron. what is your name? okay,thats great. so we are friend.">Top</a></li>-->
+<!--        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Bottom</a></li>-->
+<!--        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Left</a></li>-->
+<!--        <li><a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Right</a></li>-->
+<!--    </ul>-->
+<!--</div>-->
+<!---->
+<!--    <div class="clearfix"></div>-->
+<!--<script>-->
+<!--    $(document).ready(function(){-->
+<!--        $('[data-toggle="tooltip"]').tooltip();-->
+<!--    });-->
+<!--</script>-->
+<!------>
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
