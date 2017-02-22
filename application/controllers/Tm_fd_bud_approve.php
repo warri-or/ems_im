@@ -342,7 +342,8 @@ class Tm_fd_bud_approve extends Root_Controller
                 die();
             }
         }
-        if(!$this->check_validation())
+        $participants=$this->input->post('farmer_participant');
+        if(!$this->check_validation($participants))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -521,8 +522,15 @@ class Tm_fd_bud_approve extends Root_Controller
 
     }
 
-    private function check_validation()
+    private function check_validation($ids)
     {
+        $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+        $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+        $fmr=array();
+        foreach($farmers as $farmer)
+        {
+            $fmr[$farmer['value']]=$farmer['text'];
+        }
         $this->load->library('form_validation');
         $this->form_validation->set_rules('item[date]',$this->lang->line('LABEL_DATE'),'required');
         $this->form_validation->set_rules('item_info[variety_id]',$this->lang->line('LABEL_VARIETY_NAME'),'required');
@@ -535,6 +543,18 @@ class Tm_fd_bud_approve extends Root_Controller
         $this->form_validation->set_rules('item_info[diff_wth_com]',$this->lang->line('LABEL_SPECIFIC_DIFFERENCE'),'required');
         $this->form_validation->set_rules('item_info[expected_date]',$this->lang->line('LABEL_EXPECTED_DATE'),'required');
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
+        foreach($expenses as $expense)
+        {
+            $this->form_validation->set_rules('expense_budget['.$expense['value'].']',$expense['text'],'required');
+        }
+        if($ids){
+            foreach($ids as $index=>$id)
+            {
+                if(!$id)
+                {
+                    $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
+                }
+            }}
 
         if($this->form_validation->run() == FALSE)
         {

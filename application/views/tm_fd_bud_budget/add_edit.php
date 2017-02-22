@@ -344,7 +344,7 @@ $CI->load->view("action_buttons",$action_data);
         ?>
         <div class="row show-grid">
             <div class="col-xs-5">
-                <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><span style="color:#FF0000">*</span></label>
+                <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><span style="color: red;">*</span></label>
             </div>
             <div class="col-sm-3 col-xs-9">
                 <input type="text" name="farmer_participant[<?php echo $lead_farmer['value'];?>]" class="form-control float_type_positive" value="<?php if(isset($participants[$lead_farmer['value']])){echo $participants[$lead_farmer['value']]['number'];}?>"/>

@@ -17,7 +17,7 @@ foreach($items as $item)
     ?>
     <div class="row show-grid">
     <div class="col-xs-5">
-        <label class="control-label pull-right"><?php echo $item['text'].' ('.$item['phone_no'].')';?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $item['text'].' ('.$item['phone_no'].')';?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
         <input type="text" name="farmer_participant[<?php echo $item['value'];?>]" class="form-control float_type_positive" value=""/>

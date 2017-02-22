@@ -163,7 +163,7 @@ if($item_info['com_variety_name']){
             ?>
             <div class="row show-grid">
                 <div class="col-sm-4">
-                    <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
+                    <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?><span style="color: red;">*</span></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
                     <label class="control-label"><?php if(isset($participant[$leading_farmers[$key]['value']])){echo $participant[$leading_farmers[$key]['value']]['number'];}?></label>
@@ -210,7 +210,7 @@ foreach($expense_items as $expense)
     ?>
     <div class="row show-grid">
         <div class="col-sm-4">
-            <label class="control-label pull-right"><?php echo $expense['text'];?></label>
+            <label class="control-label pull-right"><?php echo $expense['text'];?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <label class="control-label"><?php if(isset($expense_budget[$expense['value']])){echo $expense_budget[$expense['value']]['amount'];}?></label>
@@ -278,7 +278,7 @@ foreach($expense_items as $expense)
     <div class="col-xs-4">
         <div style="<?php if(isset($video_file_details['file_location'])){echo 'display:block;';}else{echo 'display:none;';}?>" id="video_preview_id">
         <video width="300" controls id="video_preview_id">
-            <source src="<?php if(isset($video_file_details['file_location'])){ echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];}?>" id="video_here" type="<?php echo $video_file_details['file_type'];?>">
+            <source src="<?php if(isset($video_file_details['file_location'])){ echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];}?>" id="video_here">
         </video>
         </div>
         <div>

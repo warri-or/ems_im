@@ -262,7 +262,7 @@ $lang['LABEL_FIELD_DAY_BUDGET'] = 'Budget For Field Day (Tk.) :';
 $lang['LABEL_NEXT_SALES_TARGET'] = 'Next Year Sales Target';
 $lang['LABEL_UPLOAD_IMAGES'] = 'Upload Images';
 $lang['LABEL_UPLOAD_VIDEO'] = 'Upload Video';
-$lang['LABEL_TOTAL_BUDGET'] = 'Total Budget';
+$lang['LABEL_TOTAL_BUDGET'] = 'Expected Total Budget';
 
 //Leading Farmer setup
 $lang['LABEL_FARMER_ID'] = 'Farmer ID';
