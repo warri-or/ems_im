@@ -80,7 +80,8 @@ class Setup_fd_bud_picture_category extends Root_Controller
                 'id' => 0,
                 'name' => '',
                 'description' => '',
-                'ordering' => 99
+                'ordering' => 99,
+                'status' => $this->config->item('system_status_active')
             );
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
 
@@ -172,11 +173,9 @@ class Setup_fd_bud_picture_category extends Root_Controller
                 $data['date_updated'] = time();
 
                 Query_helper::update($this->config->item('table_setup_fd_bud_picture_category'),$data,array("id = ".$id));
-
             }
             else
             {
-
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = time();
                 Query_helper::add($this->config->item('table_setup_fd_bud_picture_category'),$data);

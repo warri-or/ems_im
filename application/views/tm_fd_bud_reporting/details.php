@@ -236,6 +236,23 @@ foreach($info_details as $revision=>$info)
                 <label id="total_budget"><?php echo $info[0]['next_sales_target'];?> kg</label>
             </div>
         </div>
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label id="total_market_size"><?php echo $item_info['total_market_size'];?> kg</label>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label id="arm_market_size"><?php echo $item_info['arm_market_size'];?> kg</label>
+            </div>
+        </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_COMMENT');?> :</label>

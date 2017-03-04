@@ -20,7 +20,7 @@ foreach($items as $item)
         <label class="control-label pull-right"><?php echo $item['text'].' ('.$item['phone_no'].')';?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <input type="text" name="farmer_participant[<?php echo $item['value'];?>]" class="form-control float_type_positive" value=""/>
+        <input type="text" name="farmer_participant[<?php echo $item['value'];?>]" class="participant_budget form-control float_type_positive" value=""/>
     </div>
     </div>
 <?php

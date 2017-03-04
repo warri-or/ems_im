@@ -3,8 +3,9 @@ $CI = & get_instance();
 $action_data=array();
 $action_data["action_back"]=base_url($CI->controller_url);
 $action_data["action_save"]='#save_form';
-if($CI->controller_url=='Tm_fd_bud_budget'){
-$action_data["action_save_new"]='#save_form';
+if(isset($CI->permissions['edit']) && ($CI->permissions['edit']==1) && $item['id']>0)
+{
+    $action_data["action_details_get"]=base_url($CI->controller_url."/index/details/".$item['id']);
 }
 $CI->load->view("action_buttons",$action_data);
 ?>
@@ -115,7 +116,6 @@ $CI->load->view("action_buttons",$action_data);
         </select>
     </div>
 </div>
-
 
 <div style="" class="row show-grid">
     <div class="col-xs-4">
@@ -251,7 +251,6 @@ $CI->load->view("action_buttons",$action_data);
         {
             ?>
             <label class="control-label"><?php echo $CI->locations['upazilla_name'];?></label>
-<!--            <input type="hidden" name="budget_details[upazilla_id]" value="--><?php //echo $CI->locations['upazilla_id'];?><!--">-->
         <?php
         }
         else
@@ -318,38 +317,47 @@ $CI->load->view("action_buttons",$action_data);
     </div>
 </div>
 
-<div class="row show-grid">
-    <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?><span style="color:#FF0000">*</span></label>
-    </div>
-    <div class="col-sm-4 col-xs-8">
-        <input type="text" name="item_info[no_of_participant]" id="no_of_participant" class="form-control float_type_positive" value="<?php echo $item_info['no_of_participant'];?>"/>
-    </div>
-</div>
-
-
-
-
 <div style="<?php if(!(sizeof($leading_farmers)>0)){echo 'display:none;';}?>" class="row show-grid" id="leading_farmer_container">
 
     <div id="leading_farmer_id" class="row show-grid">
         <div class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right">Expected Participant Through Leading Farmer :</label>
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
             </div>
         </div>
+<!--        --><?php
+//        foreach($leading_farmers as $lead_farmer)
+//        {
+//        ?>
+<!--        <div class="row show-grid">-->
+<!--            <div class="col-xs-5">-->
+<!--                <label class="control-label pull-right">--><?php //echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><!--<span style="color: red;">*</span></label>-->
+<!--            </div>-->
+<!--            <div class="col-sm-3 col-xs-9">-->
+<!--                <input type="text" name="farmer_participant[--><?php //echo $lead_farmer['value'];?><!--]" class="participant_budget form-control float_type_positive" value="--><?php //if(isset($participants[$lead_farmer['value']])){echo $participants[$lead_farmer['value']]['number'];}?><!--"/>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        --><?php
+//        }
+//        ?>
         <?php
+        $total=0;
         foreach($leading_farmers as $lead_farmer)
         {
-        ?>
-        <div class="row show-grid">
-            <div class="col-xs-5">
-                <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><span style="color: red;">*</span></label>
+            ?>
+            <div class="row show-grid">
+                <div class="col-xs-5">
+                    <label class="control-label pull-right"><?php echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><span style="color: red;">*</span></label>
+                </div>
+                <div class="col-sm-3 col-xs-9">
+                    <input type="text" name="farmer_participant[<?php echo $lead_farmer['value'];?>]" class="participant_budget form-control float_type_positive"
+                           value="<?php if(isset($participants[$lead_farmer['value']]))
+                           {
+                               $total+=$participants[$lead_farmer['value']]['number'];
+                               echo $participants[$lead_farmer['value']]['number'];
+                           }?>"/>
+                </div>
             </div>
-            <div class="col-sm-3 col-xs-9">
-                <input type="text" name="farmer_participant[<?php echo $lead_farmer['value'];?>]" class="form-control float_type_positive" value="<?php if(isset($participants[$lead_farmer['value']])){echo $participants[$lead_farmer['value']]['number'];}?>"/>
-            </div>
-        </div>
         <?php
         }
         ?>
@@ -357,7 +365,31 @@ $CI->load->view("action_buttons",$action_data);
     </div>
 </div>
 
+<div class="row show-grid">
+    <div class="col-xs-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+    </div>
+    <div class="col-sm-3 col-xs-9">
+        <input type="text" name="item_info[participant_through_customer]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_customer'])) {$total+=$item_info['participant_through_customer'];echo $item_info['participant_through_customer'];}?>"/>
+    </div>
+</div>
+<div class="row show-grid">
+    <div class="col-xs-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+    </div>
+    <div class="col-sm-3 col-xs-9">
+        <input type="text" name="item_info[participant_through_others]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_others'])) {$total+=$item_info['participant_through_others'];echo $item_info['participant_through_others'];}?>"/>
+    </div>
+</div>
 
+<div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="total_participant_container">
+    <div class="col-xs-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
+    </div>
+    <div class="col-sm-4 col-xs-8">
+        <label id="no_of_participant"><?php echo number_format($total);?></label>
+    </div>
+</div>
 
 
 
@@ -366,30 +398,56 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FIELD_DAY_BUDGET');?></label>
     </div>
 </div>
-<?php
- foreach($expense_items as $expense)
- {
- ?>
-<div class="row show-grid">
-     <div class="col-xs-5">
-         <label class="control-label pull-right"><?php echo $expense['text'];?> <span style="color:#FF0000">*</span></label>
-     </div>
-     <div class="col-sm-3 col-xs-9">
-         <input type="text" name="expense_budget[<?php echo $expense['value'];?>]" class="expense_budget form-control float_type_positive" value="<?php if(isset($expense_budget[$expense['value']])){echo $expense_budget[$expense['value']]['amount'];}?>"/>
-     </div>
-</div>
- <?php
- }
-?>
-<div style="display: none;" class="row show-grid" id="total_budget_container">
+
+    <?php
+    $total=0;
+     foreach($expense_items as $expense)
+     {
+         //if(isset($expense_budget[$expense['value']]['amount'])){
+     ?>
+    <div class="row show-grid">
+         <div class="col-xs-5">
+             <label class="control-label pull-right"><?php echo $expense['text'];?> <span style="color:#FF0000">*</span></label>
+         </div>
+         <div class="col-sm-3 col-xs-9">
+             <input type="text" name="expense_budget[<?php echo $expense['value'];?>]" class="expense_budget form-control float_type_positive"
+                    value="<?php if(isset($expense_budget[$expense['value']]))
+                    {
+                        $total+=$expense_budget[$expense['value']]['amount'];
+                        echo $expense_budget[$expense['value']]['amount'];
+                    }?>"/>
+         </div>
+    </div>
+     <?php
+     }
+    ?>
+
+<div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="total_budget_container">
     <div class="col-xs-5">
         <label class="control-label pull-right"> Total Budget (Tk.)</label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <label id="total_budget"><?php echo number_format($item_info['total_budget'],2);?></label>
+        <label id="total_budget"><?php echo number_format($total,2);?></label>
     </div>
 </div>
 
+<div class="row show-grid">
+    <div class="col-xs-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> (kg)<span style="color:#FF0000">*</span></label>
+    </div>
+    <div class="col-sm-4 col-xs-8">
+        <input type="text" name="item_info[total_market_size]" id="total_market_size" class="form-control float_type_positive" value="<?php if(isset($item_info['total_market_size'])) {echo $item_info['total_market_size'];}?>"/>
+    </div>
+</div>
+
+<div class="row show-grid">
+    <div class="col-xs-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> (kg)<span style="color:#FF0000">*</span></label>
+    </div>
+    <div class="col-sm-4 col-xs-8">
+        <input type="text" name="item_info[arm_market_size]" id="arm_market_size" class="form-control float_type_positive" value="<?php if(isset($item_info['arm_market_size'])) {echo $item_info['arm_market_size'];}?>"/>
+    </div>
+</div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
@@ -409,8 +467,6 @@ $CI->load->view("action_buttons",$action_data);
     </div>
 </div>
 
-
-
 <div id="image" class="panel-collapse ">
     <div id="files_container" class="panel-collapse">
         <div style="overflow-x: auto;" class="row show-grid">
@@ -419,9 +475,8 @@ $CI->load->view("action_buttons",$action_data);
                 <thead>
                 <tr>
                     <th style="min-width: 60px;">Image Type</th>
-                    <th colspan="2" style="min-width: 270px;">ARM</th>
-                    <th colspan="2" style="min-width: 270px;">Competitor</th>
-<!--                    <th style="min-width: 60px;">Image Info.</th>-->
+                    <th colspan="2" style="max-width: 350px;">ARM</th>
+                    <th colspan="2" style="max-width: 350px;">Competitor</th>
                 </tr>
                 </thead>
 
@@ -435,7 +490,7 @@ $CI->load->view("action_buttons",$action_data);
                     <tr>
                         <td style="min-width: 60px; color: #263238;"><b><?php echo $pic_cat['text'];?></b></td>
 
-                        <td style="max-width: 300px; max-height: 300px;">
+                        <td style="max-width: 270px; max-height: 200px;">
                             <div class="col-xs-4" id="image_arm_<?php echo $pic_cat['value'];?>">
                                 <?php
                                 $image='images/no_image.jpg';
@@ -445,10 +500,10 @@ $CI->load->view("action_buttons",$action_data);
                                     $image=$file_details[$pic_cat['value']]['arm_file_location'];
                                 }
                                 ?>
-                                <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                                <img style="max-width: 270px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                             </div>
                         </td>
-                        <td style="min-width: 80px; ">
+                        <td style="max-width: 80px; ">
                             <input type="file" class="browse_button" data-preview-container="#image_arm_<?php echo $pic_cat['value'];?>" name="arm_<?php echo $pic_cat['value'];?>">
                         <?php if($item['id']>0){ ?>
                             <input type="hidden"  name="image_info[<?php echo $pic_cat['value'];?>][arm_file_name]" value="<?php echo $file_details[$pic_cat['value']]['arm_file_name']?>">
@@ -456,7 +511,7 @@ $CI->load->view("action_buttons",$action_data);
                        <?php }?>
                         </td>
 
-                        <td style="max-width: 300px;max-height: 300px;">
+                        <td style="max-width: 270px;max-height: 200px;">
                             <div class="col-xs-4" id="image_com_<?php echo $pic_cat['value'];?>">
                                 <?php
                                 $image='images/no_image.jpg';
@@ -465,7 +520,7 @@ $CI->load->view("action_buttons",$action_data);
                                     $image=$file_details[$pic_cat['value']]['competitor_file_location'];
                                 }
                                 ?>
-                                <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                                <img style="max-width: 270px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                             </div>
                         </td>
                         <td style="min-width: 80px;">
@@ -475,7 +530,6 @@ $CI->load->view("action_buttons",$action_data);
                             <input type="hidden"  name="image_info[<?php echo $pic_cat['value'];?>][competitor_file_location]" value="<?php echo $file_details[$pic_cat['value']]['competitor_file_location']?>">
                             <?php }?>
                         </td>
-
 
                     </tr>
 
@@ -501,15 +555,10 @@ $CI->load->view("action_buttons",$action_data);
         </div>
     </div>
 </div>
-
 </div>
-
 
 <div class="clearfix"></div>
 </form>
-
-
-
 
 <script type="text/javascript">
     function findTotal()
@@ -529,34 +578,22 @@ $CI->load->view("action_buttons",$action_data);
         $('#total_budget').html(number_format(total,2));
     }
 
-//    function number_format(number, decimals, dec_point, thousands_sep)
-//    {
-//        number = (number + '')
-//            .replace(/[^0-9+\-Ee.]/g, '');
-//        var n = !isFinite(+number) ? 0 : +number,
-//            prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-//            sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-//            dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-//            s = '',
-//            toFixedFix = function(n, prec) {
-//                var k = Math.pow(10, prec);
-//                return '' + (Math.round(n * k) / k)
-//                    .toFixed(prec);
-//            };
-//        // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-//        s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
-//            .split('.');
-//        if (s[0].length > 3) {
-//            s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-//        }
-//        if ((s[1] || '')
-//            .length < prec) {
-//            s[1] = s[1] || '';
-//            s[1] += new Array(prec - s[1].length + 1)
-//                .join('0');
-//        }
-//        return s.join(dec);
-//    }
+    function findTotal_participant()
+    {
+        var total=0;
+        $(".participant_budget").each( function( index, element )
+        {
+            if($(this).val()==parseFloat($(this).val()))
+            {
+                total=total+parseFloat($(this).val());
+            }
+        });
+        if(total=>0)
+        {
+            $('#total_participant_container').show();
+        }
+        $('#no_of_participant').html(number_format(total));
+    }
 
 </script>
 
@@ -835,143 +872,13 @@ $CI->load->view("action_buttons",$action_data);
             findTotal();
         });
 
+        $(document).on("change",".participant_budget",function()
+        {
+            findTotal_participant();
+        });
+
 
         $(".browse_button").filestyle({input: false,icon: false,buttonText: "Upload",buttonName: "btn-primary"});
 
     });
 </script>
-
-
-
-
-
-
-
-
-<!-- MIne Start-->
-
-<!--<div class="panel-group" id="accordion">-->
-<!---->
-<!--    <div class="panel panel-default">-->
-<!--        <div class="panel-heading">-->
-<!--            <h4 class="panel-title">-->
-<!--                <a class="accordion-toggle external" data-toggle="collapse"  data-target="#image" href="#">Upload Images</a>-->
-<!--            </h4>-->
-<!--        </div>-->
-<!---->
-<!--        <div id="image" class="panel-collapse collapse">-->
-<!--            <div id="images_container">-->
-<!--                <div style="overflow-x: auto;" class="row show-grid">-->
-<!--                <table class="table table-bordered">-->
-<!--                    <tbody>-->
-<!---->
-<!--                    --><?php
-//                    foreach($details['images'] as $index=>$images)
-//                    {
-//                    ?>
-<!---->
-<!--                    <tr>-->
-<!--                        <td>-->
-<!---->
-<!--                            <div class="col-xs-4">-->
-<!--                                <label class="control-label pull-right">Picture</label>-->
-<!--                            </div>-->
-<!---->
-<!---->
-<!--                            <div class="preview_container_image col-xs-4 " id="preview_container_image_--><?php //echo $index+1;?><!--">-->
-<!--                                --><?php
-//                                $image=base_url('images/no_image.jpg');
-//                                if(strlen($images)>0)
-//                                {
-//                                    $image=$images;
-//                                }
-//                                ?>
-<!--                                <img style="max-width: 250px;" src="--><?php //echo $image;?><!--">-->
-<!--                            </div>-->
-<!---->
-<!---->
-<!--                            <div class="col-xs-4">-->
-<!--                                <input type="file" id="image_--><?php //echo $index+1;?><!--" name="image_--><?php //echo $index+1;?><!--" data-current-id="--><?php //echo $index+1;?><!--" data-preview-container="#preview_container_image_--><?php //echo $index+1;?><!--" class="browse_button"><br>-->
-<!--                                <button type="button" class="btn btn-danger system_button_add_delete">--><?php //echo $CI->lang->line('DELETE'); ?><!--</button>-->
-<!--                            </div>-->
-<!--                        </td>-->
-<!---->
-<!--                    </tr>-->
-<!--                    --><?php
-//                    }
-//                    ?>
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="row show-grid">-->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <button type="button" class="btn btn-warning system_button_add_more" data-current-id="">--><?php //echo $CI->lang->line('LABEL_ADD_MORE');?><!--</button>-->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!---->
-<!--    </div>-->
-<!---->
-<!---->
-<!--     <div class="panel panel-default">-->
-<!--        <div class="panel-heading">-->
-<!--            <h4 class="panel-title">-->
-<!--                <a class="accordion-toggle external" data-toggle="collapse"  data-target="#pdf" href="#">Upload Video</a>-->
-<!--            </h4>-->
-<!--        </div>-->
-<!--        <div id="pdf" class="panel-collapse collapse">-->
-<!--            <div class="row show-grid">-->
-<!--                <div class="col-xs-4">-->
-<!--                    <label class="control-label pull-right">Video File</label>-->
-<!--                </div>-->
-<!--                <div class="col-xs-4" id="preview_container_video">-->
-<!---->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <input type="file" class="browse_button" data-preview-container="#preview_container_pdf" name="video">-->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!---->
-<!--</div>-->
-
-<!-- MIne End -->
-
-<!-- MIne -->
-
-<!--<div id="system_content_add_more" style="display: none;">-->
-<!--    <table>-->
-<!--        <tbody>-->
-<!--        <tr>-->
-<!--            <td>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <label class="control-label pull-right">Picture</label>-->
-<!--                </div>-->
-<!---->
-<!---->
-<!--                <div class="preview_container_image col-xs-4 " >-->
-<!--                    <img style="max-width: 250px;" src="--><?php //echo base_url('images/no_image.jpg');?><!--">-->
-<!--                </div>-->
-<!---->
-<!---->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                    <input type="file" class="browse_button_new"><br>-->
-<!--                    <button type="button" class="btn btn-danger system_button_add_delete">--><?php //echo $CI->lang->line('DELETE'); ?><!--</button>-->
-<!--                </div>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--</div>-->
-
-<!-- MIne -->

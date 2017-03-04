@@ -245,11 +245,11 @@ class Reports_fd_management extends Root_Controller
         $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1'));
         foreach($results as $result)
         {
-            if($result['file_type']=='Image')
+            if(substr($result['file_type'],0,5)=='image')
             {
                 $data['a_fd_file_details'][]=$result;
             }
-            elseif($result['file_type']=='Video')
+            elseif(substr($result['file_type'],0,5)=='video')
             {
                 $data['video_file_details']=$result;
             }

@@ -2,7 +2,6 @@
 
 class Tm_fd_bud_budget extends Root_Controller
 {
-
     private  $message;
     public $permissions;
     public $controller_url;
@@ -145,9 +144,12 @@ class Tm_fd_bud_budget extends Root_Controller
             }
             $data['crops']=Query_helper::get_info($this->config->item('table_setup_classification_crops'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
             $data['participants']=array();
+            $data['total']='';
             $data['leading_farmers']=array();
+
             $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
+
             $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
             $data['file_details']=array();
             $ajax['system_page_url']=site_url($this->controller_url."/index/add");
@@ -166,6 +168,8 @@ class Tm_fd_bud_budget extends Root_Controller
             $this->jsonReturn($ajax);
         }
     }
+
+
 
     private function system_edit($id)
     {
@@ -242,7 +246,7 @@ class Tm_fd_bud_budget extends Root_Controller
             $data['crop_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id']));
             $data['competitor_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id'],'whose ="Competitor"'));
 
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"',),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
@@ -252,6 +256,7 @@ class Tm_fd_bud_budget extends Root_Controller
 
             $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
             $data['participants']=array();
+            $data['total']='';
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
             {
@@ -282,8 +287,6 @@ class Tm_fd_bud_budget extends Root_Controller
             $this->jsonReturn($ajax);
         }
     }
-
-
 
     private function system_details($id)
     {
@@ -368,9 +371,13 @@ class Tm_fd_bud_budget extends Root_Controller
             $data['users_info']=System_helper::get_users_info($user_ids);
 
             //expense
+            $results=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array(),0,0,array('ordering ASC'));
+            foreach($results as $key=>$result)
+            {
+                $data['expense_items'][$result['value']]=$result;
+            }
             $this->db->from($this->config->item('table_tm_fd_bud_details_expense').' fbde');
             $this->db->select('fbde.*');
-            //$this->db->join($this->config->item('table_tm_fd_bud_budget').' fbb','fbb.id =fbde.budget_id','INNER');
             $this->db->where('fbde.budget_id',$budget_id);
             $this->db->order_by('fbde.revision ASC');
             $this->db->order_by('fbde.id ASC');
@@ -378,25 +385,25 @@ class Tm_fd_bud_budget extends Root_Controller
             $data['expense_details']=array();
             foreach($expense_details as $expense)
             {
-                $data['expense_details'][$expense['revision']][]=$expense;
+                $data['expense_details'][$expense['revision']][$expense['item_id']]=$expense;
             }
             //participant through leading farmers
+            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('upazilla_id ='.$data['item_info']['upazilla_id']));
+            foreach($results as $key=>$result)
+            {
+                $data['leading_farmers'][$result['value']]=$result;
+            }
             $this->db->from($this->config->item('table_tm_fd_bud_details_participant').' fbdp');
             $this->db->select('fbdp.*');
-            //$this->db->join($this->config->item('table_tm_fd_bud_budget').' fbb','fbb.id =fbdp.budget_id','INNER');
             $this->db->where('fbdp.budget_id',$budget_id);
             $this->db->order_by('fbdp.revision ASC');
             $this->db->order_by('fbdp.id ASC');
             $participant_details=$this->db->get()->result_array();
-            $data['participant_details']=array();
             foreach($participant_details as $participant)
             {
-                $data['participant_details'][$participant['revision']][]=$participant;
+                $data['participant_details'][$participant['revision']][$participant['farmer_id']]=$participant;
             }
-            //print_r($data['participant_details']);exit;
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
-            $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
-            //print_r($data['leading_farmers']);exit;
+
             $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
 
             $data['file_details']=array();
@@ -423,7 +430,6 @@ class Tm_fd_bud_budget extends Root_Controller
             $this->jsonReturn($ajax);
         }
     }
-
 
     private function check_my_editable($security)
     {
@@ -508,16 +514,22 @@ class Tm_fd_bud_budget extends Root_Controller
             $field_budget=$this->input->post('item');
             $field_budget['date']=System_helper::get_time($field_budget['date']);
             $field_budget_details=$this->input->post('item_info');
+            $field_budget_details['no_of_participant']=0;
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
             $field_budget_details['total_budget']=0;
             $participants=$this->input->post('farmer_participant');
-            foreach($participants as &$no_of_participant)
+            foreach($participants as $no_of_participant)
             {
                 if($no_of_participant=='')
                 {
                     $no_of_participant=0;
                 }
+                if($no_of_participant>0)
+                {
+                    $field_budget_details['no_of_participant']+=$no_of_participant;
+                }
             }
+            $field_budget_details['no_of_participant']=$field_budget_details['no_of_participant']+$field_budget_details['participant_through_customer']+$field_budget_details['participant_through_others'];
             $expense_budget=$this->input->post('expense_budget');
             foreach($expense_budget as $amount)
             {
@@ -680,7 +692,6 @@ class Tm_fd_bud_budget extends Root_Controller
 
     }
 
-
     private function check_validation($ids)
     {
         $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
@@ -698,9 +709,11 @@ class Tm_fd_bud_budget extends Root_Controller
         $this->form_validation->set_rules('item_info[present_condition]',$this->lang->line('LABEL_PRESENT_CONDITION'),'required');
         $this->form_validation->set_rules('item_info[farmers_evaluation]',$this->lang->line('LABEL_FARMERS_EVALUATION'),'required');
         $this->form_validation->set_rules('item_info[sales_target]',$this->lang->line('LABEL_NEXT_SALES_TARGET'),'required|numeric');
-        $this->form_validation->set_rules('item_info[no_of_participant]',$this->lang->line('LABEL_EXPECTED_PARTICIPANT'),'required|numeric');
+        //$this->form_validation->set_rules('item_info[no_of_participant]',$this->lang->line('LABEL_EXPECTED_PARTICIPANT'),'required|numeric');
         $this->form_validation->set_rules('item_info[diff_wth_com]',$this->lang->line('LABEL_SPECIFIC_DIFFERENCE'),'required');
         $this->form_validation->set_rules('item_info[expected_date]',$this->lang->line('LABEL_EXPECTED_DATE'),'required');
+        $this->form_validation->set_rules('item_info[arm_market_size]',$this->lang->line('LABEL_ARM_MARKET_SIZE'),'required');
+        $this->form_validation->set_rules('item_info[total_market_size]',$this->lang->line('LABEL_TOTAL_MARKET_SIZE'),'required');
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
         foreach($expenses as $expense)
         {
@@ -721,8 +734,6 @@ class Tm_fd_bud_budget extends Root_Controller
         }
         return true;
     }
-
-
 
     private function system_get_items()
     {
@@ -775,7 +786,6 @@ class Tm_fd_bud_budget extends Root_Controller
         $this->db->order_by('fdb.id','DESC');
         $items=$this->db->get()->result_array();
 
-
         foreach($items as &$item)
         {
             $item['date']=System_helper::display_date($item['date']);
@@ -784,8 +794,4 @@ class Tm_fd_bud_budget extends Root_Controller
         }
         $this->jsonReturn($items);
     }
-
-
-
-
-} 
+}

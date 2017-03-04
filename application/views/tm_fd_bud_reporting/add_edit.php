@@ -245,7 +245,22 @@ foreach($expense_items as $expense)
         <input type="text" name="new_item[next_sales_target]" id="next_sales_target" class="form-control float_type_positive" value="<?php echo $new_item['next_sales_target']; ?>"/>
     </div>
 </div>
-
+<div class="row show-grid">
+    <div class="col-sm-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> (kg)</label>
+    </div>
+    <div class="col-sm-2 col-sm-4">
+        <label id="sales_target"><?php echo $item_info['arm_market_size'];?> kg</label>
+    </div>
+</div>
+<div class="row show-grid">
+    <div class="col-sm-4">
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> (kg)</label>
+    </div>
+    <div class="col-sm-2 col-sm-4">
+        <label id="sales_target"><?php echo $item_info['total_market_size'];?> kg</label>
+    </div>
+</div>
 <div class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_COMMENT');?><span style="color:#FF0000">*</span></label>

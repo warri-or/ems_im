@@ -65,6 +65,7 @@
             <?php
         }
     ?>
+
     <?php
     if(isset($action_delete))
     {
@@ -134,6 +135,16 @@
             </div>
             <?php
         }
+    ?>
+    <?php
+    if(isset($action_details_get))
+    {
+        ?>
+        <div class="action_button">
+            <a class="btn" id="button_action_details_get" href="<?php echo $action_details_get; ?>"><?php echo $CI->lang->line("ACTION_DETAILS"); ?></a>
+        </div>
+    <?php
+    }
     ?>
     <?php
     if(isset($action_clear))

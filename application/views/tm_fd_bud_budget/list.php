@@ -14,10 +14,6 @@ if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
 {
     $action_data["action_details"]=base_url($CI->controller_url."/index/details");
 }
-//if(isset($CI->permissions['request_approve'])&&($CI->permissions['request_approve']==1))
-//{
-//    $action_data["action_request_po_approve"]=base_url($CI->controller_url."/index/request_approve");
-//}
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {
     $action_data["action_print"]='FIELD DAY BUDGET LIST';
@@ -148,9 +144,5 @@ $CI->load->view("action_buttons",$action_data);
 
                 ]
             });
-        //var listSource = [{ label: 'Name', value: 'name', checked: false }, { label: 'Beverage Type', value: 'type', checked: true }, { label: 'Calories', value: 'calories', checked: true }, { label: 'Total Fat', value: 'totalfat', checked: true }, { label: 'Protein', value: 'protein', checked: true}];
-
-        //$("#jqxlistbox").jqxListBox({ source: listSource,   checkboxes: true });
-
     });
 </script>

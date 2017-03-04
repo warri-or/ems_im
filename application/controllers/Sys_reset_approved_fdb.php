@@ -77,8 +77,12 @@ class Sys_reset_approved_fdb extends Root_Controller
                     $this->db->trans_start();  //DB Transaction Handle START
                     $data=array();
                     $data['status_approved']=$this->config->item('system_status_po_approval_pending');
+                    $data['status_requested']=$this->config->item('system_status_po_approval_pending');
+                    $data['remarks_requested']=null;
                     $data['remarks_approved']=null;
+                    $data['user_requested']=null;
                     $data['user_approved']=null;
+                    $data['date_requested']=null;
                     $data['date_approved']=null;
                     $data['user_updated'] = $user->user_id;
                     $data['date_updated'] = $time;

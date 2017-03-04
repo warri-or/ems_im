@@ -2,6 +2,14 @@
 $CI = & get_instance();
 $action_data=array();
 $action_data["action_back"]=base_url($CI->controller_url);
+if(isset($CI->permissions['edit']) && ($CI->permissions['edit']==1) && $item_info['id']>0)
+{
+    $action_data["action_edit_get"]=base_url($CI->controller_url."/index/edit/".$item_info['id']);
+}
+if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
+{
+    $action_data["action_print_page"]='FIELD DAY BUDGET DETAILS';
+}
 $CI->load->view("action_buttons",$action_data);
 ?>
 <div class="row widget">
@@ -169,7 +177,11 @@ foreach($info_details as $revision=>$info)
             </div>
         </div>
         <?php
-        foreach($participant_details[$index] as $key=>$participant_detail){
+        foreach($participant_details[$index] as $key=>$participant_detail)
+        {
+            //if(in_array($participant_detail['farmer_id'],$leading_farmers[$key])){
+            //if(isset($leading_farmers[$key]['text']) && isset($participant_detail['number'])){
+
             ?>
             <div class="row show-grid">
                 <div class="col-xs-4">
@@ -179,7 +191,25 @@ foreach($info_details as $revision=>$info)
                     <label class="control-label"><?php echo $participant_detail['number'];?></label>
                 </div>
             </div>
-        <?php } ?>
+        <?php
+        }
+        ?>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
+            </div>
+        </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
@@ -194,14 +224,15 @@ foreach($info_details as $revision=>$info)
             </div>
         </div>
         <?php
-        foreach($expense_items as $key=>$expense_item){
+        foreach($expense_details[$index] as $key=>$expenses){
+            //if($expense_items[$key]['text'] && $expenses['amount']){
             ?>
             <div class="row show-grid">
                 <div class="col-xs-4">
-                    <label class="control-label pull-right"><?php echo $expense_item['text']?></label>
+                    <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php echo number_format($expense_details[$index][$key]['amount']);?></label>
+                    <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
                 </div>
             </div>
         <?php } ?>
@@ -211,6 +242,24 @@ foreach($info_details as $revision=>$info)
             </div>
             <div class="col-sm-4 col-xs-8">
                 <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label id="total_market_size"><?php echo $info[0]['total_market_size'];?> kg</label>
+            </div>
+        </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label id="arm_market_size"><?php echo $info[0]['arm_market_size'];?> kg</label>
             </div>
         </div>
         <div class="row show-grid">
@@ -337,13 +386,12 @@ foreach($info_details as $revision=>$info)
             <div id="files_container" class="panel-collapse">
                 <div style="overflow-x: auto;" class="row show-grid">
 
-                    <table class="table table-bordered" style="width: 800px; margin-left: 50px;">
+                    <table class="table table-bordered" style="width: 840px; margin-left: 50px;">
                         <thead>
                         <tr>
-                            <th style="min-width: 60px;">Image Type</th>
+                            <th style="max-width: 100px;">Image Type</th>
                             <th style="max-width: 270px;max-height: 200px;">ARM</th>
                             <th style="max-width: 270px;max-height: 200px;">Competitor</th>
-                            <!--                    <th style="min-width: 60px;">Image Info.</th>-->
                         </tr>
                         </thead>
 
@@ -355,8 +403,8 @@ foreach($info_details as $revision=>$info)
                             ?>
 
                             <tr>
-                                <td style="min-width: 60px; color: #263238;"><b><?php echo $pic_cat['text'];?></b></td>
-                                <td style="max-width: 300px; max-height: 300px;">
+                                <td style="max-width: 100px; color: #263238;"><b><?php echo $pic_cat['text'];?></b></td>
+                                <td style="max-width: 270px; max-height: 200px;">
                                     <div class="col-xs-4" id="image_arm_<?php echo $pic_cat['value'];?>">
                                         <?php
                                         $image='images/no_image.jpg';
@@ -366,10 +414,10 @@ foreach($info_details as $revision=>$info)
                                             $image=$file_details[$pic_cat['value']]['arm_file_location'];
                                         }
                                         ?>
-                                        <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></h5>">
+                                        <img style="max-width: 270px; max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                     </div>
                                 </td>
-                                <td style="max-width: 300px;max-height: 300px;">
+                                <td style="max-width: 270px; max-height: 200px;">
                                     <div class="col-xs-4" id="image_com_<?php echo $pic_cat['value'];?>">
                                         <?php
                                         $image='images/no_image.jpg';
@@ -378,9 +426,14 @@ foreach($info_details as $revision=>$info)
                                             $image=$file_details[$pic_cat['value']]['competitor_file_location'];
                                         }
                                         ?>
-                                        <img style="max-width: 300px;max-height: 300px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>" data-toggle="Tooltip" title="<h5><?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></h5>">
+                                        <img style="max-width: 270px; max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                     </div>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td style="max-width: 100px;"><b>Remarks (<?php echo $pic_cat['text'];?>)</b></td>
+                                <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
+                                <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
                             </tr>
 
 
@@ -436,7 +489,11 @@ foreach($info_details as $revision=>$info)
                     </div>
                 </div>
                 <?php
-                foreach($participant_details[$index] as $key=>$participant_detail){
+                foreach($participant_details[$index] as $key=>$participant_detail)
+                {
+                    //if(in_array($participant_detail['farmer_id'],$leading_farmers[$key])){
+                    //if(isset($leading_farmers[$key]['text']) && isset($participant_detail['number'])){
+
                     ?>
                     <div class="row show-grid">
                         <div class="col-xs-4">
@@ -446,7 +503,25 @@ foreach($info_details as $revision=>$info)
                             <label class="control-label"><?php echo $participant_detail['number'];?></label>
                         </div>
                     </div>
-                <?php } ?>
+                <?php
+                }
+                ?>
+                <div style="" class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
+                    </div>
+                </div>
+                <div style="" class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
+                    </div>
+                </div>
                 <div style="" class="row show-grid">
                     <div class="col-xs-4">
                         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
@@ -461,14 +536,15 @@ foreach($info_details as $revision=>$info)
                     </div>
                 </div>
                 <?php
-                foreach($expense_items as $key=>$expense_item){
+                foreach($expense_details[$index] as $key=>$expenses){
+                    //if($expense_items[$key]['text'] && $expenses['amount']){
                     ?>
                     <div class="row show-grid">
                         <div class="col-xs-4">
-                            <label class="control-label pull-right"><?php echo $expense_item['text']?></label>
+                            <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                         </div>
                         <div class="col-sm-4 col-xs-8">
-                            <label class="control-label"><?php echo number_format($expense_details[$index][$key]['amount']);?></label>
+                            <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
                         </div>
                     </div>
                 <?php } ?>
@@ -478,6 +554,23 @@ foreach($info_details as $revision=>$info)
                     </div>
                     <div class="col-sm-4 col-xs-8">
                         <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                    </div>
+                </div>
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> :</label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <label id="total_market_size"><?php echo $info[0]['total_market_size'];?> kg</label>
+                    </div>
+                </div>
+
+                <div class="row show-grid">
+                    <div class="col-xs-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> :</label>
+                    </div>
+                    <div class="col-sm-4 col-xs-8">
+                        <label id="arm_market_size"><?php echo $info[0]['arm_market_size'];?> kg</label>
                     </div>
                 </div>
                 <div class="row show-grid">
@@ -502,10 +595,10 @@ foreach($info_details as $revision=>$info)
     jQuery(document).ready(function()
     {
         turn_off_triggers();
-        $('[data-toggle="Tooltip"]').tooltip({
-            animated: 'fade',
-            placement: 'bottom',
-            html: true
-        });
+//        $('[data-toggle="Tooltip"]').tooltip({
+//            animated: 'fade',
+//            placement: 'bottom',
+//            html: true
+//        });
     });
 </script>

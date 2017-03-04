@@ -68,11 +68,11 @@ class Setup_fsetup_leading_farmer extends Root_Controller
     {
         $this->db->from($this->config->item('table_setup_fsetup_leading_farmer').' lf');
         $this->db->select('lf.*');
-        $this->db->select('u.name upazilla_name');
-        $this->db->select('d.name district_name');
-        $this->db->select('t.name territory_name');
-        $this->db->select('zone.name zone_name');
-        $this->db->select('division.name division_name');
+        $this->db->select('u.name upazilla_name,u.ordering order');
+        $this->db->select('d.name district_name,d.ordering order');
+        $this->db->select('t.name territory_name,t.ordering order');
+        $this->db->select('zone.name zone_name,zone.ordering order');
+        $this->db->select('division.name division_name,division.ordering order');
         $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = lf.upazilla_id','INNER');
         $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
         $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
@@ -98,9 +98,17 @@ class Setup_fsetup_leading_farmer extends Root_Controller
                 }
             }
         }
+        $this->db->order_by('division.ordering','ASC');
+        $this->db->order_by('zone.ordering','ASC');
+        $this->db->order_by('t.ordering','ASC');
+        $this->db->order_by('d.ordering','ASC');
+        $this->db->order_by('u.ordering','ASC');
         $this->db->order_by('lf.ordering','ASC');
         $this->db->where('lf.status !=',$this->config->item('system_status_delete'));
         $items=$this->db->get()->result_array();
+//        echo '<pre>';
+//        print_r($items);
+//        echo '</pre>';exit;
         $this->jsonReturn($items);
     }
 
