@@ -222,7 +222,7 @@ if($index==1){
 </div>
 <?php
 foreach($expense_details[$index] as $key=>$expenses){
-    if($expense_items[$key]['text'] && $expenses['amount']){
+    //if($expense_items[$key]['text'] && $expenses['amount']){
     ?>
     <div class="row show-grid">
         <div class="col-xs-4">
@@ -232,7 +232,7 @@ foreach($expense_details[$index] as $key=>$expenses){
             <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
         </div>
     </div>
-<?php } }?>
+<?php } ?>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
         <label class="control-label pull-right"> Total Budget :</label>
@@ -557,7 +557,7 @@ else{
             </div>
             <?php
             foreach($expense_details[$index] as $key=>$expenses){
-                if($expense_items[$key]['text'] && $expenses['amount']){
+                //if($expense_items[$key]['text'] && $expenses['amount']){
                 ?>
                 <div class="row show-grid">
                     <div class="col-xs-4">
@@ -567,7 +567,7 @@ else{
                         <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
                     </div>
                 </div>
-            <?php } }?>
+            <?php } ?>
             <div style="" class="row show-grid">
                 <div class="col-xs-4">
                     <label class="control-label pull-right"> Total Budget :</label>
@@ -604,8 +604,7 @@ else{
             <div style="overflow-x: auto;" class="row show-grid"></div>
         </div>
     </div>
-<?php }?>
-<?php }?>
+<?php }}?>
 
 
 </div>
@@ -615,7 +614,7 @@ else{
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
-        turn_off_triggers();
+        //turn_off_triggers();
 //        $('[data-toggle="Tooltip"]').tooltip({
 //            animated: 'fade',
 //            placement: 'bottom',

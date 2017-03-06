@@ -226,7 +226,7 @@ $CI->load->view("action_buttons",$action_data);
             </div>
             <?php
             foreach($expense_details[$index] as $key=>$expenses){
-                if($expense_items[$key]['text'] && $expenses['amount']){
+                //if($expense_items[$key]['text'] && $expenses['amount']){
                 ?>
                 <div class="row show-grid">
                     <div class="col-xs-4">
@@ -236,7 +236,7 @@ $CI->load->view("action_buttons",$action_data);
                         <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
                     </div>
                 </div>
-            <?php } }?>
+            <?php } ?>
             <div style="" class="row show-grid">
                 <div class="col-xs-4">
                     <label class="control-label pull-right"> Total Budget :</label>
@@ -537,7 +537,7 @@ $CI->load->view("action_buttons",$action_data);
                     </div>
                     <?php
                     foreach($expense_details[$index] as $key=>$expenses){
-                        if($expense_items[$key]['text'] && $expenses['amount']){
+                        //if($expense_items[$key]['text'] && $expenses['amount']){
                         ?>
                         <div class="row show-grid">
                             <div class="col-xs-4">
@@ -547,7 +547,7 @@ $CI->load->view("action_buttons",$action_data);
                                 <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
                             </div>
                         </div>
-                    <?php } }?>
+                    <?php } ?>
                     <div style="" class="row show-grid">
                         <div class="col-xs-4">
                             <label class="control-label pull-right"> Total Budget :</label>

@@ -334,6 +334,7 @@ $CI->load->view("action_buttons",$action_data);
         $total=0;
         foreach($leading_farmers as $key=>$lead_farmer)
         {
+            if(isset($participants[$lead_farmer['value']]) || $lead_farmer['status']=='Active'){
             ?>
             <div class="row show-grid">
                 <div class="col-xs-5">
@@ -349,7 +350,7 @@ $CI->load->view("action_buttons",$action_data);
                 </div>
             </div>
         <?php
-        }
+        }}
         ?>
 
     </div>
@@ -389,7 +390,7 @@ $CI->load->view("action_buttons",$action_data);
 $total=0;
 foreach($expense_items as $expense)
 {
-    //if(isset($expense_budget[$expense['value']]['amount'])){
+if(isset($expense_budget[$expense['value']]) || $expense['status']=='Active'){
     ?>
     <div class="row show-grid">
         <div class="col-xs-5">
@@ -405,7 +406,7 @@ foreach($expense_items as $expense)
         </div>
     </div>
 <?php
-}
+}}
 ?>
 <div style="" class="row show-grid" id="total_budget_container">
     <div class="col-xs-5">
@@ -551,48 +552,13 @@ foreach($expense_items as $expense)
 
 
 
-
-<script type="text/javascript">
-    function findTotal()
-    {
-        var total=0;
-        $(".expense_budget").each( function( index, element )
-        {
-            if($(this).val()==parseFloat($(this).val()))
-            {
-                total=total+parseFloat($(this).val());
-            }
-        });
-        $('#total_budget').html(number_format(total,2));
-    }
-
-    function findTotal_participant()
-    {
-        var total=0;
-        $(".participant_budget").each( function( index, element )
-        {
-            if($(this).val()==parseFloat($(this).val()))
-            {
-                total=total+parseFloat($(this).val());
-            }
-        });
-        if(total=>0)
-        {
-            $('#total_participant_container').show();
-        }
-        $('#no_of_participant').html(number_format(total));
-    }
-
-</script>
-
-
-
 <script type="text/javascript">
 
 jQuery(document).ready(function()
 {
     turn_off_triggers();
-
+    $(document).off("input",".expense_budget");
+    $(document).off("input",".participant_budget");
     $(".datepicker").datepicker({dateFormat : display_date_format});
 
 
@@ -855,13 +821,40 @@ jQuery(document).ready(function()
     });
 
 
-    $(document).on("change",".expense_budget",function()
+    $(document).on("input",".expense_budget",function()
     {
-        findTotal();
+        //findTotal();
+        var total=0;
+        $(".expense_budget").each( function( index, element )
+        {
+            if($(this).val()==parseFloat($(this).val()))
+            {
+                total=total+parseFloat($(this).val());
+            }
+        });
+        if(total=>0)
+        {
+            $('#total_budget_container').show();
+        }
+        $('#total_budget').html(number_format(total,2));
     });
-    $(document).on("change",".participant_budget",function()
+
+    $(document).on("input",".participant_budget",function()
     {
-        findTotal_participant();
+        //findTotal_participant();
+        var total=0;
+        $(".participant_budget").each( function( index, element )
+        {
+            if($(this).val()==parseFloat($(this).val()))
+            {
+                total=total+parseFloat($(this).val());
+            }
+        });
+        if(total=>0)
+        {
+            $('#total_participant_container').show();
+        }
+        $('#no_of_participant').html(number_format(total));
     });
 
 
@@ -869,138 +862,3 @@ jQuery(document).ready(function()
 
 });
 </script>
-
-
-
-
-
-
-
-
-<!-- MIne Start-->
-
-<!--<div class="panel-group" id="accordion">-->
-<!---->
-<!--    <div class="panel panel-default">-->
-<!--        <div class="panel-heading">-->
-<!--            <h4 class="panel-title">-->
-<!--                <a class="accordion-toggle external" data-toggle="collapse"  data-target="#image" href="#">Upload Images</a>-->
-<!--            </h4>-->
-<!--        </div>-->
-<!---->
-<!--        <div id="image" class="panel-collapse collapse">-->
-<!--            <div id="images_container">-->
-<!--                <div style="overflow-x: auto;" class="row show-grid">-->
-<!--                <table class="table table-bordered">-->
-<!--                    <tbody>-->
-<!---->
-<!--                    --><?php
-//                    foreach($details['images'] as $index=>$images)
-//                    {
-//                    ?>
-<!---->
-<!--                    <tr>-->
-<!--                        <td>-->
-<!---->
-<!--                            <div class="col-xs-4">-->
-<!--                                <label class="control-label pull-right">Picture</label>-->
-<!--                            </div>-->
-<!---->
-<!---->
-<!--                            <div class="preview_container_image col-xs-4 " id="preview_container_image_--><?php //echo $index+1;?><!--">-->
-<!--                                --><?php
-//                                $image=base_url('images/no_image.jpg');
-//                                if(strlen($images)>0)
-//                                {
-//                                    $image=$images;
-//                                }
-//                                ?>
-<!--                                <img style="max-width: 250px;" src="--><?php //echo $image;?><!--">-->
-<!--                            </div>-->
-<!---->
-<!---->
-<!--                            <div class="col-xs-4">-->
-<!--                                <input type="file" id="image_--><?php //echo $index+1;?><!--" name="image_--><?php //echo $index+1;?><!--" data-current-id="--><?php //echo $index+1;?><!--" data-preview-container="#preview_container_image_--><?php //echo $index+1;?><!--" class="browse_button"><br>-->
-<!--                                <button type="button" class="btn btn-danger system_button_add_delete">--><?php //echo $CI->lang->line('DELETE'); ?><!--</button>-->
-<!--                            </div>-->
-<!--                        </td>-->
-<!---->
-<!--                    </tr>-->
-<!--                    --><?php
-//                    }
-//                    ?>
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="row show-grid">-->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <button type="button" class="btn btn-warning system_button_add_more" data-current-id="">--><?php //echo $CI->lang->line('LABEL_ADD_MORE');?><!--</button>-->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!---->
-<!--    </div>-->
-<!---->
-<!---->
-<!--     <div class="panel panel-default">-->
-<!--        <div class="panel-heading">-->
-<!--            <h4 class="panel-title">-->
-<!--                <a class="accordion-toggle external" data-toggle="collapse"  data-target="#pdf" href="#">Upload Video</a>-->
-<!--            </h4>-->
-<!--        </div>-->
-<!--        <div id="pdf" class="panel-collapse collapse">-->
-<!--            <div class="row show-grid">-->
-<!--                <div class="col-xs-4">-->
-<!--                    <label class="control-label pull-right">Video File</label>-->
-<!--                </div>-->
-<!--                <div class="col-xs-4" id="preview_container_video">-->
-<!---->
-<!--                </div>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <input type="file" class="browse_button" data-preview-container="#preview_container_pdf" name="video">-->
-<!--                </div>-->
-<!---->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!---->
-<!--</div>-->
-
-<!-- MIne End -->
-
-<!-- MIne -->
-
-<!--<div id="system_content_add_more" style="display: none;">-->
-<!--    <table>-->
-<!--        <tbody>-->
-<!--        <tr>-->
-<!--            <td>-->
-<!--                <div class="col-xs-4">-->
-<!--                    <label class="control-label pull-right">Picture</label>-->
-<!--                </div>-->
-<!---->
-<!---->
-<!--                <div class="preview_container_image col-xs-4 " >-->
-<!--                    <img style="max-width: 250px;" src="--><?php //echo base_url('images/no_image.jpg');?><!--">-->
-<!--                </div>-->
-<!---->
-<!---->
-<!--                <div class="col-xs-4">-->
-<!---->
-<!--                    <input type="file" class="browse_button_new"><br>-->
-<!--                    <button type="button" class="btn btn-danger system_button_add_delete">--><?php //echo $CI->lang->line('DELETE'); ?><!--</button>-->
-<!--                </div>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-<!--</div>-->
-
-<!-- MIne -->
