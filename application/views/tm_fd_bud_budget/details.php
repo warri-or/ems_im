@@ -597,7 +597,7 @@ foreach($info_details as $revision=>$info)
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
-        turn_off_triggers();
+        //turn_off_triggers();
 //        $('[data-toggle="Tooltip"]').tooltip({
 //            animated: 'fade',
 //            placement: 'bottom',

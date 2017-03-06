@@ -325,25 +325,12 @@ $CI->load->view("action_buttons",$action_data);
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
             </div>
         </div>
-<!--        --><?php
-//        foreach($leading_farmers as $lead_farmer)
-//        {
-//        ?>
-<!--        <div class="row show-grid">-->
-<!--            <div class="col-xs-5">-->
-<!--                <label class="control-label pull-right">--><?php //echo $lead_farmer['text'].' ('.$lead_farmer['phone_no'].')';?><!--<span style="color: red;">*</span></label>-->
-<!--            </div>-->
-<!--            <div class="col-sm-3 col-xs-9">-->
-<!--                <input type="text" name="farmer_participant[--><?php //echo $lead_farmer['value'];?><!--]" class="participant_budget form-control float_type_positive" value="--><?php //if(isset($participants[$lead_farmer['value']])){echo $participants[$lead_farmer['value']]['number'];}?><!--"/>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        --><?php
-//        }
-//        ?>
+
         <?php
         $total=0;
         foreach($leading_farmers as $lead_farmer)
         {
+        if(isset($participants[$lead_farmer['value']]) || $lead_farmer['status']=='Active'){
             ?>
             <div class="row show-grid">
                 <div class="col-xs-5">
@@ -359,7 +346,7 @@ $CI->load->view("action_buttons",$action_data);
                 </div>
             </div>
         <?php
-        }
+        }}
         ?>
 
     </div>
@@ -403,6 +390,7 @@ $CI->load->view("action_buttons",$action_data);
     $total=0;
      foreach($expense_items as $expense)
      {
+    if(isset($expense_budget[$expense['value']]) || $expense['status']=='Active'){
          //if(isset($expense_budget[$expense['value']]['amount'])){
      ?>
     <div class="row show-grid">
@@ -419,7 +407,7 @@ $CI->load->view("action_buttons",$action_data);
          </div>
     </div>
      <?php
-     }
+     }}
     ?>
 
 <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="total_budget_container">
@@ -560,8 +548,8 @@ $CI->load->view("action_buttons",$action_data);
 <div class="clearfix"></div>
 </form>
 
-<script type="text/javascript">
-    function findTotal()
+<!--<script type="text/javascript">-->
+    /*function findTotal()
     {
         var total=0;
         $(".expense_budget").each( function( index, element )
@@ -576,9 +564,9 @@ $CI->load->view("action_buttons",$action_data);
             $('#total_budget_container').show();
         }
         $('#total_budget').html(number_format(total,2));
-    }
+    }*/
 
-    function findTotal_participant()
+    /*function findTotal_participant()
     {
         var total=0;
         $(".participant_budget").each( function( index, element )
@@ -593,9 +581,9 @@ $CI->load->view("action_buttons",$action_data);
             $('#total_participant_container').show();
         }
         $('#no_of_participant').html(number_format(total));
-    }
+    }*/
 
-</script>
+<!--</script>-->
 
 
 
@@ -604,6 +592,8 @@ $CI->load->view("action_buttons",$action_data);
     jQuery(document).ready(function()
     {
         turn_off_triggers();
+        $(document).off("input",".expense_budget");
+        $(document).off("input",".participant_budget");
 
         $(".datepicker").datepicker({dateFormat : display_date_format});
 
@@ -867,14 +857,40 @@ $CI->load->view("action_buttons",$action_data);
         });
 
 
-        $(document).on("change",".expense_budget",function()
+        $(document).on("input",".expense_budget",function()
         {
-            findTotal();
+            //findTotal();
+            var total=0;
+            $(".expense_budget").each( function( index, element )
+            {
+                if($(this).val()==parseFloat($(this).val()))
+                {
+                    total=total+parseFloat($(this).val());
+                }
+            });
+            if(total=>0)
+            {
+                $('#total_budget_container').show();
+            }
+            $('#total_budget').html(number_format(total,2));
         });
 
-        $(document).on("change",".participant_budget",function()
+        $(document).on("input",".participant_budget",function()
         {
-            findTotal_participant();
+            //findTotal_participant();
+            var total=0;
+            $(".participant_budget").each( function( index, element )
+            {
+                if($(this).val()==parseFloat($(this).val()))
+                {
+                    total=total+parseFloat($(this).val());
+                }
+            });
+            if(total=>0)
+            {
+                $('#total_participant_container').show();
+            }
+            $('#no_of_participant').html(number_format(total));
         });
 
 
