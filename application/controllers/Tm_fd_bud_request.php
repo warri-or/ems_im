@@ -231,7 +231,7 @@ class Tm_fd_bud_request extends Root_Controller
             $data['crop_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id']));
             $data['competitor_varieties']=Query_helper::get_info($this->config->item('table_setup_classification_varieties'),array('id value','name text'),array('crop_type_id ='.$data['item_info']['crop_type_id'],'whose ="Competitor"'));
 
-            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+            $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
             $data['expense_budget']=array();
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
@@ -239,7 +239,7 @@ class Tm_fd_bud_request extends Root_Controller
                 $data['expense_budget'][$result['item_id']]=$result;
             }
 
-            $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
+            $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
             $data['participants']=array();
             $data['total']='';
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));
@@ -345,7 +345,8 @@ class Tm_fd_bud_request extends Root_Controller
             }
         }
         $participants=$this->input->post('farmer_participant');
-        if(!$this->check_validation($participants))
+        $expense_budget=$this->input->post('expense_budget');
+        if(!$this->check_validation($participants,$expense_budget))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -405,10 +406,6 @@ class Tm_fd_bud_request extends Root_Controller
                     $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                     $this->jsonReturn($ajax);
                     die();
-                }
-                else
-                {
-                    $budget_id=$budget_id;
                 }
             }
             //budget details start
@@ -646,7 +643,6 @@ class Tm_fd_bud_request extends Root_Controller
             }
             $data['users']=System_helper::get_users_info($user_ids);
 
-
             $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fbid');
             $this->db->select('fbid.*');
             //$this->db->join($this->config->item('table_tm_fd_bud_budget').' fbb','fbb.id =fbid.budget_id','INNER');
@@ -682,7 +678,7 @@ class Tm_fd_bud_request extends Root_Controller
                 $data['expense_details'][$expense['revision']][$expense['item_id']]=$expense;
             }
             //participant through leading farmers
-            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('upazilla_id ='.$data['item_info']['upazilla_id']));
+            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
             foreach($results as $key=>$result)
             {
                 $data['leading_farmers'][$result['value']]=$result;
@@ -837,7 +833,7 @@ class Tm_fd_bud_request extends Root_Controller
                 $data['expense_details'][$expense['revision']][$expense['item_id']]=$expense;
             }
             //participant through leading farmers
-            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('upazilla_id ='.$data['item_info']['upazilla_id']));
+            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
             foreach($results as $key=>$result)
             {
                 $data['leading_farmers'][$result['value']]=$result;

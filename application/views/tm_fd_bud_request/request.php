@@ -608,7 +608,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
 <script type="text/javascript">
     jQuery(document).ready(function()
     {
-        turn_off_triggers();
+        //turn_off_triggers();
 //        $('[data-toggle="Tooltip"]').tooltip({
 //            animated: 'fade',
 //            placement: 'bottom',
