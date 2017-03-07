@@ -193,7 +193,11 @@ class Reports_fd_management extends Root_Controller
         //get user info from login site
         $data['user_info']=System_helper::get_users_info($user_ids);
 
-        $data['expense_items']=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
+        $results=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
+        foreach($results as $result)
+        {
+            $data['expense_items'][$result['value']]=$result;
+        }
         $data['expense_budget']=array();
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budget_id,'revision=1'));
         foreach($results as $result)
@@ -207,12 +211,17 @@ class Reports_fd_management extends Root_Controller
             $data['expense_report'][$res['item_id']]=$res;
         }
 
-        $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no phone_no'),array('status ="'.$this->config->item('system_status_active').'"','upazilla_id ='.$data['item_info']['upazilla_id']));
+        $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
+        $data['leading_farmers']=array();
+        foreach($results as $result)
+        {
+            $data['leading_farmers'][$result['value']]=$result;
+        }
         $data['participants']=array();
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));
         foreach($results as $res)
         {
-            $data['participants'][][$res['farmer_id']]=$res;
+            $data['participants'][$res['farmer_id']]=$res;
         }
         $data['farmers']=array();
         $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));

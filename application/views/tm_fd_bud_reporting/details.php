@@ -161,13 +161,37 @@ foreach($info_details as $revision=>$info)
                     <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($participants[$leading_farmers[$key]['value']])){echo $participants[$leading_farmers[$key]['value']]['number'];}?></label>
+                    <label class="control-label"><?php if(isset($participants[$key]['number'])){echo $participants[$key]['number'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
                     <label class="control-label"><?php echo $participant_detail['number'];?></label>
                 </div>
             </div>
         <?php } ?>
+
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
+            </div>
+        </div>
+
 
         <div style="" class="row show-grid">
             <div class="col-sm-4">
@@ -198,17 +222,17 @@ foreach($info_details as $revision=>$info)
             </div>
         </div>
         <?php
-        foreach($expense_items as $key=>$expense_item){
+        foreach($expense_details[$index] as $key=>$details){
             ?>
             <div class="row show-grid">
                 <div class="col-sm-4">
-                    <label class="control-label pull-right"><?php echo $expense_item['text']?></label>
+                    <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($expense_budget[$expense_item['value']])){echo $expense_budget[$expense_item['value']]['amount'];}?></label>
+                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php echo number_format($expense_details[$index][$key]['amount']);?></label>
+                    <label class="control-label"><?php echo number_format($details['amount']);?></label>
                 </div>
             </div>
         <?php } ?>
@@ -443,13 +467,38 @@ foreach($info_details as $revision=>$info)
                             <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                         </div>
                         <div class="col-sm-2 col-sm-4">
-                            <label class="control-label"><?php if(isset($participants[$leading_farmers[$key]['value']])){echo $participants[$leading_farmers[$key]['value']]['number'];}?></label>
+                            <label class="control-label"><?php if(isset($participants[$key]['number'])){echo $participants[$key]['number'];}?></label>
                         </div>
                         <div class="col-sm-2 col-sm-4">
                             <label class="control-label"><?php echo $participant_detail['number'];?></label>
                         </div>
                     </div>
                 <?php } ?>
+
+                <div style="" class="row show-grid">
+                    <div class="col-sm-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
+                    </div>
+                    <div class="col-sm-2 col-sm-4">
+                        <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
+                    </div>
+                    <div class="col-sm-2 col-sm-4">
+                        <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
+                    </div>
+                </div>
+                <div style="" class="row show-grid">
+                    <div class="col-sm-4">
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
+                    </div>
+                    <div class="col-sm-2 col-sm-4">
+                        <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
+                    </div>
+                    <div class="col-sm-2 col-sm-4">
+                        <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
+                    </div>
+                </div>
+
+
                 <div style="" class="row show-grid">
                     <div class="col-sm-4">
                         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT');?> :</label>
@@ -478,17 +527,17 @@ foreach($info_details as $revision=>$info)
                     </div>
                 </div>
                 <?php
-                foreach($expense_items as $key=>$expense_item){
+                foreach($expense_details[$index] as $key=>$details){
                     ?>
                     <div class="row show-grid">
                         <div class="col-sm-4">
-                            <label class="control-label pull-right"><?php echo $expense_item['text']?></label>
+                            <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                         </div>
                         <div class="col-sm-2 col-sm-4">
-                            <label class="control-label"><?php if(isset($expense_budget[$expense_item['value']])){echo $expense_budget[$expense_item['value']]['amount'];}?></label>
+                            <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
                         </div>
                         <div class="col-sm-2 col-sm-4">
-                            <label class="control-label"><?php echo number_format($expense_details[$index][$key]['amount']);?></label>
+                            <label class="control-label"><?php echo number_format($details['amount']);?></label>
                         </div>
                     </div>
                 <?php } ?>
@@ -516,22 +565,22 @@ foreach($info_details as $revision=>$info)
                         <label id="total_budget"><?php echo $info[0]['next_sales_target'];?> kg</label>
                     </div>
                 </div>
-                <div style="" class="row show-grid">
-                    <div class="col-xs-4">
-                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_COMMENT');?> :</label>
-                    </div>
-                    <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo $info[0]['participant_comment'];?></label>
-                    </div>
-                </div>
-                <div class="row show-grid">
-                    <div class="col-xs-4">
-                        <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_RECOMMENDATION');?> :</label>
-                    </div>
-                    <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo $report_item[0]['recommendation'];?></label>
-                    </div>
-                </div>
+<!--                <div style="" class="row show-grid">-->
+<!--                    <div class="col-xs-4">-->
+<!--                        <label class="control-label pull-right">--><?php //echo $CI->lang->line('LABEL_PARTICIPANT_COMMENT');?><!-- :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-4 col-xs-8">-->
+<!--                        <label class="control-label">--><?php //echo $info[0]['participant_comment'];?><!--</label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row show-grid">-->
+<!--                    <div class="col-xs-4">-->
+<!--                        <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_RECOMMENDATION');?><!-- :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col-sm-4 col-xs-8">-->
+<!--                        <label class="control-label">--><?php //echo $report_item[0]['recommendation'];?><!--</label>-->
+<!--                    </div>-->
+<!--                </div>-->
 
                 <div style="overflow-x: auto;" class="row show-grid"></div>
             </div>
@@ -547,48 +596,13 @@ foreach($info_details as $revision=>$info)
 
 
 <script type="text/javascript">
-    jQuery(document).ready(function()
-    {
-        turn_off_triggers();
-        $('[class="Tooltip"]').tooltip({
-            animated: 'fade',
-            placement: 'bottom',
-            html: true
-        });
-    });
+//    jQuery(document).ready(function()
+//    {
+//        turn_off_triggers();
+//        $('[class="Tooltip"]').tooltip({
+//            animated: 'fade',
+//            placement: 'bottom',
+//            html: true
+//        });
+//    });
 </script>
-
-<!--<script type="text/javascript">-->
-<!--    $(document).ready(function(){-->
-<!---->
-<!--// Method 1 - uses 'data-toggle' to initialize-->
-<!--        $('[data-toggle="myToolTip"]').tooltip();-->
-<!---->
-<!--        /* - - - - - - - - - - - - - - - - - - - */-->
-<!---->
-<!--// Method 2 - uses the id, class or native tag, could use .btn as class-->
-<!---->
-<!--        $('button').tooltip();-->
-<!---->
-<!--// options set in JS by class-->
-<!--        $(".tip-top").tooltip({-->
-<!--            placement : 'top'-->
-<!--        });-->
-<!--        $(".tip-right").tooltip({-->
-<!--            placement : 'right'-->
-<!--        });-->
-<!--        $(".tip-bottom").tooltip({-->
-<!--            placement : 'bottom'-->
-<!--        });-->
-<!--        $(".tip-left").tooltip({-->
-<!--            placement : 'left',-->
-<!--            html : true-->
-<!--        });-->
-<!---->
-<!--        $(".tip-auto").tooltip({-->
-<!--            placement : 'auto',-->
-<!--            html : true-->
-<!--        });-->
-<!---->
-<!--    });-->
-<!--</script>-->

@@ -123,9 +123,6 @@ $CI = & get_instance();
             </div>
         </div>
         <?php
-        //echo '<pre>';
-        //print_r($participants);
-        //echo '</pre>';
         foreach($participants as $key=>$participant)
         {
             ?>
@@ -134,17 +131,41 @@ $CI = & get_instance();
                     <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($participant[$leading_farmers[$key]['value']])){echo $participant[$leading_farmers[$key]['value']]['number'];}?></label>
+                    <label class="control-label"><?php if(isset($participant['number'])){echo $participant['number'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php echo $farmers[$leading_farmers[$key]['value']]['number'];?></label>
+                    <label class="control-label"><?php echo $farmers[$key]['number'];?></label>
                 </div>
             </div>
         <?php } ?>
 
         <div style="" class="row show-grid">
             <div class="col-sm-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT');?> :</label>
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info['participant_through_customer']);?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info['participant_through_others']);?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
             </div>
             <div class="col-sm-2 col-sm-4">
                 <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
@@ -171,17 +192,17 @@ $CI = & get_instance();
             </div>
         </div>
         <?php
-        foreach($expense_items as $key=>$expense_item){
+        foreach($expense_report as $key=>$report){
             ?>
             <div class="row show-grid">
                 <div class="col-sm-4">
-                    <label class="control-label pull-right"><?php echo $expense_item['text']?></label>
+                    <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($expense_budget[$expense_item['value']])){echo $expense_budget[$expense_item['value']]['amount'];}?></label>
+                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php echo number_format($expense_report[$expense_item['value']]['amount']);?></label>
+                    <label class="control-label"><?php echo number_format($report['amount']);?></label>
                 </div>
             </div>
         <?php } ?>

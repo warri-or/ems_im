@@ -136,12 +136,12 @@ if($item_info['com_variety_name']){
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <input type="text" name="new_item[guest]" id="guest" class="form-control float_type_positive" value="<?php echo $new_item['guest']; ?>"/>
+        <input type="text" name="new_item[guest]" id="guest" class="participant_budget form-control float_type_positive" value="<?php echo $new_item['guest']; ?>"/>
     </div>
 </div>
-<div style="<?php if(!(sizeof($leading_farmers)>0)){echo 'display:none;';}?>" class="row show-grid" id="leading_farmer_container">
+<!--<div style="--><?php //if(!(sizeof($leading_farmers)>0)){echo 'display:none;';}?><!--" class="row show-grid" id="leading_farmer_container">-->
 
-    <div id="leading_farmer_id" class="row show-grid">
+<!--    <div id="leading_farmer_id" class="row show-grid">-->
         <div class="row show-grid">
             <div class="col-sm-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
@@ -166,27 +166,54 @@ if($item_info['com_variety_name']){
                     <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?><span style="color: red;">*</span></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($participant[$leading_farmers[$key]['value']])){echo $participant[$leading_farmers[$key]['value']]['number'];}?></label>
+                    <label class="control-label"><?php if(isset($participant['number'])){echo $participant['number'];}?></label>
                 </div>
                 <div class="col-sm-2 col-sm-4">
-                    <input type="text" name="farmers[<?php echo $leading_farmers[$key]['value'];?>]" id="farmers[<?php echo $leading_farmers[$key]['value'];?>]" class="form-control float_type_positive" value="<?php if(isset($farmers[$leading_farmers[$key]['value']])){echo $farmers[$leading_farmers[$key]['value']]['number'];}?>"/>
+                    <input type="text" name="farmers[<?php echo $leading_farmers[$key]['value'];?>]" id="farmers[<?php echo $leading_farmers[$key]['value'];?>]" class="participant_budget form-control float_type_positive" value="<?php if(isset($farmers[$leading_farmers[$key]['value']])){echo $farmers[$leading_farmers[$key]['value']]['number'];}?>"/>
                 </div>
             </div>
         <?php
         }
         ?>
 
+<!--    </div>-->
+
+
+
+    <div class="row show-grid">
+        <div class="col-sm-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+        </div>
+        <div class="col-sm-2 col-sm-4">
+            <label class="control-label"><?php echo number_format($item_info['participant_through_customer']);?></label>
+        </div>
+        <div class="col-sm-2 col-sm-4">
+            <input type="text" name="new_item[participant_through_customer]" id="participant_through_customer" class="participant_budget form-control float_type_positive" value="<?php if(isset($new_item['participant_through_customer'])){echo $new_item['participant_through_customer'];}?>"/>
+        </div>
     </div>
-</div>
+    <div class="row show-grid">
+        <div class="col-sm-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+        </div>
+        <div class="col-sm-2 col-sm-4">
+            <label class="control-label"><?php echo number_format($item_info['participant_through_others']);?></label>
+        </div>
+        <div class="col-sm-2 col-sm-4">
+            <input type="text" name="new_item[participant_through_others]" id="participant_through_others" class="participant_budget form-control float_type_positive" value="<?php if(isset($new_item['participant_through_others'])){echo $new_item['participant_through_others'];}?>"/>
+        </div>
+    </div>
+
+
+<!--</div>-->
 <div style="" class="row show-grid">
     <div class="col-sm-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-2 col-sm-4">
-        <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
+        <label class="control-label"><?php echo $item_info['no_of_participant'];?> (Person)</label>
     </div>
-    <div class="col-sm-2 col-sm-4">
-        <input type="text" name="new_item[total_participant]" id="total_participant" class="form-control float_type_positive" value="<?php echo $new_item['total_participant']; ?>"/>
+    <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="col-sm-2 col-sm-4" id="total_participant_container">
+        <label id="no_of_participant"><?php if(isset($total_participant)) {echo number_format($total_participant);}?> (Person)</label>
     </div>
 </div>
 <div class="row show-grid">
@@ -205,18 +232,18 @@ if($item_info['com_variety_name']){
     </div>
 </div>
 <?php
-foreach($expense_items as $expense)
+foreach($expense_budget as $key=>$budget)
 {
     ?>
     <div class="row show-grid">
         <div class="col-sm-4">
-            <label class="control-label pull-right"><?php echo $expense['text'];?><span style="color: red;">*</span></label>
+            <label class="control-label pull-right"><?php echo $expense_items[$key]['text'];?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
-            <label class="control-label"><?php if(isset($expense_budget[$expense['value']])){echo $expense_budget[$expense['value']]['amount'];}?></label>
+            <label class="control-label"><?php if(isset($budget['amount'])){echo $budget['amount'];}?></label>
         </div>
         <div class="col-sm-2 col-sm-4">
-            <input type="text" name="expense_report[<?php echo $expense['value'];?>]" id="expense_report[<?php echo $expense['value'];?>]" class="form-control float_type_positive total_expense" value="<?php if(isset($expense_report[$expense['value']])){echo $expense_report[$expense['value']]['amount'];}?>"/>
+            <input type="text" name="expense_report[<?php echo $key;?>]" id="expense_report[<?php echo $key;?>]" class="expense_budget form-control float_type_positive total_expense" value="<?php if(isset($expense_report[$key]['amount'])){echo $expense_report[$key]['amount'];}?>"/>
         </div>
     </div>
 <?php
@@ -230,7 +257,7 @@ foreach($expense_items as $expense)
         <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
     </div>
     <div class="col-sm-2 col-sm-4" id="total_expense_container" style="<?php if($item['id']==0){echo 'display: none';}?>">
-        <label id="total_expense"><?php echo number_format($new_item['total_expense'],2);?></label>
+        <label id="total_expense"><?php echo number_format($new_item['total_expense'],2);?> Tk.</label>
     </div>
 </div>
 
@@ -407,31 +434,14 @@ foreach($expense_items as $expense)
 </div>
 
 
-<script type="text/javascript">
-    function findTotal()
-    {
-        var total=0;
-        $(".total_expense").each( function( index, element )
-        {
-            if($(this).val()==parseFloat($(this).val()))
-            {
-                total=total+parseFloat($(this).val());
-            }
-        });
-        if(total=>0)
-        {
-            $('#total_expense_container').show();
-        }
-        $('#total_expense').html(number_format(total,2));
-    }
 
-</script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
 <script type="text/javascript">
 
 jQuery(document).ready(function()
 {
     turn_off_triggers();
+    $(document).off("input",".expense_budget");
+    $(document).off("input",".participant_budget");
     $(document).on("change", ".file_multi_video", function(evt) {
         $('#video_preview_id').show();
         var $source = $('#video_here');
@@ -469,9 +479,40 @@ jQuery(document).ready(function()
         $(this).closest('tr').remove();
     });
 
-    $(document).on("change",".total_expense",function()
+    $(document).on("input",".expense_budget",function()
     {
-        findTotal();
+        //findTotal();
+        var total=0;
+        $(".expense_budget").each( function( index, element )
+        {
+            if($(this).val()==parseFloat($(this).val()))
+            {
+                total=total+parseFloat($(this).val());
+            }
+        });
+        if(total=>0)
+        {
+            $('#total_expense_container').show();
+        }
+        $('#total_expense').html(number_format(total,2));
+    });
+
+    $(document).on("input",".participant_budget",function()
+    {
+        //findTotal_participant();
+        var total=0;
+        $(".participant_budget").each( function( index, element )
+        {
+            if($(this).val()==parseFloat($(this).val()))
+            {
+                total=total+parseFloat($(this).val());
+            }
+        });
+        if(total=>0)
+        {
+            $('#total_participant_container').show();
+        }
+        $('#no_of_participant').html(number_format(total));
     });
 
 });
