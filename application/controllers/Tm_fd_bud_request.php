@@ -28,11 +28,11 @@ class Tm_fd_bud_request extends Root_Controller
             }
 
         }
-//        $this->permissions['request_approve']=1;
-//        if($this->locations['territory_id']>0)
-//        {
-//            $this->permissions['request_approve']=0;
-//        }
+        $this->permissions['request_approve']=1;
+        if($this->locations['territory_id']>0)
+        {
+            $this->permissions['request_approve']=0;
+        }
         $this->controller_url='tm_fd_bud_request';
     }
 

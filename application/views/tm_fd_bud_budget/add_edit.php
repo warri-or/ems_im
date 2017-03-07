@@ -548,42 +548,7 @@ $CI->load->view("action_buttons",$action_data);
 <div class="clearfix"></div>
 </form>
 
-<!--<script type="text/javascript">-->
-    /*function findTotal()
-    {
-        var total=0;
-        $(".expense_budget").each( function( index, element )
-        {
-            if($(this).val()==parseFloat($(this).val()))
-            {
-                total=total+parseFloat($(this).val());
-            }
-        });
-        if(total=>0)
-        {
-            $('#total_budget_container').show();
-        }
-        $('#total_budget').html(number_format(total,2));
-    }*/
 
-    /*function findTotal_participant()
-    {
-        var total=0;
-        $(".participant_budget").each( function( index, element )
-        {
-            if($(this).val()==parseFloat($(this).val()))
-            {
-                total=total+parseFloat($(this).val());
-            }
-        });
-        if(total=>0)
-        {
-            $('#total_participant_container').show();
-        }
-        $('#no_of_participant').html(number_format(total));
-    }*/
-
-<!--</script>-->
 
 
 
