@@ -32,7 +32,6 @@ class Sys_reset_approved_fdb extends Root_Controller
     {
         if(isset($this->permissions['edit'])&&($this->permissions['edit']==1))
         {
-
             $data['title']="Reset Approved FDB";
             $ajax['system_page_url']=site_url($this->controller_url."/index/search");
             $ajax['status']=true;
@@ -66,10 +65,10 @@ class Sys_reset_approved_fdb extends Root_Controller
             }
             else
             {
-                if($fdb_info['status_approved']==$this->config->item('system_status_po_approval_pending'))
+                if($fdb_info['status_approved']==$this->config->item('system_status_po_approval_pending') && $fdb_info['status_requested']==$this->config->item('system_status_po_approval_pending'))
                 {
                     $ajax['status']=false;
-                    $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-success">FDB Did not Approved yet</div>');
+                    $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-success">FDB Did not Approved/Requested yet</div>');
                     $this->jsonReturn($ajax);
                 }
                 else
@@ -87,21 +86,6 @@ class Sys_reset_approved_fdb extends Root_Controller
                     $data['user_updated'] = $user->user_id;
                     $data['date_updated'] = $time;
                     Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$data,array("id = ".$fdb_no));
-
-                    /*/FOR SAVE IN NEW TABLE /*/
-//                    $data=array();
-//                    $data['po_id']=$po_no;
-//                    $data['status_field']='status_approved';
-//                    $data['new_status']=$this->config->item('system_status_po_approval_pending');
-//                    $data['previous_status']=$po_info['status_approved'];
-//                    $data['previous_info']=json_encode($po_info);
-////                    echo '<pre>';
-////                    print_r($data['previous_info']);
-////                    exit;
-//                    $data['user_created'] = $user->user_id;
-//                    $data['date_created'] = $time;
-//                    Query_helper::add($this->config->item('table_system_po_status_change'),$data);
-                    /*/FOR SAVE IN NEW TABLE /*/
 
                     $this->db->trans_complete();   //DB Transaction Handle END
 
@@ -123,28 +107,6 @@ class Sys_reset_approved_fdb extends Root_Controller
                 $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'ON Process');
                 $this->jsonReturn($ajax);
             }
-            /*if($po_info['status_requested']==$this->config->item('system_status_po_request_requested'))
-            {
-                $this->message=$this->lang->line('MSG_PO_EDIT_UNABLE');
-                return false;
-            }*/
-
-            /*$this->db->trans_start();  //DB Transaction Handle START
-            $data['user_created'] = $user->user_id;
-            $data['date_created'] = time();
-            Query_helper::add($this->config->item('table_system_site_offline'),$data);
-            $this->db->trans_complete();   //DB Transaction Handle END
-
-            if ($this->db->trans_status() === TRUE)
-            {
-                $this->dashboard_page();
-            }
-            else
-            {
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
-                $this->jsonReturn($ajax);
-            }*/
         }
         else
         {

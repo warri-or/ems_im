@@ -40,7 +40,7 @@ $CI->load->view("action_buttons",$action_data);
             ?>
             <div style="" class="row show-grid">
                 <div class="col-xs-4">
-                    <label class="control-label pull-left">Revision : <?php echo $max_revision.' (Latest)';?></label>
+                    <label class="control-label pull-left">Latest :</label>
                 </div>
             </div>
             <div style="" class="row show-grid">

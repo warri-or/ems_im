@@ -5,13 +5,13 @@ if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
 {
     $action_data["action_edit"]=base_url($CI->controller_url."/index/edit");
 }
-if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
-{
-    $action_data["action_details"]=base_url($CI->controller_url."/index/details");
-}
 if(isset($CI->permissions['request_approve'])&&($CI->permissions['request_approve']==1))
 {
     $action_data["action_request_po_approve"]=base_url($CI->controller_url."/index/request");
+}
+if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
+{
+    $action_data["action_details"]=base_url($CI->controller_url."/index/details");
 }
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {

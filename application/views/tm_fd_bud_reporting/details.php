@@ -31,7 +31,7 @@ foreach($info_details as $revision=>$info)
         ?>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-left">Revision : <?php echo $max_revision.' (Latest)';?></label>
+                <label class="control-label pull-left">Latest :</label>
             </div>
         </div>
 
@@ -127,16 +127,6 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label"><?php echo $item_info['upazilla_name'];?></label>
             </div>
         </div>
-        <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($info[0]['guest']);?></label>
-            </div>
-        </div>
-
-
 
         <div class="row show-grid">
             <div class="col-xs-4">
@@ -171,7 +161,7 @@ foreach($info_details as $revision=>$info)
 
         <div style="" class="row show-grid">
             <div class="col-sm-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
             </div>
             <div class="col-sm-2 col-sm-4">
                 <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
@@ -182,7 +172,7 @@ foreach($info_details as $revision=>$info)
         </div>
         <div style="" class="row show-grid">
             <div class="col-sm-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
             </div>
             <div class="col-sm-2 col-sm-4">
                 <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
@@ -191,17 +181,27 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
             </div>
         </div>
-
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label">0</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info[0]['guest']);?></label>
+            </div>
+        </div>
 
         <div style="" class="row show-grid">
             <div class="col-sm-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT');?> :</label>
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
             </div>
             <div class="col-sm-2 col-sm-4">
-                <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
+                <label class="control-label"><?php echo $item_info['no_of_participant'];?> (Person)</label>
             </div>
             <div class="col-sm-2 col-sm-4">
-                <label class="control-label"><?php echo number_format($info[0]['total_participant']);?></label>
+                <label class="control-label"><?php echo number_format($info[0]['total_participant']);?> (Person)</label>
             </div>
         </div>
 
@@ -317,62 +317,29 @@ foreach($info_details as $revision=>$info)
         <div id="image" class="panel-collapse ">
             <div id="files_container" class="panel-collapse">
                 <div style="overflow-x: auto;" class="row show-grid">
-
                     <table class="table table-bordered" style="width: 800px; margin-left: 50px;">
                         <thead>
                         <tr>
-                            <th style="min-width: 60px;">File Type</th>
-                            <th style="min-width: 60px;">File Name</th>
+                            <th style="min-width: 100px;">File Type</th>
+                            <th style="min-width: 100px;">File Name</th>
                             <th style="max-width: 270px;max-height: 200px;">Preview</th>
-                            <th style="max-width: 100px;max-height: 200px;">Remarks</th>
+                            <th style="max-width: 150px;max-height: 200px;">Remarks</th>
                         </tr>
                         </thead>
 
                         <tbody>
                         <tr>
-                            <td style="min-width: 60px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
-                            <td style="min-width: 60px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
+                            <td style="min-width: 100px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
+                            <td style="min-width: 100px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
                             <td style="max-width: 270px; max-height: 200px;">
                                 <div class="col-xs-4">
                                 <video width="270" controls>
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
                                             type="<?php echo $video_file_details['file_type'];?>"></video>
-<!--                                            video/--><?php
-//                                            $exp=explode('.',$video_file_details['file_name']);
-//                                            $ext=strtolower($exp[sizeof($exp)-1]);
-//                                            if($ext=='mp4')
-//                                            {
-//                                                echo 'mp4';
-//                                            }
-//                                            elseif($ext=='3gp')
-//                                            {
-//                                                echo '3gpp';
-//                                            }
-//                                            elseif($ext=='mkv')
-//                                            {
-//                                                echo 'x-matroska';
-//                                            }
-//                                            elseif($ext=='wmv')
-//                                            {
-//                                                echo 'x-ms-wmv';
-//                                            }
-//                                            elseif($ext=='avi')
-//                                            {
-//                                                echo 'x-msvideo';
-//                                            }
-//                                            elseif($ext=='mov')
-//                                            {
-//                                                echo 'quicktime';
-//                                            }
-//                                            elseif($ext=='ftv')
-//                                            {
-//                                                echo 'x-flv';
-//                                            }
-//                                            ?><!--"-->
                                     <a style="margin-left: 170px;"  target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
                                  </div>
                             </td>
-                            <td style="max-width: 100px;max-height: 200px;">
+                            <td style="max-width: 150px;max-height: 200px;">
                             </td>
                         </tr>
                         <?php
@@ -381,16 +348,15 @@ foreach($info_details as $revision=>$info)
                             ?>
 
                             <tr>
-                                <td style="min-width: 60px; color: #263238;"><?php echo $file['file_type'];?></td>
-                                <td style="min-width: 60px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
+                                <td style="min-width: 100px; color: #263238;"><?php echo $file['file_type'];?></td>
+                                <td style="min-width: 100px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
                                 <td style="max-width: 270px; max-height: 200px;">
                                     <div class="col-xs-4">
                                         <img style="max-width: 270px;max-height: 200px;"
-                                             src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>"
-                                             class="Tooltip" title="<h5><?php echo $file['file_remarks']?></h5>">
+                                             src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                     </div>
                                 </td>
-                                <td style="max-width: 100px;max-height: 200px;">
+                                <td style="max-width: 150px;max-height: 200px;">
                                     <h5><?php echo $file['file_remarks']?></h5>
                                 </td>
                             </tr>
@@ -477,7 +443,7 @@ foreach($info_details as $revision=>$info)
 
                 <div style="" class="row show-grid">
                     <div class="col-sm-4">
-                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
                     </div>
                     <div class="col-sm-2 col-sm-4">
                         <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
@@ -488,7 +454,7 @@ foreach($info_details as $revision=>$info)
                 </div>
                 <div style="" class="row show-grid">
                     <div class="col-sm-4">
-                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
                     </div>
                     <div class="col-sm-2 col-sm-4">
                         <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
@@ -501,13 +467,13 @@ foreach($info_details as $revision=>$info)
 
                 <div style="" class="row show-grid">
                     <div class="col-sm-4">
-                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT');?> :</label>
+                        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                     </div>
                     <div class="col-sm-2 col-sm-4">
-                        <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
+                        <label class="control-label"><?php echo $item_info['no_of_participant'];?> (Person)</label>
                     </div>
                     <div class="col-sm-2 col-sm-4">
-                        <label class="control-label"><?php echo number_format($info[0]['total_participant']);?></label>
+                        <label class="control-label"><?php echo number_format($info[0]['total_participant']);?> (Person)</label>
                     </div>
                 </div>
 
@@ -565,22 +531,6 @@ foreach($info_details as $revision=>$info)
                         <label id="total_budget"><?php echo $info[0]['next_sales_target'];?> kg</label>
                     </div>
                 </div>
-<!--                <div style="" class="row show-grid">-->
-<!--                    <div class="col-xs-4">-->
-<!--                        <label class="control-label pull-right">--><?php //echo $CI->lang->line('LABEL_PARTICIPANT_COMMENT');?><!-- :</label>-->
-<!--                    </div>-->
-<!--                    <div class="col-sm-4 col-xs-8">-->
-<!--                        <label class="control-label">--><?php //echo $info[0]['participant_comment'];?><!--</label>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="row show-grid">-->
-<!--                    <div class="col-xs-4">-->
-<!--                        <label class="control-label pull-right">--><?php //echo $this->lang->line('LABEL_RECOMMENDATION');?><!-- :</label>-->
-<!--                    </div>-->
-<!--                    <div class="col-sm-4 col-xs-8">-->
-<!--                        <label class="control-label">--><?php //echo $report_item[0]['recommendation'];?><!--</label>-->
-<!--                    </div>-->
-<!--                </div>-->
 
                 <div style="overflow-x: auto;" class="row show-grid"></div>
             </div>

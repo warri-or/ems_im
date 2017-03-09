@@ -76,7 +76,7 @@ class Tm_fd_bud_approve extends Root_Controller
     {
         if(isset($this->permissions['view'])&&($this->permissions['view']==1))
         {
-            $data['title']="Requested Budget List For Field Day";
+            $data['title']="Field Day Budget List For Approval";
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/list",$data,true));
             if($this->message)
@@ -367,8 +367,7 @@ class Tm_fd_bud_approve extends Root_Controller
             $field_budget_details['no_of_participant']=0;
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
             $field_budget_details['total_budget']=0;
-            $participants=$this->input->post('farmer_participant');
-            foreach($participants as $no_of_participant)
+            foreach($participants as &$no_of_participant)
             {
                 if($no_of_participant=='')
                 {
@@ -380,8 +379,7 @@ class Tm_fd_bud_approve extends Root_Controller
                 }
             }
             $field_budget_details['no_of_participant']=$field_budget_details['no_of_participant']+$field_budget_details['participant_through_customer']+$field_budget_details['participant_through_others'];
-            $expense_budget=$this->input->post('expense_budget');
-            foreach($expense_budget as $amount)
+            foreach($expense_budget as &$amount)
             {
                 if($amount=='')
                 {
@@ -543,9 +541,7 @@ class Tm_fd_bud_approve extends Root_Controller
     private function check_validation($ids,$expense_budget)
     {
         $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
-        //print_r($expenses);exit;
         $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text','status'),array(),0,0,array('ordering ASC'));
-        //print_r($farmers);exit;
         $fmr=array();
         foreach($farmers as $farmer)
         {
@@ -563,8 +559,9 @@ class Tm_fd_bud_approve extends Root_Controller
         $this->form_validation->set_rules('item_info[address]',$this->lang->line('LABEL_ADDRESS'),'required');
         $this->form_validation->set_rules('item_info[present_condition]',$this->lang->line('LABEL_PRESENT_CONDITION'),'required');
         $this->form_validation->set_rules('item_info[farmers_evaluation]',$this->lang->line('LABEL_FARMERS_EVALUATION'),'required');
+        $this->form_validation->set_rules('item_info[participant_through_customer]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER'),'required');
+        $this->form_validation->set_rules('item_info[participant_through_others]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS'),'required');
         $this->form_validation->set_rules('item_info[sales_target]',$this->lang->line('LABEL_NEXT_SALES_TARGET'),'required|numeric');
-        //$this->form_validation->set_rules('item_info[no_of_participant]',$this->lang->line('LABEL_EXPECTED_PARTICIPANT'),'required|numeric');
         $this->form_validation->set_rules('item_info[diff_wth_com]',$this->lang->line('LABEL_SPECIFIC_DIFFERENCE'),'required');
         $this->form_validation->set_rules('item_info[expected_date]',$this->lang->line('LABEL_EXPECTED_DATE'),'required');
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
@@ -573,15 +570,15 @@ class Tm_fd_bud_approve extends Root_Controller
         if($expense_budget){
             foreach($expense_budget as $index=>$exp)
             {
-                if(!isset($exp))
+                if(!$exp)
                 {
-                    $this->form_validation->set_rules('farmer_participant['.$index.']',$expense[$index],'required');
+                    $this->form_validation->set_rules('expense_budget['.$index.']',$expense[$index],'required');
                 }
             }}
         if($ids){
             foreach($ids as $index=>$id)
             {
-                if(!isset($id))
+                if(!$id)
                 {
                     $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
                 }
@@ -659,15 +656,8 @@ class Tm_fd_bud_approve extends Root_Controller
             }
             $data['users']=System_helper::get_users_info($user_ids);
 
-
-            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fbid');
-            $this->db->select('fbid.*');
-            $this->db->where('fbid.budget_id',$budget_id);
-            $this->db->order_by('fbid.revision ASC');
-            $this->db->order_by('fbid.id DESC');
-            //details
-            $info_details=$this->db->get()->result_array();
-            $data['info_details']=array();
+            $info_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_info_details'),'*',array('budget_id='.$budget_id),0,0,array('id DESC','revision ASC'));
+            $data['info_details']=array();;
             foreach($info_details as $info)
             {
                 $data['info_details'][$info['revision']][]=$info;
@@ -682,12 +672,7 @@ class Tm_fd_bud_approve extends Root_Controller
             {
                 $data['expense_items'][$result['value']]=$result;
             }
-            $this->db->from($this->config->item('table_tm_fd_bud_details_expense').' fbde');
-            $this->db->select('fbde.*');
-            $this->db->where('fbde.budget_id',$budget_id);
-            $this->db->order_by('fbde.revision ASC');
-            $this->db->order_by('fbde.id ASC');
-            $expense_details=$this->db->get()->result_array();
+            $expense_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id='.$budget_id),0,0,array('id ASC','revision ASC'));
             $data['expense_details']=array();
             foreach($expense_details as $expense)
             {
@@ -699,12 +684,8 @@ class Tm_fd_bud_approve extends Root_Controller
             {
                 $data['leading_farmers'][$result['value']]=$result;
             }
-            $this->db->from($this->config->item('table_tm_fd_bud_details_participant').' fbdp');
-            $this->db->select('fbdp.*');
-            $this->db->where('fbdp.budget_id',$budget_id);
-            $this->db->order_by('fbdp.revision ASC');
-            $this->db->order_by('fbdp.id ASC');
-            $participant_details=$this->db->get()->result_array();
+            $participant_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id='.$budget_id),0,0,array('id ASC','revision ASC'));
+            $data['participant_details']=array();
             foreach($participant_details as $participant)
             {
                 $data['participant_details'][$participant['revision']][$participant['farmer_id']]=$participant;
@@ -815,13 +796,7 @@ class Tm_fd_bud_approve extends Root_Controller
             $data['users']=System_helper::get_users_info($user_ids);
 
 
-            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fbid');
-            $this->db->select('fbid.*');
-            $this->db->where('fbid.budget_id',$budget_id);
-            $this->db->order_by('fbid.revision ASC');
-            $this->db->order_by('fbid.id DESC');
-            //details
-            $info_details=$this->db->get()->result_array();
+            $info_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_info_details'),'*',array('budget_id='.$budget_id),0,0,array('id DESC','revision ASC'));
             $data['info_details']=array();
             foreach($info_details as $info)
             {
@@ -837,12 +812,7 @@ class Tm_fd_bud_approve extends Root_Controller
             {
                 $data['expense_items'][$result['value']]=$result;
             }
-            $this->db->from($this->config->item('table_tm_fd_bud_details_expense').' fbde');
-            $this->db->select('fbde.*');
-            $this->db->where('fbde.budget_id',$budget_id);
-            $this->db->order_by('fbde.revision ASC');
-            $this->db->order_by('fbde.id ASC');
-            $expense_details=$this->db->get()->result_array();
+            $expense_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id='.$budget_id),0,0,array('id ASC','revision ASC'));
             $data['expense_details']=array();
             foreach($expense_details as $expense)
             {
@@ -854,12 +824,8 @@ class Tm_fd_bud_approve extends Root_Controller
             {
                 $data['leading_farmers'][$result['value']]=$result;
             }
-            $this->db->from($this->config->item('table_tm_fd_bud_details_participant').' fbdp');
-            $this->db->select('fbdp.*');
-            $this->db->where('fbdp.budget_id',$budget_id);
-            $this->db->order_by('fbdp.revision ASC');
-            $this->db->order_by('fbdp.id ASC');
-            $participant_details=$this->db->get()->result_array();
+            $participant_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id='.$budget_id),0,0,array('id ASC','revision ASC'));
+            $data['participant_details']=array();
             foreach($participant_details as $participant)
             {
                 $data['participant_details'][$participant['revision']][$participant['farmer_id']]=$participant;
@@ -874,7 +840,7 @@ class Tm_fd_bud_approve extends Root_Controller
                 $data['file_details'][$result['item_id']]=$result;
             }
 
-            $data['title']='Approve Field Day Budget Here';
+            $data['title']='Approve or Reject This Budget For Field Day';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/approve",$data,true));
             if($this->message)
@@ -896,17 +862,36 @@ class Tm_fd_bud_approve extends Root_Controller
     {
         $id = $this->input->post("id");
         $user = User_helper::get_user();
+        if($id)
+        {
+            $data=array();
+            $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$id));
+            foreach($result as $res)
+            {
+                $data=$res;
+            }
+            if($data['status_approved']=='Approved' || $data['status_approved']=='Rejected')
+            {
+                $this->message='Already '.$data['status_approved'];
+                $this->system_list();
+            }
+        }
         if(!(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->jsonReturn($ajax);
-            die();
         }
         if(!$this->check_validation_approval())
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
+            $this->jsonReturn($ajax);
+        }
+        if($this->permissions['request_approve']!=1)
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->jsonReturn($ajax);
         }
         else

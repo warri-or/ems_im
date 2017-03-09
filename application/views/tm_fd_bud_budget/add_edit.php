@@ -10,14 +10,6 @@ if(isset($CI->permissions['edit']) && ($CI->permissions['edit']==1) && $item['id
 $CI->load->view("action_buttons",$action_data);
 ?>
 <style>
-    .tbdgt{
-        border: none !important;
-        background-color: rgb(250,250,250) !important;
-        cursor: default !important;
-        box-shadow: none !important;
-        margin-top: -6px !important;
-        font-weight: bold !important;
-    }
     .arm_remarks{
         width: 300px;
     }

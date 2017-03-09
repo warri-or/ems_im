@@ -26,16 +26,6 @@
     }
     ?>
     <?php
-    if(isset($action_edit_get))
-    {
-        ?>
-        <div class="action_button">
-            <a class="btn" id="button_action_edit_get" href="<?php echo $action_edit_get; ?>"><?php echo $CI->lang->line("ACTION_EDIT"); ?></a>
-        </div>
-    <?php
-    }
-    ?>
-    <?php
     if(isset($action_approve))
     {
         ?>
@@ -104,6 +94,16 @@
             <a class="btn" href="<?php echo $action_back; ?>"><?php echo $CI->lang->line("ACTION_BACK"); ?></a>
         </div>
         <?php
+    }
+    ?>
+    <?php
+    if(isset($action_edit_get))
+    {
+        ?>
+        <div class="action_button">
+            <a class="btn" id="button_action_edit_get" href="<?php echo $action_edit_get; ?>"><?php echo $CI->lang->line("ACTION_EDIT"); ?></a>
+        </div>
+    <?php
     }
     ?>
     <?php

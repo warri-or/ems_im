@@ -3,8 +3,9 @@ $CI = & get_instance();
 $action_data=array();
 $action_data["action_back"]=base_url($CI->controller_url);
 $action_data["action_save"]='#save_form';
+if($item['id']==0){
 $action_data["action_clear"]='#save_form';
-
+}
 $CI->load->view("action_buttons",$action_data);
 ?>
 <style>
@@ -139,9 +140,6 @@ if($item_info['com_variety_name']){
         <input type="text" name="new_item[guest]" id="guest" class="participant_budget form-control float_type_positive" value="<?php echo $new_item['guest']; ?>"/>
     </div>
 </div>
-<!--<div style="--><?php //if(!(sizeof($leading_farmers)>0)){echo 'display:none;';}?><!--" class="row show-grid" id="leading_farmer_container">-->
-
-<!--    <div id="leading_farmer_id" class="row show-grid">-->
         <div class="row show-grid">
             <div class="col-sm-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
@@ -176,10 +174,6 @@ if($item_info['com_variety_name']){
         }
         ?>
 
-<!--    </div>-->
-
-
-
     <div class="row show-grid">
         <div class="col-sm-4">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
@@ -203,8 +197,6 @@ if($item_info['com_variety_name']){
         </div>
     </div>
 
-
-<!--</div>-->
 <div style="" class="row show-grid">
     <div class="col-sm-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?><span style="color:#FF0000">*</span></label>
@@ -213,7 +205,7 @@ if($item_info['com_variety_name']){
         <label class="control-label"><?php echo $item_info['no_of_participant'];?> (Person)</label>
     </div>
     <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="col-sm-2 col-sm-4" id="total_participant_container">
-        <label id="no_of_participant"><?php if(isset($total_participant)) {echo number_format($total_participant);}?> (Person)</label>
+        <label id="no_of_participant"><?php if(isset($new_item['total_participant'])) {echo number_format($new_item['total_participant']);}?> (Person)</label>
     </div>
 </div>
 <div class="row show-grid">

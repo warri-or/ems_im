@@ -319,7 +319,11 @@ $CI = & get_instance();
                                     </div>
                                 </td>
                             </tr>
-
+                            <tr>
+                                <td style="max-width: 100px;"><b>Remarks (<?php echo $pic_cat['text'];?>)</b></td>
+                                <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $b_fd_file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
+                                <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $b_fd_file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
+                            </tr>
 
                         <?php } ?>
 
@@ -340,8 +344,8 @@ $CI = & get_instance();
                     <table class="table table-bordered" style="width: 700px; margin-left: 50px;">
                         <thead>
                         <tr>
-                            <th style="max-width: 60px;">File Type</th>
-                            <th style="max-width: 60px;">File Name</th>
+                            <th style="min-width: 100px;">File Type</th>
+                            <th style="min-width: 100px;">File Name</th>
                             <th style="max-width: 270px;max-height: 200px;">Preview</th>
                             <th style="max-width: 100px;max-height: 200px;">Remarks</th>
                         </tr>
@@ -349,46 +353,13 @@ $CI = & get_instance();
 
                         <tbody>
                         <tr>
-                            <td style="max-width: 60px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
-                            <td style="max-width: 60px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
+                            <td style="min-width: 100px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
+                            <td style="min-width: 100px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
                             <td style="max-width: 270px; max-height: 200px;">
                                 <div class="col-xs-4">
-                                    <video width="270px" controls>
+                                    <video width="270" controls>
                                         <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
-                                                type="video/<?php
-                                                $exp=explode('.',$video_file_details['file_name']);
-                                                $ext=strtolower($exp[sizeof($exp)-1]);
-                                                if($ext=='mp4')
-                                                {
-                                                    echo 'mp4';
-                                                }
-                                                elseif($ext=='3gp')
-                                                {
-                                                    echo '3gpp';
-                                                }
-                                                elseif($ext=='mkv')
-                                                {
-                                                    echo 'x-matroska';
-                                                }
-                                                elseif($ext=='wmv')
-                                                {
-                                                    echo 'x-ms-wmv';
-                                                }
-                                                elseif($ext=='avi')
-                                                {
-                                                    echo 'x-msvideo';
-                                                }
-                                                elseif($ext=='mov')
-                                                {
-                                                    echo 'quicktime';
-                                                }
-                                                elseif($ext=='ftv')
-                                                {
-                                                    echo 'x-flv';
-                                                }
-                                                ?>"
-                                            >
-                                    </video>
+                                                type="<?php echo $video_file_details['file_type'];?>"></video>
                                     <a style="margin-left: 175px;"  target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
                                 </div>
                             </td>
@@ -401,13 +372,12 @@ $CI = & get_instance();
                             ?>
 
                             <tr>
-                                <td style="min-width: 60px; color: #263238;"><?php echo $file['file_type'];?></td>
-                                <td style="min-width: 60px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
+                                <td style="min-width: 100px; color: #263238;"><?php echo $file['file_type'];?></td>
+                                <td style="min-width: 100px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
                                 <td style="max-width: 270px; max-height: 200px;">
                                     <div class="col-xs-4">
                                         <img style="max-width: 270px;max-height: 200px;"
-                                             src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>"
-                                             class="Tooltip" title="<h5><?php echo $file['file_remarks']?></h5>">
+                                             src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                     </div>
                                 </td>
                                 <td style="max-width: 100px;max-height: 200px;">

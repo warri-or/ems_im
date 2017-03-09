@@ -238,11 +238,11 @@ class Reports_fd_management extends Root_Controller
             $data['item']['recommendation']=$res['recommendation'];
         }
 
-        $this->db->from($this->config->item('table_tm_fd_rep_details_info').' fr_details');
-        $this->db->select('fr_details.*');
-        $this->db->where('fr_details.budget_id',$budget_id);
-        $this->db->where('fr_details.revision',1);
-        $data['new_item']=$this->db->get()->row_array();
+//        $result=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_info'),'*',array('budget_id ='.$budget_id,'revision=1'));
+//        foreach($result as $res)
+//        {
+//            $data['new_item']=$res;
+//        }
 
         $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1','status ="'.$this->config->item('system_status_active').'"'));
