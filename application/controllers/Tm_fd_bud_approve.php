@@ -209,7 +209,14 @@ class Tm_fd_bud_approve extends Root_Controller
             }
             if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_pending'))
             {
-                System_helper::invalid_try('trying to edit pending po',$budget_id);
+                System_helper::invalid_try('trying to edit pending FDB',$budget_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_rejected'))
+            {
+                System_helper::invalid_try('trying to edit rejecting FDB',$budget_id);
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
@@ -567,23 +574,26 @@ class Tm_fd_bud_approve extends Root_Controller
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
         $this->form_validation->set_rules('item_info[arm_market_size]',$this->lang->line('LABEL_ARM_MARKET_SIZE'),'required');
         $this->form_validation->set_rules('item_info[total_market_size]',$this->lang->line('LABEL_TOTAL_MARKET_SIZE'),'required');
-        if($expense_budget){
+        if($expense_budget)
+        {
             foreach($expense_budget as $index=>$exp)
             {
                 if(!$exp)
                 {
                     $this->form_validation->set_rules('expense_budget['.$index.']',$expense[$index],'required');
                 }
-            }}
-        if($ids){
+            }
+        }
+        if($ids)
+        {
             foreach($ids as $index=>$id)
             {
                 if(!$id)
                 {
                     $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
                 }
-            }}
-
+            }
+        }
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
@@ -644,6 +654,20 @@ class Tm_fd_bud_approve extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
             }
+            if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_pending'))
+            {
+                System_helper::invalid_try('trying to edit pending FDB',$budget_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_rejected'))
+            {
+                System_helper::invalid_try('trying to edit rejecting FDB',$budget_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
             $user_ids=array();
             $user_ids[$data['item_info']['user_created']]=$data['item_info']['user_created'];
             if($data['item_info']['user_requested']>0)
@@ -657,7 +681,7 @@ class Tm_fd_bud_approve extends Root_Controller
             $data['users']=System_helper::get_users_info($user_ids);
 
             $info_details=Query_helper::get_info($this->config->item('table_tm_fd_bud_info_details'),'*',array('budget_id='.$budget_id),0,0,array('id DESC','revision ASC'));
-            $data['info_details']=array();;
+            $data['info_details']=array();
             foreach($info_details as $info)
             {
                 $data['info_details'][$info['revision']][]=$info;
@@ -699,7 +723,6 @@ class Tm_fd_bud_approve extends Root_Controller
             {
                 $data['file_details'][$result['item_id']]=$result;
             }
-
             $data['title']='Field Day Budget Details';
             $ajax['status']=true;
             $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/details",$data,true));
@@ -712,7 +735,6 @@ class Tm_fd_bud_approve extends Root_Controller
         }
         else
         {
-
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->jsonReturn($ajax);
@@ -767,6 +789,20 @@ class Tm_fd_bud_approve extends Root_Controller
             if(!$this->check_my_editable($data['item_info']))
             {
                 System_helper::invalid_try($this->config->item('system_edit_others'),$budget_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_pending'))
+            {
+                System_helper::invalid_try('trying to edit pending FDB',$budget_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_rejected'))
+            {
+                System_helper::invalid_try('trying to edit rejecting FDB',$budget_id);
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);

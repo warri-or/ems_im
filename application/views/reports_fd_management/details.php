@@ -96,14 +96,14 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $item_info['upazilla_name'];?></label>
             </div>
         </div>
-        <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($info['guest']);?></label>
-            </div>
-        </div>
+<!--        <div style="" class="row show-grid">-->
+<!--            <div class="col-xs-4">-->
+<!--                <label class="control-label pull-right">--><?php //echo $CI->lang->line('LABEL_GUEST');?><!-- :</label>-->
+<!--            </div>-->
+<!--            <div class="col-sm-4 col-xs-8">-->
+<!--                <label class="control-label">--><?php //echo number_format($info['guest']);?><!--</label>-->
+<!--            </div>-->
+<!--        </div>-->
 
 
 
@@ -160,6 +160,18 @@ $CI = & get_instance();
             </div>
             <div class="col-sm-2 col-sm-4">
                 <label class="control-label"><?php echo number_format($info['participant_through_others']);?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-sm-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label">0</label>
+            </div>
+            <div class="col-sm-2 col-sm-4">
+                <label class="control-label"><?php echo number_format($info['guest']);?></label>
             </div>
         </div>
 

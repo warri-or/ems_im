@@ -373,12 +373,12 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
     <div id="files_container" class="panel-collapse">
         <div style="overflow-x: auto;" class="row show-grid">
 
-            <table class="table table-bordered" style="width: 840px; margin-left: 50px;">
+            <table class="table table-bordered table-responsive">
                 <thead>
                 <tr>
-                    <th style="max-width: 100px;">Image Type</th>
-                    <th style="max-width: 270px;max-height: 200px;">ARM</th>
-                    <th style="max-width: 270px;max-height: 200px;">Competitor</th>
+                    <th>Image Type</th>
+                    <th colspan="2" style="text-align: center;">ARM</th>
+                    <th colspan="2" style="text-align: center;">Competitor</th>
                 </tr>
                 </thead>
 
@@ -388,39 +388,31 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                 foreach($picture_categories as $pic_cat)
                 {
                     ?>
-
                     <tr>
-                        <td style="max-width: 100px; color: #263238;"><b><?php echo $pic_cat['text'];?></b></td>
-                        <td style="max-width: 270px; max-height: 200px;">
-                            <div class="col-xs-4" id="image_arm_<?php echo $pic_cat['value'];?>">
-                                <?php
-                                $image='images/no_image.jpg';
+                        <td style="color: #263238;"><b><?php echo $pic_cat['text'];?></b></td>
+                        <td>
+                            <?php
+                            $image='images/no_image.jpg';
 
-                                if((isset($file_details[$pic_cat['value']]))&&(strlen($file_details[$pic_cat['value']]['arm_file_location'])>0))
-                                {
-                                    $image=$file_details[$pic_cat['value']]['arm_file_location'];
-                                }
-                                ?>
-                                <img style="max-width: 270px; max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
-                            </div>
+                            if((isset($file_details[$pic_cat['value']]))&&(strlen($file_details[$pic_cat['value']]['arm_file_location'])>0))
+                            {
+                                $image=$file_details[$pic_cat['value']]['arm_file_location'];
+                            }
+                            ?>
+                            <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                         </td>
-                        <td style="max-width: 270px; max-height: 200px;">
-                            <div class="col-xs-4" id="image_com_<?php echo $pic_cat['value'];?>">
-                                <?php
-                                $image='images/no_image.jpg';
-                                if((isset($file_details[$pic_cat['value']]))&&(strlen($file_details[$pic_cat['value']]['competitor_file_location'])>0))
-                                {
-                                    $image=$file_details[$pic_cat['value']]['competitor_file_location'];
-                                }
-                                ?>
-                                <img style="max-width: 270px; max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
-                            </div>
+                        <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
+                        <td>
+                            <?php
+                            $image='images/no_image.jpg';
+                            if((isset($file_details[$pic_cat['value']]))&&(strlen($file_details[$pic_cat['value']]['competitor_file_location'])>0))
+                            {
+                                $image=$file_details[$pic_cat['value']]['competitor_file_location'];
+                            }
+                            ?>
+                            <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                         </td>
-                    </tr>
-                    <tr>
-                        <td style="max-width: 100px;"><b>Remarks (<?php echo $pic_cat['text'];?>)</b></td>
-                        <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
-                        <td style="max-width: 270px;"><p style="text-align:justify;margin-left: 15px;margin-right: 15px;"><?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
+                        <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
                     </tr>
 
 
