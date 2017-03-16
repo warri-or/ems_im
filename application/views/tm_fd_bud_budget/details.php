@@ -180,10 +180,10 @@ foreach($info_details as $revision=>$info)
             ?>
 
             <div class="row show-grid">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
-                <div class="col-sm-4 col-xs-8">
+                <div class="col-sm-3 col-xs-9">
                     <label class="control-label"><?php echo $participant_detail['number'];?></label>
                 </div>
             </div>
@@ -193,28 +193,28 @@ foreach($info_details as $revision=>$info)
         ?>
 
         <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+            <div class="col-xs-5">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?> :</label>
             </div>
-            <div class="col-sm-4 col-xs-8">
+            <div class="col-sm-3 col-xs-9">
                 <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
             </div>
         </div>
         <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+            <div class="col-xs-5">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?> :</label>
             </div>
-            <div class="col-sm-4 col-xs-8">
+            <div class="col-sm-3 col-xs-9">
                 <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
             </div>
         </div>
 
         <div style="" class="row show-grid">
-            <div class="col-xs-4">
+            <div class="col-xs-5">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
             </div>
-            <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+            <div class="col-sm-3 col-xs-9">
+                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
             </div>
         </div>
         <div class="row show-grid">
@@ -227,20 +227,20 @@ foreach($info_details as $revision=>$info)
             //if($expense_items[$key]['text'] && $expenses['amount']){
                 ?>
                 <div class="row show-grid">
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                     </div>
-                    <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                    <div class="col-sm-3 col-xs-9">
+                        <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                     </div>
                 </div>
             <?php } ?>
         <div style="" class="row show-grid">
-            <div class="col-xs-4">
+            <div class="col-xs-5">
                 <label class="control-label pull-right"> Total Budget :</label>
             </div>
-            <div class="col-sm-4 col-xs-8">
-                <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+            <div class="col-sm-3 col-xs-9">
+                <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
             </div>
         </div>
 
@@ -522,7 +522,7 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                     </div>
                 </div>
                 <div class="row show-grid">
@@ -539,7 +539,7 @@ foreach($info_details as $revision=>$info)
                                 <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                             </div>
                             <div class="col-sm-4 col-xs-8">
-                                <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                                <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                             </div>
                         </div>
                     <?php } ?>
@@ -549,7 +549,7 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"> Total Budget :</label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                        <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                     </div>
                 </div>
                 <div class="row show-grid">

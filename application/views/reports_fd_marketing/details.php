@@ -273,55 +273,54 @@ $CI = & get_instance();
             </div>
             <div id="collapse_1" class="panel-collapse collapse">
 
-                    <table class="table table-bordered" style="width: 700px; margin-left: 50px;">
-                        <thead>
-                        <tr>
-                            <th style="max-width: 60px;">File Type</th>
-                            <th style="max-width: 60px;">File Name</th>
-                            <th style="max-width: 270px;max-height: 200px;">Preview</th>
-                            <th style="max-width: 100px;max-height: 200px;">Remarks</th>
-                        </tr>
-                        </thead>
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                    <tr>
+                        <th>File Type</th>
+                        <th>File Name</th>
+                        <th style="max-width: 270px;max-height: 200px;">Preview</th>
+                        <th style="max-width: 100px;max-height: 200px;">Remarks</th>
+                    </tr>
+                    </thead>
 
-                        <tbody>
+                    <tbody>
+                    <tr>
+                        <td style="color: #263238;"><?php echo $video_file_details['file_type'];?></td>
+                        <td style="color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
+                        <td>
+                            <div class="col-xs-4">
+                                <video style="max-width: 250px;max-height:150px" controls>
+                                    <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
+                                            type="<?php echo $video_file_details['file_type'];?>"></video>
+                                <a target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <?php
+                    foreach($a_fd_file_details as $file)
+                    {
+                        ?>
+
                         <tr>
-                            <td style="max-width: 60px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
-                            <td style="max-width: 60px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
-                            <td style="max-width: 270px; max-height: 200px;">
+                            <td style="color: #263238;"><?php echo $file['file_type'];?></td>
+                            <td style="color: #263238;"><b><?php echo $file['file_name'];?></b></td>
+                            <td>
                                 <div class="col-xs-4">
-                                    <video width="270" controls>
-                                        <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
-                                                type="<?php echo $video_file_details['file_type'];?>"></video>
-                                    <a style="margin-left: 175px;"  target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
+                                    <img style="max-width: 270px;max-height: 200px;"
+                                         src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                 </div>
                             </td>
-                            <td style="max-width: 100px;max-height: 200px;">
+                            <td>
+                                <h5><?php echo $file['file_remarks']?></h5>
                             </td>
                         </tr>
-                        <?php
-                        foreach($a_fd_file_details as $file)
-                        {
-                            ?>
-
-                            <tr>
-                                <td style="min-width: 60px; color: #263238;"><?php echo $file['file_type'];?></td>
-                                <td style="min-width: 60px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
-                                <td style="max-width: 270px; max-height: 200px;">
-                                    <div class="col-xs-4">
-                                        <img style="max-width: 270px;max-height: 200px;"
-                                             src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
-                                    </div>
-                                </td>
-                                <td style="max-width: 100px;max-height: 200px;">
-                                    <h5><?php echo $file['file_remarks']?></h5>
-                                </td>
-                            </tr>
 
 
-                        <?php } ?>
+                    <?php } ?>
 
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
                 </div>
                 </div>
 

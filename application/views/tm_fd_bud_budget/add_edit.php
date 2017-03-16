@@ -346,7 +346,7 @@ $CI->load->view("action_buttons",$action_data);
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
         <input type="text" name="item_info[participant_through_customer]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_customer'])) {$total+=$item_info['participant_through_customer'];echo $item_info['participant_through_customer'];}?>"/>
@@ -354,7 +354,7 @@ $CI->load->view("action_buttons",$action_data);
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
         <input type="text" name="item_info[participant_through_others]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_others'])) {$total+=$item_info['participant_through_others'];echo $item_info['participant_through_others'];}?>"/>

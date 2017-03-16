@@ -150,11 +150,11 @@ class Tm_fd_bud_request extends Root_Controller
         {
             $item['date']=System_helper::display_date($item['date']);
             $item['expected_date']=System_helper::display_date($item['expected_date']);
+            $item['total_budget']=number_format($item['total_budget'],2);
 
         }
         $this->jsonReturn($items);
     }
-
 
     private function system_edit($id)
     {
@@ -300,10 +300,11 @@ class Tm_fd_bud_request extends Root_Controller
     {
         $id = $this->input->post("id");
         $user = User_helper::get_user();
+        $data=array();
         if($id>0)
         {
             $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
-            $this->db->select('fdb_details.upazilla_id');
+            $this->db->select('fdb_details.*');
             $this->db->select('u.district_id');
             $this->db->select('d.territory_id');
             $this->db->select('t.zone_id zone_id');
@@ -324,29 +325,26 @@ class Tm_fd_bud_request extends Root_Controller
                 $this->jsonReturn($ajax);
             }
         }
-        if($id>0)
+        elseif($id>0)
         {
             if(!(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))
             {
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         else
         {
-            if(!(isset($this->permissions['add'])&&($this->permissions['add']==1)))
-            {
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-                $this->jsonReturn($ajax);
-                die();
-            }
+            $ajax['status']=false;
+            $ajax['system_message']='Invalid Try';
+            $this->jsonReturn($ajax);
         }
         $participants=$this->input->post('farmer_participant');
         $expense_budget=$this->input->post('expense_budget');
-        if(!$this->check_validation($participants,$expense_budget))
+        $upazilla_id=$data['item_info']['upazilla_id'];
+
+        if(!$this->check_validation($participants,$expense_budget,$upazilla_id))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -356,7 +354,6 @@ class Tm_fd_bud_request extends Root_Controller
         {
             $time=time();
             $field_budget=$this->input->post('item');
-            $field_budget['date']=System_helper::get_time($field_budget['date']);
             $field_budget_details=$this->input->post('item_info');
             $field_budget_details['no_of_participant']=0;
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
@@ -384,36 +381,28 @@ class Tm_fd_bud_request extends Root_Controller
                     $field_budget_details['total_budget']+=$amount;
                 }
             }
+
             $this->db->trans_begin();  //DB Transaction Handle START
-            if($id>0)
-            {
-                $budget_id=$id;
-                $field_budget['user_updated'] = $user->user_id;
-                $field_budget['date_updated'] = $time;
-                Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$field_budget,array("id = ".$id));
-            }
-            else
-            {
-                $field_budget['user_created'] = $user->user_id;
-                $field_budget['date_created'] = $time;
-                $budget_id=Query_helper::add($this->config->item('table_tm_fd_bud_budget'),$field_budget);
-                if($budget_id===false)
-                {
-                    $this->db->trans_rollback();
-                    $ajax['status']=false;
-                    $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
-                    $this->jsonReturn($ajax);
-                    die();
-                }
-            }
+            $budget_id=$id;
+            $field_budget['user_updated'] = $user->user_id;
+            $field_budget['date_updated'] = $time;
+            Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$field_budget,array("id = ".$id));
+
             //budget details start
             $this->db->where('budget_id',$budget_id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_tm_fd_bud_info_details'));
             $field_budget_details['budget_id']=$budget_id;
-            $field_budget_details['revision']=1;
+            $field_budget_details['variety_id'] = $data['item_info']['variety_id'];
+            $field_budget_details['competitor_variety_id'] = $data['item_info']['competitor_variety_id'];
+            $field_budget_details['upazilla_id'] = $data['item_info']['upazilla_id'];
+            $field_budget_details['address'] = $data['item_info']['address'];
+            $field_budget_details['present_condition'] = $data['item_info']['present_condition'];
+            $field_budget_details['farmers_evaluation'] = $data['item_info']['farmers_evaluation'];
+            $field_budget_details['diff_wth_com'] = $data['item_info']['diff_wth_com'];
             $field_budget_details['user_created'] = $user->user_id;
             $field_budget_details['date_created'] = $time;
+            $field_budget_details['revision']=1;
             Query_helper::add($this->config->item('table_tm_fd_bud_info_details'),$field_budget_details);
             //budget details end
 
@@ -457,7 +446,6 @@ class Tm_fd_bud_request extends Root_Controller
 
             //file details start
             $image_info=$this->input->post('image_info');
-
             $this->db->where('budget_id',$budget_id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_tm_fd_bud_details_picture'));
@@ -477,7 +465,6 @@ class Tm_fd_bud_request extends Root_Controller
                     $ajax['status']=false;
                     $ajax['system_message']=$file['message'];
                     $this->jsonReturn($ajax);
-                    die();
                 }
             }
             $arm_file_details_remarks=$this->input->post('arm_file_details_remarks');
@@ -533,55 +520,76 @@ class Tm_fd_bud_request extends Root_Controller
 
     }
 
-    private function check_validation($ids,$expense_budget)
+    private function check_validation($ids,$expense_budget,$upazilla_id)
     {
-        $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
-        $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text','status'),array(),0,0,array('ordering ASC'));
-        $fmr=array();
-        foreach($farmers as $farmer)
-        {
-            $fmr[$farmer['value']]=$farmer['text'];
-        }
-        $expense=array();
-        foreach($expenses as $exp)
-        {
-            $expense[$exp['value']]=$exp['text'];
-        }
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('item[date]',$this->lang->line('LABEL_DATE'),'required');
-        $this->form_validation->set_rules('item_info[variety_id]',$this->lang->line('LABEL_VARIETY_NAME'),'required');
-        $this->form_validation->set_rules('item_info[upazilla_id]',$this->lang->line('LABEL_UPAZILLA_NAME'),'required');
-        $this->form_validation->set_rules('item_info[address]',$this->lang->line('LABEL_ADDRESS'),'required');
-        $this->form_validation->set_rules('item_info[present_condition]',$this->lang->line('LABEL_PRESENT_CONDITION'),'required');
-        $this->form_validation->set_rules('item_info[farmers_evaluation]',$this->lang->line('LABEL_FARMERS_EVALUATION'),'required');
         $this->form_validation->set_rules('item_info[participant_through_customer]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER'),'required');
         $this->form_validation->set_rules('item_info[participant_through_others]',$this->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS'),'required');
         $this->form_validation->set_rules('item_info[sales_target]',$this->lang->line('LABEL_NEXT_SALES_TARGET'),'required|numeric');
-        $this->form_validation->set_rules('item_info[diff_wth_com]',$this->lang->line('LABEL_SPECIFIC_DIFFERENCE'),'required');
         $this->form_validation->set_rules('item_info[expected_date]',$this->lang->line('LABEL_EXPECTED_DATE'),'required');
+        $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
         $this->form_validation->set_rules('item_info[arm_market_size]',$this->lang->line('LABEL_ARM_MARKET_SIZE'),'required');
         $this->form_validation->set_rules('item_info[total_market_size]',$this->lang->line('LABEL_TOTAL_MARKET_SIZE'),'required');
-        $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
-        if($expense_budget){
+
+        if($upazilla_id)
+        {
+            $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text','status'),array('upazilla_id='.$upazilla_id),0,0,array('ordering ASC'));
+            $check=array();
+            $fmr=array();
+            foreach($farmers as $farmer)
+            {
+                $check[$farmer['value']]=$farmer['value'];
+                $fmr[$farmer['value']]=$farmer['text'];
+            }
+            if($ids)
+            {
+                foreach($ids as $key=>$id)
+                {
+                    if(!in_array($key,$check))
+                    {
+                        $this->message='Invalid Try';
+                        return false;
+                    }
+                }
+                foreach($ids as $index=>$id)
+                {
+                    if(!$id)
+                    {
+                        $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
+                    }
+                }
+            }
+        }
+        if($expense_budget)
+        {
+            $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
+            $expense=array();
+            foreach($expenses as $exp)
+            {
+                $expense[$exp['value']]=$exp['text'];
+            }
             foreach($expense_budget as $index=>$exp)
             {
                 if(!$exp)
                 {
                     $this->form_validation->set_rules('expense_budget['.$index.']',$expense[$index],'required');
                 }
-            }}
-        if($ids){
-            foreach($ids as $index=>$id)
-            {
-                if(!$id)
-                {
-                    $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
-                }
-            }}
+            }
+        }
 
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
+            return false;
+        }
+        if(!$ids)
+        {
+            $this->message=$this->lang->line('SET_LEADING_FARMER');
+            return false;
+        }
+        if(!$expense_budget)
+        {
+            $this->message=$this->lang->line('SET_BUDGET_EXPENSE_ITEMS');
             return false;
         }
         return true;

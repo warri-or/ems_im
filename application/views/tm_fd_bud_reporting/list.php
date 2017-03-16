@@ -10,6 +10,10 @@ if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
 {
     $action_data["action_details"]=base_url($CI->controller_url."/index/details");
 }
+//if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
+//{
+//    $action_data["action_forward"]=base_url($CI->controller_url."/index/forward");
+//}
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {
     $action_data["action_print"]='FIELD DAY BUDGET LIST';
@@ -43,13 +47,13 @@ $CI->load->view("action_buttons",$action_data);
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="crop_type_name"><?php echo $CI->lang->line('LABEL_CROP_TYPE'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="variety_name"><?php echo $CI->lang->line('LABEL_VARIETY_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="com_variety_name"><?php echo $CI->lang->line('LABEL_COMPETITOR_VARIETY'); ?></label>
-            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="division_name"><?php echo $CI->lang->line('LABEL_DIVISION_NAME'); ?></label>
-            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="zone_name"><?php echo $CI->lang->line('LABEL_ZONE_NAME'); ?></label>
-            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="territory_name"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?></label>
+            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  value="division_name"><?php echo $CI->lang->line('LABEL_DIVISION_NAME'); ?></label>
+            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  value="zone_name"><?php echo $CI->lang->line('LABEL_ZONE_NAME'); ?></label>
+            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  value="territory_name"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="district_name"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="upazilla_name"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?></label>
-            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_approved"><?php echo $CI->lang->line('LABEL_APPROVAL'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_reporting"><?php echo $CI->lang->line('LABEL_REPORTING'); ?></label>
+            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_approved"><?php echo $CI->lang->line('LABEL_APPROVAL'); ?></label>
 
 
         </div>
@@ -75,7 +79,7 @@ $CI->load->view("action_buttons",$action_data);
                 { name: 'id', type: 'int' },
                 { name: 'date', type: 'string' },
                 { name: 'expected_date', type: 'string' },
-                { name: 'total_budget', type: 'int' },
+                { name: 'total_budget', type: 'string' },
                 { name: 'crop_name', type: 'string' },
                 { name: 'crop_type_name', type: 'string' },
                 { name: 'variety_name', type: 'string' },
@@ -113,7 +117,7 @@ $CI->load->view("action_buttons",$action_data);
                 columnsreorder: true,
                 columns: [
                     {
-                        text: '<?php echo $CI->lang->line('LABEL_SL_NO'); ?>',datafield: '',pinned:true,width:'50', columntype: 'number',cellsalign: 'right',sortable:false,filterable:false,
+                        text: '<?php echo $CI->lang->line('LABEL_SL_NO'); ?>',datafield: '',pinned:true,width:'80', columntype: 'number',cellsalign: 'right',sortable:false,filterable:false,
                         cellsrenderer: function(row, column, value, defaultHtml, columnSettings, record)
                         {
                             var element = $(defaultHtml);
@@ -121,20 +125,20 @@ $CI->load->view("action_buttons",$action_data);
                             return element[0].outerHTML;
                         }
                     },
-                    { text: '<?php echo $CI->lang->line('LABEL_DATE'); ?>', dataField: 'date',width:'100',cellsalign: 'right',pinned:true},
-                    { text: '<?php echo $CI->lang->line('LABEL_EXPECTED_DATE'); ?>', dataField: 'expected_date',width:'100',cellsalign: 'right',pinned:true},
-                    { text: '<?php echo $CI->lang->line('LABEL_TOTAL_BUDGET'); ?>', dataField: 'total_budget',width:'80',cellsalign: 'right',pinned:true},
-                    { text: '<?php echo $CI->lang->line('LABEL_CROP_NAME'); ?>', dataField: 'crop_name',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_CROP_TYPE'); ?>', dataField: 'crop_type_name',filtertype: 'list',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_VARIETY_NAME'); ?>', dataField: 'variety_name',width:'120',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_COMPETITOR_VARIETY'); ?>', dataField: 'com_variety_name',width:'120',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_DIVISION_NAME'); ?>', dataField: 'division_name',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_ZONE_NAME'); ?>', dataField: 'zone_name',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?>', dataField: 'territory_name',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?>', dataField: 'district_name',width:'110',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?>', dataField: 'upazilla_name',width:'100',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_APPROVAL'); ?>', dataField: 'status_approved',width:'100',cellsalign: 'right',filtertype: 'list'},
-                    { text: '<?php echo $CI->lang->line('LABEL_REPORTING'); ?>', dataField: 'status_reporting',width:'100',cellsalign: 'right',filtertype: 'list'}
+                    { text: '<?php echo $CI->lang->line('LABEL_DATE'); ?>', dataField: 'date',width:'120',cellsalign: 'right',pinned:true},
+                    { text: '<?php echo $CI->lang->line('LABEL_EXPECTED_DATE'); ?>', dataField: 'expected_date',width:'120',cellsalign: 'right',pinned:true},
+                    { text: '<?php echo $CI->lang->line('LABEL_TOTAL_BUDGET'); ?>', dataField: 'total_budget',width:'130',cellsalign: 'right',pinned:true},
+                    { text: '<?php echo $CI->lang->line('LABEL_CROP_NAME'); ?>', dataField: 'crop_name',width:'120',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_CROP_TYPE'); ?>', dataField: 'crop_type_name',filtertype: 'list',width:'120',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_VARIETY_NAME'); ?>', dataField: 'variety_name',width:'130',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_COMPETITOR_VARIETY'); ?>', dataField: 'com_variety_name',width:'140',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_DIVISION_NAME'); ?>', dataField: 'division_name',width:'100',cellsalign: 'right',hidden: true},
+                    { text: '<?php echo $CI->lang->line('LABEL_ZONE_NAME'); ?>', dataField: 'zone_name',width:'100',cellsalign: 'right',hidden: true},
+                    { text: '<?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?>', dataField: 'territory_name',width:'100',cellsalign: 'right',hidden: true},
+                    { text: '<?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?>', dataField: 'district_name',width:'130',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?>', dataField: 'upazilla_name',width:'130',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_REPORTING'); ?>', dataField: 'status_reporting',width:'100',cellsalign: 'right',filtertype: 'list'},
+                    { text: '<?php echo $CI->lang->line('LABEL_APPROVAL'); ?>', dataField: 'status_approved',width:'100',cellsalign: 'right',filtertype: 'list'}
 
                 ]
             });

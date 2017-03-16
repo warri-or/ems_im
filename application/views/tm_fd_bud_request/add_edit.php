@@ -23,64 +23,58 @@ $CI->load->view("action_buttons",$action_data);
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DATE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DATE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="item[date]" id="date" class="form-control datepicker" value="<?php echo System_helper::display_date($item['date']); ?>"/>
+        <label class="control-label pull-left"><?php echo System_helper::display_date($item['date']); ?></label>
     </div>
 </div>
 
 <div style="" class="row show-grid" id="crop_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <select id="crop_id" class="form-control">
-            <option value=""><?php echo $this->lang->line('SELECT');?></option>
-            <?php
-            foreach($crops as $crop)
-            {?>
-                <option value="<?php echo $crop['value']?>" <?php if($crop['value']==$item_info['crop_id']){ echo "selected";}?>><?php echo $crop['text'];?></option>
-            <?php
-            }
-            ?>
-        </select>
+        <label class="control-label">
+        <?php
+        foreach($crops as $crop)
+        {
+            if($crop['value']==$item_info['crop_id']){ echo $crop['text'];}
+        }
+        ?>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="crop_type_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_TYPE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_CROP_TYPE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <select id="crop_type_id" class="form-control">
-            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+        <label class="control-label">
             <?php
-            foreach($crop_types as $type)
-            {?>
-                <option value="<?php echo $type['value']?>" <?php if($type['value']==$item_info['crop_type_id']){ echo "selected";}?>><?php echo $type['text'];?></option>
-            <?php
-            }
+                foreach($crop_types as $type)
+                {
+                    if($type['value']==$item_info['crop_type_id']){ echo $type['text'];}
+                }
             ?>
-        </select>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="variety_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_VARIETY_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_VARIETY_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <select id="variety_id" name="item_info[variety_id]" class="form-control">
-            <option value=""><?php echo $this->lang->line('SELECT');?></option>
-            <?php
-            foreach($crop_varieties as $variety)
-            {?>
-                <option value="<?php echo $variety['value']?>" <?php if($variety['value']==$item_info['variety_id']){ echo "selected";}?>><?php echo $variety['text'];?></option>
-            <?php
-            }
-            ?>
-        </select>
+        <label class="control-label pull-left">
+                <?php
+                    foreach($crop_varieties as $variety)
+                    {
+                        if($variety['value']==$item_info['variety_id']){ echo $variety['text'];}
+                    }
+                ?>
+        </label>
     </div>
 </div>
 
@@ -89,209 +83,131 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_COMPETITOR_VARIETY');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <select id="competitor_variety_id" name="item_info[competitor_variety_id]" class="form-control">
-            <option value=""><?php echo $this->lang->line('SELECT');?></option>
+        <label class="control-label">
             <?php
-            foreach($competitor_varieties as $competitor)
-            {?>
-                <option value="<?php echo $competitor['value']?>" <?php if($competitor['value']==$item_info['competitor_variety_id']){ echo "selected";}?>><?php echo $competitor['text'];?></option>
-            <?php
-            }
+                foreach($competitor_varieties as $competitor)
+                {
+                    if($competitor['value']==$item_info['competitor_variety_id']){ echo $competitor['text'];}
+                }
             ?>
-        </select>
+        </label>
     </div>
 </div>
 
 
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DIVISION_NAME');?></label>
     </div>
-    <div class="col-sm-4 col-xs-4">
-        <?php
-        if($CI->locations['division_id']>0)
-        {
-            ?>
-            <label class="control-label"><?php echo $CI->locations['division_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="division_id" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
+    <div class="col-sm-4 col-xs-8">
+        <label class="control-label">
+            <?php
                 foreach($divisions as $division)
-                {?>
-                    <option value="<?php echo $division['value']?>" <?php if($division['value']==$item_info['division_id']){ echo "selected";}?>><?php echo $division['text'];?></option>
-                <?php
+                {
+                    if($division['value']==$item_info['division_id']){ echo $division['text'];}
                 }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+            ?>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!(sizeof($zones)>0)){echo 'display:none';}?>" class="row show-grid" id="zone_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ZONE_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['zone_id']>0)
-        {
-            ?>
-            <label class="control-label"><?php echo $CI->locations['zone_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="zone_id" class="form-control" ">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
+        <label class="control-label">
+            <?php
                 foreach($zones as $zone)
-                {?>
-                    <option value="<?php echo $zone['value']?>" <?php if($zone['value']==$item_info['zone_id']){ echo "selected";}?>><?php echo $zone['text'];?></option>
-                <?php
+                {
+                    if($zone['value']==$item_info['zone_id']){ echo $zone['text'];}
                 }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+            ?>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!(sizeof($territories)>0)){echo 'display:none';}?>" class="row show-grid" id="territory_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['territory_id']>0)
-        {
-            ?>
-            <label class="control-label"><?php echo $CI->locations['territory_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="territory_id" class="form-control" >
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
+        <label class="control-label">
+            <?php
                 foreach($territories as $territory)
-                {?>
-                    <option value="<?php echo $territory['value']?>" <?php if($territory['value']==$item_info['territory_id']){ echo "selected";}?>><?php echo $territory['text'];?></option>
-                <?php
+                {
+                    if($territory['value']==$item_info['territory_id']){ echo $territory['text'];}
                 }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+            ?>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!(sizeof($districts)>0)){echo 'display:none';}?>" class="row show-grid" id="district_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['district_id']>0)
-        {
-            ?>
-            <label class="control-label"><?php echo $CI->locations['district_name'];?></label>
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="district_id" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
+        <label class="control-label">
+            <?php
                 foreach($districts as $district)
-                {?>
-                    <option value="<?php echo $district['value']?>" <?php if($district['value']==$item_info['district_id']){ echo "selected";}?>><?php echo $district['text'];?></option>
-                <?php
-                }
+                    {
+                        if($district['value']==$item_info['district_id']){ echo $district['text'];}
+                    }
                 ?>
-            </select>
-        <?php
-        }
-        ?>
+        </label>
     </div>
 </div>
 
 <div style="<?php if(!(sizeof($upazillas)>0)){echo 'display:none';}?>" class="row show-grid" id="upazilla_id_container">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <?php
-        if($CI->locations['upazilla_id']>0)
-        {
-            ?>
-            <label class="control-label"><?php echo $CI->locations['upazilla_name'];?></label>
-            <!--            <input type="hidden" name="budget_details[upazilla_id]" value="--><?php //echo $CI->locations['upazilla_id'];?><!--">-->
-        <?php
-        }
-        else
-        {
-            ?>
-            <select id="upazilla_id" name="item_info[upazilla_id]" class="form-control">
-                <option value=""><?php echo $this->lang->line('SELECT');?></option>
-                <?php
+        <label class="control-label">
+            <?php
                 foreach($upazillas as $upazilla)
-                {?>
-                    <option value="<?php echo $upazilla['value']?>" <?php if($upazilla['value']==$item_info['upazilla_id']){ echo "selected";}?>><?php echo $upazilla['text'];?></option>
-                <?php
+                {
+                    if($upazilla['value']==$item_info['upazilla_id']){ echo $upazilla['text'];}
                 }
-                ?>
-            </select>
-        <?php
-        }
-        ?>
+            ?>
+        </label>
     </div>
 </div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ADDRESS');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ADDRESS');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <textarea class="form-control" id="address" name="item_info[address]" ><?php echo $item_info['address'];?></textarea>
+        <label class="control-label"><?php echo $item_info['address'];?></label>
     </div>
 </div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRESENT_CONDITION');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PRESENT_CONDITION');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <textarea class="form-control" id="present_condition" name="item_info[present_condition]"><?php echo $item_info['present_condition']; ?></textarea>
+        <label class="control-label"><?php echo $item_info['present_condition'];?></label>
     </div>
 </div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FARMERS_EVALUATION');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FARMERS_EVALUATION');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <textarea class="form-control" id="farmers_evaluation" name="item_info[farmers_evaluation]"><?php echo $item_info['farmers_evaluation']; ?></textarea>
+        <label class="control-label"><?php echo $item_info['farmers_evaluation'];?></label>
     </div>
 </div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_SPECIFIC_DIFFERENCE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_SPECIFIC_DIFFERENCE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <textarea class="form-control" id="diff_wth_com" name="item_info[diff_wth_com]"><?php echo $item_info['diff_wth_com']; ?></textarea>
+        <label class="control-label"><?php echo $item_info['diff_wth_com'];?></label>
     </div>
 </div>
 
@@ -340,7 +256,7 @@ $CI->load->view("action_buttons",$action_data);
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?><span style="color:red;">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <input type="text" name="item_info[participant_through_customer]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_customer'])) {$total+=$item_info['participant_through_customer'];echo $item_info['participant_through_customer'];}?>"/>
@@ -348,7 +264,7 @@ $CI->load->view("action_buttons",$action_data);
 </div>
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?><span style="color:red;">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <input type="text" name="item_info[participant_through_others]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_others'])) {$total+=$item_info['participant_through_others'];echo $item_info['participant_through_others'];}?>"/>
@@ -397,7 +313,7 @@ if(isset($expense_budget[$expense['value']]) || $expense['status']=='Active'){
         <label class="control-label pull-right"> Total Budget (Tk.)</label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <label id="total_budget"><?php echo number_format($total);?></label>
+        <label id="total_budget"><?php echo number_format($total,2);?></label>
     </div>
 </div>
 

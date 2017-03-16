@@ -485,7 +485,8 @@ class Tm_fd_bud_budget extends Root_Controller
         }
         $participants=$this->input->post('farmer_participant');
         $expense_budget=$this->input->post('expense_budget');
-        if(!$this->check_validation($participants,$expense_budget))
+        $upazilla_id=$this->input->post('item_info[upazilla_id]');
+        if(!$this->check_validation($participants,$expense_budget,$upazilla_id))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->message;
@@ -542,7 +543,6 @@ class Tm_fd_bud_budget extends Root_Controller
                     $ajax['status']=false;
                     $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                     $this->jsonReturn($ajax);
-                    die();
                 }
             }
             //budget details start
@@ -617,7 +617,6 @@ class Tm_fd_bud_budget extends Root_Controller
                     $ajax['status']=false;
                     $ajax['system_message']=$file['message'];
                     $this->jsonReturn($ajax);
-                    die();
                 }
             }
             $arm_file_details_remarks=$this->input->post('arm_file_details_remarks');
@@ -672,20 +671,8 @@ class Tm_fd_bud_budget extends Root_Controller
         }
     }
 
-    private function check_validation($ids,$expense_budget)
+    private function check_validation($ids,$expense_budget,$upazilla_id)
     {
-        $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
-        $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text','status'),array(),0,0,array('ordering ASC'));
-        $fmr=array();
-        foreach($farmers as $farmer)
-        {
-            $fmr[$farmer['value']]=$farmer['text'];
-        }
-        $expense=array();
-        foreach($expenses as $exp)
-        {
-            $expense[$exp['value']]=$exp['text'];
-        }
         $this->load->library('form_validation');
         $this->form_validation->set_rules('item[date]',$this->lang->line('LABEL_DATE'),'required');
         $this->form_validation->set_rules('item_info[variety_id]',$this->lang->line('LABEL_VARIETY_NAME'),'required');
@@ -701,26 +688,66 @@ class Tm_fd_bud_budget extends Root_Controller
         $this->form_validation->set_rules('item[remarks]',$this->lang->line('LABEL_RECOMMENDATION'),'required');
         $this->form_validation->set_rules('item_info[arm_market_size]',$this->lang->line('LABEL_ARM_MARKET_SIZE'),'required');
         $this->form_validation->set_rules('item_info[total_market_size]',$this->lang->line('LABEL_TOTAL_MARKET_SIZE'),'required');
-        if($expense_budget){
+
+        if($upazilla_id)
+        {
+            $farmers=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','CONCAT(name," (",phone_no,")") text','status'),array('upazilla_id='.$upazilla_id),0,0,array('ordering ASC'));
+            $check=array();
+            $fmr=array();
+            foreach($farmers as $farmer)
+            {
+                $check[$farmer['value']]=$farmer['value'];
+                $fmr[$farmer['value']]=$farmer['text'];
+            }
+            if($ids)
+            {
+                foreach($ids as $key=>$id)
+                {
+                    if(!in_array($key,$check))
+                    {
+                        $this->message='Invalid Try';
+                        return false;
+                    }
+                }
+                foreach($ids as $index=>$id)
+                {
+                    if(!$id)
+                    {
+                        $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
+                    }
+                }
+            }
+        }
+        if($expense_budget)
+        {
+            $expenses=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
+            $expense=array();
+            foreach($expenses as $exp)
+            {
+                $expense[$exp['value']]=$exp['text'];
+            }
             foreach($expense_budget as $index=>$exp)
             {
                 if(!$exp)
                 {
                     $this->form_validation->set_rules('expense_budget['.$index.']',$expense[$index],'required');
                 }
-            }}
-        if($ids){
-            foreach($ids as $index=>$id)
-            {
-                if(!$id)
-                {
-                    $this->form_validation->set_rules('farmer_participant['.$index.']',$fmr[$index],'required');
-                }
-            }}
+            }
+        }
 
         if($this->form_validation->run() == FALSE)
         {
             $this->message=validation_errors();
+            return false;
+        }
+        if(!$ids)
+        {
+            $this->message=$this->lang->line('SET_LEADING_FARMER');
+            return false;
+        }
+        if(!$expense_budget)
+        {
+            $this->message=$this->lang->line('SET_BUDGET_EXPENSE_ITEMS');
             return false;
         }
         return true;
@@ -781,7 +808,7 @@ class Tm_fd_bud_budget extends Root_Controller
         {
             $item['date']=System_helper::display_date($item['date']);
             $item['expected_date']=System_helper::display_date($item['expected_date']);
-
+            $item['total_budget']=number_format($item['total_budget'],2);
         }
         $this->jsonReturn($items);
     }

@@ -322,7 +322,7 @@ foreach($info_details as $revision=>$info)
                         <tr>
                             <th>File Type</th>
                             <th>File Name</th>
-                            <th style="width: 300px;max-height:150px">Preview</th>
+                            <th style="max-width: 300px;max-height:150px">Preview</th>
                             <th>Remarks</th>
                         </tr>
                         </thead>
@@ -336,7 +336,7 @@ foreach($info_details as $revision=>$info)
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
                                     type="<?php echo $video_file_details['file_type'];?>">
                                 </video>
-<!--                                <a target="_blank" href="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?><!--" class="btn btn-success external">Download this video</a>-->
+<!--                                <a target="_blank" href="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?><!--" class="btn btn-primary external">Download this video</a>-->
                             </td>
 <!--                            <td><a target="_blank" href="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?><!--"class="btn btn-primary external">Download this video</a></td>-->
                             <td></td>

@@ -215,7 +215,7 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
             </div>
         </div>
         <div class="row show-grid">
@@ -232,7 +232,7 @@ foreach($info_details as $revision=>$info)
                     <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                    <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                 </div>
             </div>
         <?php } ?>
@@ -241,7 +241,7 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label pull-right"> Total Budget :</label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
             </div>
         </div>
 
@@ -412,7 +412,7 @@ foreach($info_details as $revision=>$info)
                                         $image=$file_details[$pic_cat['value']]['arm_file_location'];
                                     }
                                     ?>
-                                    <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                                    <img style="max-width: 250px; max-height: 150px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                 </td>
                                 <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
                                 <td>
@@ -423,7 +423,7 @@ foreach($info_details as $revision=>$info)
                                         $image=$file_details[$pic_cat['value']]['competitor_file_location'];
                                     }
                                     ?>
-                                    <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                                    <img style="max-width: 250px; max-height: 150px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                 </td>
                                 <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
                             </tr>
@@ -519,7 +519,7 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                     </div>
                 </div>
                 <div class="row show-grid">
@@ -536,7 +536,7 @@ foreach($info_details as $revision=>$info)
                             <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                         </div>
                         <div class="col-sm-4 col-xs-8">
-                            <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                            <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                         </div>
                     </div>
                 <?php } ?>
@@ -545,7 +545,7 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"> Total Budget :</label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                        <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                     </div>
                 </div>
                 <div class="row show-grid">

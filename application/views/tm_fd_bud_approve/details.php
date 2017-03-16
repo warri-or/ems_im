@@ -216,7 +216,7 @@ $CI->load->view("action_buttons",$action_data);
                     <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                    <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                 </div>
             </div>
             <div class="row show-grid">
@@ -233,7 +233,7 @@ $CI->load->view("action_buttons",$action_data);
                         <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                        <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                     </div>
                 </div>
             <?php } ?>
@@ -242,7 +242,7 @@ $CI->load->view("action_buttons",$action_data);
                     <label class="control-label pull-right"> Total Budget :</label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                    <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                 </div>
             </div>
             <div class="row show-grid">
@@ -518,7 +518,7 @@ $CI->load->view("action_buttons",$action_data);
                             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                         </div>
                         <div class="col-sm-4 col-xs-8">
-                            <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                            <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                         </div>
                     </div>
                     <div class="row show-grid">
@@ -535,7 +535,7 @@ $CI->load->view("action_buttons",$action_data);
                                 <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                             </div>
                             <div class="col-sm-4 col-xs-8">
-                                <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                                <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                             </div>
                         </div>
                     <?php } ?>
@@ -544,7 +544,7 @@ $CI->load->view("action_buttons",$action_data);
                             <label class="control-label pull-right"> Total Budget :</label>
                         </div>
                         <div class="col-sm-4 col-xs-8">
-                            <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                            <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                         </div>
                     </div>
                     <div class="row show-grid">

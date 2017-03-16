@@ -287,7 +287,7 @@ $CI = & get_instance();
                 </div>
                 <div id="collapse_2" class="panel-collapse collapse">
 
-                    <table class="table table-bordered" style="width: 700px; margin-left: 50px;">
+                    <table class="table table-bordered table-responsive" style="width: 700px; margin-left: 50px;">
                         <thead>
                         <tr>
                             <th style="min-width: 60px;">Image Type</th>
@@ -315,7 +315,7 @@ $CI = & get_instance();
                                             $image=$b_fd_file_details[$pic_cat['value']]['arm_file_location'];
                                         }
                                         ?>
-                                        <img style="max-width: 250px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>"class="Tooltip" title="<h5><?php echo $b_fd_file_details[$pic_cat['value']]['arm_file_remarks']?></h5>">
+                                        <img style="max-width: 250px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                     </div>
                                 </td>
                                 <td style="max-width: 270px;max-height: 200px;">
@@ -327,7 +327,7 @@ $CI = & get_instance();
                                             $image=$b_fd_file_details[$pic_cat['value']]['competitor_file_location'];
                                         }
                                         ?>
-                                        <img style="max-width: 250px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>" class="Tooltip" title="<h5><?php echo $b_fd_file_details[$pic_cat['value']]['competitor_file_remarks']?></h5>">
+                                        <img style="max-width: 250px;max-height: 200px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                                     </div>
                                 </td>
                             </tr>
@@ -353,11 +353,11 @@ $CI = & get_instance();
             </div>
             <div id="collapse_1" class="panel-collapse collapse">
 
-                    <table class="table table-bordered" style="width: 700px; margin-left: 50px;">
+                    <table class="table table-bordered table-responsive">
                         <thead>
                         <tr>
-                            <th style="min-width: 100px;">File Type</th>
-                            <th style="min-width: 100px;">File Name</th>
+                            <th>File Type</th>
+                            <th>File Name</th>
                             <th style="max-width: 270px;max-height: 200px;">Preview</th>
                             <th style="max-width: 100px;max-height: 200px;">Remarks</th>
                         </tr>
@@ -365,18 +365,17 @@ $CI = & get_instance();
 
                         <tbody>
                         <tr>
-                            <td style="min-width: 100px; color: #263238;"><?php echo $video_file_details['file_type'];?></td>
-                            <td style="min-width: 100px; color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
-                            <td style="max-width: 270px; max-height: 200px;">
+                            <td style="color: #263238;"><?php echo $video_file_details['file_type'];?></td>
+                            <td style="color: #263238;"><b><?php echo $video_file_details['file_name'];?></b></td>
+                            <td>
                                 <div class="col-xs-4">
-                                    <video width="270" controls>
+                                    <video style="max-width: 250px;max-height:150px" controls>
                                         <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
                                                 type="<?php echo $video_file_details['file_type'];?>"></video>
-                                    <a style="margin-left: 175px;"  target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
+                                    <a target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>" class="btn btn-primary external">Download</a>
                                 </div>
                             </td>
-                            <td style="max-width: 100px;max-height: 200px;">
-                            </td>
+                            <td></td>
                         </tr>
                         <?php
                         foreach($a_fd_file_details as $file)
@@ -384,15 +383,15 @@ $CI = & get_instance();
                             ?>
 
                             <tr>
-                                <td style="min-width: 100px; color: #263238;"><?php echo $file['file_type'];?></td>
-                                <td style="min-width: 100px; color: #263238;"><b><?php echo $file['file_name'];?></b></td>
-                                <td style="max-width: 270px; max-height: 200px;">
+                                <td style="color: #263238;"><?php echo $file['file_type'];?></td>
+                                <td style="color: #263238;"><b><?php echo $file['file_name'];?></b></td>
+                                <td>
                                     <div class="col-xs-4">
                                         <img style="max-width: 270px;max-height: 200px;"
                                              src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                     </div>
                                 </td>
-                                <td style="max-width: 100px;max-height: 200px;">
+                                <td>
                                     <h5><?php echo $file['file_remarks']?></h5>
                                 </td>
                             </tr>
@@ -419,11 +418,11 @@ $CI = & get_instance();
     jQuery(document).ready(function()
     {
         turn_off_triggers();
-        $('[class="Tooltip"]').tooltip({
-            animated: 'fade',
-            placement: 'bottom',
-            html: true
-        });
+//        $('[class="Tooltip"]').tooltip({
+//            animated: 'fade',
+//            placement: 'bottom',
+//            html: true
+//        });
     });
 </script>
-
+<!--class="Tooltip" title="<h5>--><?php //echo $b_fd_file_details[$pic_cat['value']]['competitor_file_remarks']?><!--</h5>"-->

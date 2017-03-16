@@ -24,6 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'http://localhost/ems_im/';
+//$config['base_url'] = 'http://localhost/ems_im/';
 /*if(strpos($_SERVER['HTTP_HOST'],'www')===false)
 {
     $config['base_url'] = 'http://ems.malikseeds.com/';

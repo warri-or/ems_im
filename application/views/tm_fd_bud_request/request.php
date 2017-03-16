@@ -205,7 +205,7 @@ foreach($participant_details[$index] as $key=>$participant_detail){
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
         </div>
         <div class="col-sm-4 col-xs-8">
-            <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+            <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
         </div>
     </div>
 <div class="row show-grid">
@@ -222,7 +222,7 @@ foreach($participant_details[$index] as $key=>$participant_detail){
                 <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
             </div>
         </div>
     <?php } ?>
@@ -231,7 +231,7 @@ foreach($participant_details[$index] as $key=>$participant_detail){
         <label class="control-label pull-right"> Total Budget :</label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+        <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
     </div>
 </div>
 
@@ -444,7 +444,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
 </div>
 <div style="" class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo 'ZI '. $CI->lang->line('LABEL_RECOMMENDATION');?></label>
+        <label class="control-label pull-right"><?php echo 'ZI '. $CI->lang->line('LABEL_RECOMMENDATION');?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <textarea class="form-control" name="request[remarks_requested]"></textarea>
@@ -533,7 +533,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                     <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?></label>
+                    <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                 </div>
             </div>
             <div class="row show-grid">
@@ -550,7 +550,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                         <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                     </div>
                     <div class="col-sm-4 col-xs-8">
-                        <label class="control-label"><?php echo number_format($expenses['amount']);?></label>
+                        <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                     </div>
                 </div>
             <?php } ?>
@@ -559,7 +559,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                     <label class="control-label pull-right"> Total Budget :</label>
                 </div>
                 <div class="col-sm-4 col-xs-8">
-                    <label id="total_budget"><?php echo number_format($info[0]['total_budget']);?> Tk.</label>
+                    <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                 </div>
             </div>
             <div class="row show-grid">

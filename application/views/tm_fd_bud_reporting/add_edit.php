@@ -176,7 +176,7 @@ if($item_info['com_variety_name']){
 
     <div class="row show-grid">
         <div class="col-sm-4">
-            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <label class="control-label"><?php echo number_format($item_info['participant_through_customer']);?></label>
@@ -187,7 +187,7 @@ if($item_info['com_variety_name']){
     </div>
     <div class="row show-grid">
         <div class="col-sm-4">
-            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <label class="control-label"><?php echo number_format($item_info['participant_through_others']);?></label>
@@ -205,7 +205,7 @@ if($item_info['com_variety_name']){
         <label class="control-label"><?php echo $item_info['no_of_participant'];?> (Person)</label>
     </div>
     <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="col-sm-2 col-sm-4" id="total_participant_container">
-        <label id="no_of_participant"><?php if(isset($new_item['total_participant'])) {echo number_format($new_item['total_participant']);}?> (Person)</label>
+        <label id="no_of_participant"><?php if(isset($new_item['total_participant'])) {echo number_format($new_item['total_participant']);}?> (Persons)</label>
     </div>
 </div>
 <div class="row show-grid">
@@ -246,7 +246,7 @@ foreach($expense_budget as $key=>$budget)
         <label class="control-label pull-right"> Total Amount :</label>
     </div>
     <div class="col-sm-2 col-sm-4">
-        <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
+        <label id="total_budget"><?php echo number_format($item_info['total_budget'],2);?> Tk.</label>
     </div>
     <div class="col-sm-2 col-sm-4" id="total_expense_container" style="<?php if($item['id']==0){echo 'display: none';}?>">
         <label id="total_expense"><?php echo number_format($new_item['total_expense'],2);?> Tk.</label>
@@ -307,7 +307,7 @@ foreach($expense_budget as $key=>$budget)
         }
     ?>
     <div class="col-xs-2">
-        <label class="control-label">Upload a Video File</label>
+        <label class="control-label">Upload a Video File<span style="color: red;">*</span></label>
     </div>
     <div class="col-xs-4">
         <div style="<?php if(isset($video_file_details['file_location'])){echo 'display:block;';}else{echo 'display:none;';}?>" id="video_preview_id">
