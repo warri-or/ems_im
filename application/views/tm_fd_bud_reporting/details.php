@@ -230,10 +230,10 @@ foreach($info_details as $revision=>$info)
                     <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                 </div>
                 <div class="col-sm-2 col-xs-4">
-                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
+                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo number_format($expense_budget[$key]['amount'],2);}?></label>
                 </div>
                 <div class="col-sm-2 col-xs-4">
-                    <label class="control-label"><?php echo number_format($details['amount']);?></label>
+                    <label class="control-label"><?php echo number_format($details['amount'],2);?></label>
                 </div>
             </div>
         <?php } ?>
@@ -243,10 +243,10 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label pull-right"> Total Amount :</label>
             </div>
             <div class="col-sm-2 col-xs-4">
-                <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
+                <label id="total_budget"><?php echo number_format($item_info['total_budget'],2);?> Tk.</label>
             </div>
             <div class="col-sm-2 col-xs-4">
-                <label id="total_budget"><?php echo number_format($info[0]['total_expense']);?> Tk.</label>
+                <label id="total_budget"><?php echo number_format($info[0]['total_expense'],2);?> Tk.</label>
             </div>
         </div>
 
@@ -336,9 +336,9 @@ foreach($info_details as $revision=>$info)
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
                                     type="<?php echo $video_file_details['file_type'];?>">
                                 </video>
-<!--                                <a target="_blank" href="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?><!--" class="btn btn-primary external">Download this video</a>-->
+                                <br>
+                                <a target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" class="btn btn-primary external">Download this video</a>
                             </td>
-<!--                            <td><a target="_blank" href="--><?php //echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?><!--"class="btn btn-primary external">Download this video</a></td>-->
                             <td></td>
                         </tr>
                         <?php
@@ -494,10 +494,10 @@ foreach($info_details as $revision=>$info)
                             <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                         </div>
                         <div class="col-sm-2 col-xs-4">
-                            <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
+                            <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo number_format($expense_budget[$key]['amount'],2);}?></label>
                         </div>
                         <div class="col-sm-2 col-xs-4">
-                            <label class="control-label"><?php echo number_format($details['amount']);?></label>
+                            <label class="control-label"><?php echo number_format($details['amount'],2);?></label>
                         </div>
                     </div>
                 <?php } ?>
@@ -507,10 +507,10 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"> Total Amount :</label>
                     </div>
                     <div class="col-sm-2 col-xs-4">
-                        <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
+                        <label id="total_budget"><?php echo number_format($item_info['total_budget'],2);?> Tk.</label>
                     </div>
                     <div class="col-sm-2 col-xs-4">
-                        <label id="total_budget"><?php echo number_format($info[0]['total_expense']);?> Tk.</label>
+                        <label id="total_budget"><?php echo number_format($info[0]['total_expense'],2);?> Tk.</label>
                     </div>
                 </div>
 

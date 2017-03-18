@@ -319,7 +319,7 @@ $CI->load->view("action_buttons",$action_data);
         </div>
 
         <?php
-        $total=0;
+        $total_participant=0;
         foreach($leading_farmers as $lead_farmer)
         {
         if(isset($participants[$lead_farmer['value']]) || $lead_farmer['status']=='Active'){
@@ -332,7 +332,7 @@ $CI->load->view("action_buttons",$action_data);
                     <input type="text" name="farmer_participant[<?php echo $lead_farmer['value'];?>]" class="participant_budget form-control float_type_positive"
                            value="<?php if(isset($participants[$lead_farmer['value']]))
                            {
-                               $total+=$participants[$lead_farmer['value']]['number'];
+                               $total_participant+=$participants[$lead_farmer['value']]['number'];
                                echo $participants[$lead_farmer['value']]['number'];
                            }?>"/>
                 </div>
@@ -349,7 +349,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <input type="text" name="item_info[participant_through_customer]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_customer'])) {$total+=$item_info['participant_through_customer'];echo $item_info['participant_through_customer'];}?>"/>
+        <input type="text" name="item_info[participant_through_customer]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_customer'])) {$total_participant+=$item_info['participant_through_customer'];echo $item_info['participant_through_customer'];}?>"/>
     </div>
 </div>
 <div class="row show-grid">
@@ -357,7 +357,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?><span style="color: red;">*</span></label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <input type="text" name="item_info[participant_through_others]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_others'])) {$total+=$item_info['participant_through_others'];echo $item_info['participant_through_others'];}?>"/>
+        <input type="text" name="item_info[participant_through_others]" class="participant_budget form-control float_type_positive" value="<?php if(isset($item_info['participant_through_others'])) {$total_participant+=$item_info['participant_through_others'];echo $item_info['participant_through_others'];}?>"/>
     </div>
 </div>
 
@@ -366,7 +366,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <label id="no_of_participant"><?php echo number_format($total);?></label>
+        <label id="no_of_participant"><?php echo number_format($total_participant);?></label>
     </div>
 </div>
 
@@ -379,7 +379,7 @@ $CI->load->view("action_buttons",$action_data);
 </div>
 
     <?php
-    $total=0;
+    $total_budget=0;
      foreach($expense_items as $expense)
      {
     if(isset($expense_budget[$expense['value']]) || $expense['status']=='Active'){
@@ -393,7 +393,7 @@ $CI->load->view("action_buttons",$action_data);
              <input type="text" name="expense_budget[<?php echo $expense['value'];?>]" class="expense_budget form-control float_type_positive"
                     value="<?php if(isset($expense_budget[$expense['value']]))
                     {
-                        $total+=$expense_budget[$expense['value']]['amount'];
+                        $total_budget+=$expense_budget[$expense['value']]['amount'];
                         echo $expense_budget[$expense['value']]['amount'];
                     }?>"/>
          </div>
@@ -407,7 +407,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"> Total Budget (Tk.)</label>
     </div>
     <div class="col-sm-3 col-xs-9">
-        <label id="total_budget"><?php echo number_format($total,2);?></label>
+        <label id="total_budget"><?php echo number_format($total_budget,2);?></label>
     </div>
 </div>
 
@@ -416,7 +416,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_TOTAL_MARKET_SIZE');?> (kg)<span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="item_info[total_market_size]" id="total_market_size" class="form-control float_type_positive" value="<?php if(isset($item_info['total_market_size'])) {echo $item_info['total_market_size'];}?>"/>
+        <input type="text" name="item_info[total_market_size]" id="total_market_size" class="form-control float_type_positive" value="<?php if($item_info['total_market_size']) {echo $item_info['total_market_size'];}?>"/>
     </div>
 </div>
 
@@ -425,7 +425,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_ARM_MARKET_SIZE');?> (kg)<span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="item_info[arm_market_size]" id="arm_market_size" class="form-control float_type_positive" value="<?php if(isset($item_info['arm_market_size'])) {echo $item_info['arm_market_size'];}?>"/>
+        <input type="text" name="item_info[arm_market_size]" id="arm_market_size" class="form-control float_type_positive" value="<?php if($item_info['arm_market_size']) {echo $item_info['arm_market_size'];}?>"/>
     </div>
 </div>
 
@@ -434,7 +434,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NEXT_SALES_TARGET');?> (kg)<span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <input type="text" name="item_info[sales_target]" id="sales_target" class="form-control float_type_positive" value="<?php echo $item_info['sales_target'];?>"/>
+        <input type="text" name="item_info[sales_target]" id="sales_target" class="form-control float_type_positive" value="<?php if($item_info['sales_target']) {echo $item_info['sales_target'];}?>"/>
     </div>
 </div>
 
@@ -817,37 +817,37 @@ $CI->load->view("action_buttons",$action_data);
         $(document).on("input",".expense_budget",function()
         {
             //findTotal();
-            var total=0;
+            var total_budget=0;
             $(".expense_budget").each( function( index, element )
             {
                 if($(this).val()==parseFloat($(this).val()))
                 {
-                    total=total+parseFloat($(this).val());
+                    total_budget=total_budget+parseFloat($(this).val());
                 }
             });
-            if(total=>0)
+            if(total_budget=>0)
             {
                 $('#total_budget_container').show();
             }
-            $('#total_budget').html(number_format(total,2));
+            $('#total_budget').html(number_format(total_budget,2));
         });
 
         $(document).on("input",".participant_budget",function()
         {
             //findTotal_participant();
-            var total=0;
+            var total_participant=0;
             $(".participant_budget").each( function( index, element )
             {
                 if($(this).val()==parseFloat($(this).val()))
                 {
-                    total=total+parseFloat($(this).val());
+                    total_participant=total_participant+parseFloat($(this).val());
                 }
             });
-            if(total=>0)
+            if(total_participant=>0)
             {
                 $('#total_participant_container').show();
             }
-            $('#no_of_participant').html(number_format(total));
+            $('#no_of_participant').html(number_format(total_participant));
         });
 
 

@@ -289,10 +289,10 @@ $CI->load->view("action_buttons",$action_data);
 </div>
 
 <div style="<?php if(!($item['id']>0)){echo 'display:none';} ?>" class="row show-grid" id="total_participant_container">
-    <div class="col-xs-5">
+    <div class="col-xs-4">
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
     </div>
-    <div class="col-sm-3 col-xs-9">
+    <div class="col-sm-4 col-xs-8">
         <label id="no_of_participant"><?php if(isset($total)){echo number_format($total);}?></label>
     </div>
 </div>
@@ -740,37 +740,37 @@ jQuery(document).ready(function()
     $(document).on("input",".expense_budget",function()
     {
         //findTotal();
-        var total=0;
+        var total_budget=0;
         $(".expense_budget").each( function( index, element )
         {
             if($(this).val()==parseFloat($(this).val()))
             {
-                total=total+parseFloat($(this).val());
+                total_budget=total_budget+parseFloat($(this).val());
             }
         });
-        if(total=>0)
+        if(total_budget=>0)
         {
             $('#total_budget_container').show();
         }
-        $('#total_budget').html(number_format(total,2));
+        $('#total_budget').html(number_format(total_budget,2));
     });
 
     $(document).on("input",".participant_budget",function()
     {
         //findTotal_participant();
-        var total=0;
+        var total_participant=0;
         $(".participant_budget").each( function( index, element )
         {
             if($(this).val()==parseFloat($(this).val()))
             {
-                total=total+parseFloat($(this).val());
+                total_participant=total_participant+parseFloat($(this).val());
             }
         });
-        if(total=>0)
+        if(total_participant=>0)
         {
             $('#total_participant_container').show();
         }
-        $('#no_of_participant').html(number_format(total));
+        $('#no_of_participant').html(number_format(total_participant));
     });
 
 

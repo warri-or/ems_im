@@ -113,6 +113,8 @@ class Tm_fd_bud_budget extends Root_Controller
                 'no_of_participant' => '',
                 'expected_date' => '',
                 'total_budget' => 0,
+                'arm_market_size' => '',
+                'total_market_size' => '',
                 'sales_target' => ''
             );
             $data['divisions']=Query_helper::get_info($this->config->item('table_setup_location_divisions'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'));
@@ -253,7 +255,8 @@ class Tm_fd_bud_budget extends Root_Controller
 
             $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
             $data['participants']=array();
-            $data['total']='';
+            $data['total_participant']='';
+            $data['total_budget']='';
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
             {
@@ -415,7 +418,6 @@ class Tm_fd_bud_budget extends Root_Controller
 
     private function check_my_editable($security)
     {
-
         if(($this->locations['division_id']>0)&&($this->locations['division_id']!=$security['division_id']))
         {
             return false;
@@ -470,7 +472,6 @@ class Tm_fd_bud_budget extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         else
@@ -480,11 +481,14 @@ class Tm_fd_bud_budget extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         $participants=$this->input->post('farmer_participant');
+//        echo '<pre>';
+//        print_r($participants);
         $expense_budget=$this->input->post('expense_budget');
+//        echo '<pre>';
+//        print_r($expense_budget);exit;
         $upazilla_id=$this->input->post('item_info[upazilla_id]');
         if(!$this->check_validation($participants,$expense_budget,$upazilla_id))
         {
@@ -501,6 +505,12 @@ class Tm_fd_bud_budget extends Root_Controller
             $field_budget_details['no_of_participant']=0;
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
             $field_budget_details['total_budget']=0;
+            $expense_budget=$this->input->post('expense_budget');
+//            echo '<pre>';
+//            print_r($expense_budget);exit;
+            $participants=$this->input->post('farmer_participant');
+//            echo '<pre>';
+//            print_r($participants);exit;
             foreach($participants as &$no_of_participant)
             {
                 if($no_of_participant=='')
@@ -524,6 +534,9 @@ class Tm_fd_bud_budget extends Root_Controller
                     $field_budget_details['total_budget']+=$amount;
                 }
             }
+//            echo $field_budget_details['no_of_participant'];
+//            echo $field_budget_details['total_budget'];exit;
+//            print_r($field_budget_details);exit;
             $this->db->trans_begin();  //DB Transaction Handle START
             if($id>0)
             {
@@ -560,16 +573,12 @@ class Tm_fd_bud_budget extends Root_Controller
             $this->db->where('budget_id',$budget_id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_tm_fd_bud_details_expense'));
-            foreach($expense_budget as $item_id=>$amount)
+            foreach($expense_budget as $item_id=>$budget_amount)
             {
                 $data=array();
                 $data['budget_id']=$budget_id;
                 $data['item_id']=$item_id;
-                $data['amount']=0;
-                if($amount>0)
-                {
-                    $data['amount']=$amount;
-                }
+                $data['amount']=$budget_amount;
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = $time;
                 $data['revision']=1;

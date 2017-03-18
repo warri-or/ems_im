@@ -166,74 +166,79 @@ if($item_info['com_variety_name']){
     </div>
 </div>
 
-<div class="row show-grid">
-    <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
-    </div>
-</div>
-<?php
-foreach($participant_details[$index] as $key=>$participant_detail){
-    if(isset($leading_farmers[$key]['text']) && isset($participant_detail['number'])){
-    ?>
     <div class="row show-grid">
         <div class="col-xs-4">
-            <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
-        </div>
-        <div class="col-sm-4 col-xs-8">
-            <label class="control-label"><?php echo $participant_detail['number'];?></label>
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_LEAD_FARMER');?></label>
         </div>
     </div>
-<?php }}?>
+    <?php
+    foreach($participant_details[$index] as $key=>$participant_detail)
+    {
+        //if(in_array($participant_detail['farmer_id'],$leading_farmers[$key])){
+        //if(isset($leading_farmers[$key]['text']) && isset($participant_detail['number'])){
+
+        ?>
+        <div class="row show-grid">
+            <div class="col-xs-5">
+                <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
+            </div>
+            <div class="col-sm-3 col-xs-9">
+                <label class="control-label"><?php echo $participant_detail['number'];?></label>
+            </div>
+        </div>
+    <?php
+    }
+    ?>
     <div style="" class="row show-grid">
-        <div class="col-xs-4">
+        <div class="col-xs-5">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
         </div>
-        <div class="col-sm-4 col-xs-8">
+        <div class="col-sm-3 col-xs-9">
             <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
         </div>
     </div>
     <div style="" class="row show-grid">
-        <div class="col-xs-4">
+        <div class="col-xs-5">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
         </div>
-        <div class="col-sm-4 col-xs-8">
+        <div class="col-sm-3 col-xs-9">
             <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
         </div>
     </div>
     <div style="" class="row show-grid">
-        <div class="col-xs-4">
+        <div class="col-xs-5">
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
         </div>
-        <div class="col-sm-4 col-xs-8">
+        <div class="col-sm-3 col-xs-9">
             <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
         </div>
     </div>
-<div class="row show-grid">
-    <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FIELD_DAY_BUDGET');?></label>
+    <div class="row show-grid">
+        <div class="col-xs-4">
+            <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FIELD_DAY_BUDGET');?></label>
+        </div>
     </div>
-</div>
     <?php
     foreach($expense_details[$index] as $key=>$expenses){
         //if($expense_items[$key]['text'] && $expenses['amount']){
         ?>
         <div class="row show-grid">
-            <div class="col-xs-4">
+            <div class="col-xs-5">
                 <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
             </div>
-            <div class="col-sm-4 col-xs-8">
+            <div class="col-sm-3 col-xs-9">
                 <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
             </div>
         </div>
     <?php } ?>
-<div style="" class="row show-grid">
-    <div class="col-xs-4">
-        <label class="control-label pull-right"> Total Budget :</label>
+    <div style="" class="row show-grid">
+        <div class="col-xs-5">
+            <label class="control-label pull-right"> Total Budget :</label>
+        </div>
+        <div class="col-sm-3 col-xs-9">
+            <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
+        </div>
     </div>
-    <div class="col-sm-4 col-xs-8">
-        <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
-    </div>
-</div>
 
 <div class="row show-grid">
     <div class="col-xs-4">
@@ -399,7 +404,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                                 $image=$file_details[$pic_cat['value']]['arm_file_location'];
                             }
                             ?>
-                            <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                            <img style="max-width: 250px; max-height: 150px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                         </td>
                         <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['arm_file_remarks']?></p></td>
                         <td>
@@ -410,7 +415,7 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                                 $image=$file_details[$pic_cat['value']]['competitor_file_location'];
                             }
                             ?>
-                            <img style="min-width: 150px; max-height: 100px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
+                            <img style="max-width: 250px; max-height: 150px;" src="<?php echo $CI->config->item('system_image_base_url').$image; ?>">
                         </td>
                         <td><p style="text-align:justify;"><b>Remarks :</b> <?php echo $file_details[$pic_cat['value']]['competitor_file_remarks']?></p></td>
                     </tr>
@@ -502,10 +507,10 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
 
                 ?>
                 <div class="row show-grid">
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                     </div>
-                    <div class="col-sm-4 col-xs-8">
+                    <div class="col-sm-3 col-xs-9">
                         <label class="control-label"><?php echo $participant_detail['number'];?></label>
                     </div>
                 </div>
@@ -513,26 +518,26 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
             }
             ?>
             <div style="" class="row show-grid">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
                 </div>
-                <div class="col-sm-4 col-xs-8">
+                <div class="col-sm-3 col-xs-9">
                     <label class="control-label"><?php echo number_format($info[0]['participant_through_customer']);?></label>
                 </div>
             </div>
             <div style="" class="row show-grid">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
                 </div>
-                <div class="col-sm-4 col-xs-8">
+                <div class="col-sm-3 col-xs-9">
                     <label class="control-label"><?php echo number_format($info[0]['participant_through_others']);?></label>
                 </div>
             </div>
             <div style="" class="row show-grid">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                 </div>
-                <div class="col-sm-4 col-xs-8">
+                <div class="col-sm-3 col-xs-9">
                     <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
                 </div>
             </div>
@@ -546,19 +551,19 @@ if(($item_info['status_approved']==$CI->config->item('system_status_po_approval_
                 //if($expense_items[$key]['text'] && $expenses['amount']){
                 ?>
                 <div class="row show-grid">
-                    <div class="col-xs-4">
+                    <div class="col-xs-5">
                         <label class="control-label pull-right"><?php if(isset($expense_items[$key]['text'])) {echo $expense_items[$key]['text'];}?></label>
                     </div>
-                    <div class="col-sm-4 col-xs-8">
+                    <div class="col-sm-3 col-xs-9">
                         <label class="control-label"><?php echo number_format($expenses['amount'],2);?></label>
                     </div>
                 </div>
             <?php } ?>
             <div style="" class="row show-grid">
-                <div class="col-xs-4">
+                <div class="col-xs-5">
                     <label class="control-label pull-right"> Total Budget :</label>
                 </div>
-                <div class="col-sm-4 col-xs-8">
+                <div class="col-sm-3 col-xs-9">
                     <label id="total_budget"><?php echo number_format($info[0]['total_budget'],2);?> Tk.</label>
                 </div>
             </div>
