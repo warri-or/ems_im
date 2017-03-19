@@ -58,3 +58,6 @@ $config['system_host_type_special']='special';
 
 $config['system_bank_type_receive']='Receive';
 $config['system_bank_type_expense']='Expense';
+
+//field_day
+$config['LABEL_FDR_FORWARDED'] = 'Forwarded';

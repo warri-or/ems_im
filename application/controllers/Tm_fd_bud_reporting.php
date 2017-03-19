@@ -33,11 +33,6 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $this->jsonReturn($ajax);
             }
         }
-        $this->permissions['request_approve']=1;
-        if($this->locations['territory_id']>0)
-        {
-            $this->permissions['request_approve']=0;
-        }
         $this->controller_url='tm_fd_bud_reporting';
     }
 
@@ -58,6 +53,10 @@ class Tm_fd_bud_reporting extends Root_Controller
         elseif($action=="save")
         {
             $this->system_save();
+        }
+        elseif($action=="forward")
+        {
+            $this->system_forward($id);
         }
         elseif($action=="details")
         {
@@ -152,6 +151,45 @@ class Tm_fd_bud_reporting extends Root_Controller
         $this->jsonReturn($items);
     }
 
+    private function system_forward($id)
+    {
+        if(isset($this->permissions['edit'])&&($this->permissions['edit']==1))
+        {
+            $id=$this->input->post('id');
+            $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),array('*'),array('budget_id ='.$id));
+            if($result)
+            {
+                $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),array('*'),array('id ='.$id));
+                if($result[0]['status_reporting']==$this->config->item('LABEL_FDR_FORWARDED'))
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']='Report Already Forwarded';
+                    $this->jsonReturn($ajax);
+                }
+                else
+                {
+                    $this->db->where('id',$id);
+                    $this->db->set('status_reporting',$this->config->item('LABEL_FDR_FORWARDED'));
+                    $this->db->update($this->config->item('table_tm_fd_bud_budget'));
+                    $this->message='Report Forwarded Successfully';
+                    $this->system_list();
+                }
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='No Reports Found. Please Complete Field Day Budget Reporting Task To Forward It.';
+                $this->jsonReturn($ajax);
+            }
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->jsonReturn($ajax);
+        }
+    }
+
 
 //try....
 
@@ -165,164 +203,174 @@ class Tm_fd_bud_reporting extends Root_Controller
         {
             $budgeted_id=$id;
         }
-        $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
-        $this->db->select('fdb_details.*');
-        $this->db->select('fdb.*');
-        $this->db->select('v.name variety_name');
-        $this->db->select('v1.name com_variety_name');
-        $this->db->select('crop.name crop_name,crop.id crop_id');
-        $this->db->select('type.name crop_type_name,type.id crop_type_id');
-        $this->db->select('u.name upazilla_name');
-        $this->db->select('d.name district_name,d.id district_id');
-        $this->db->select('t.name territory_name,t.id territory_id');
-        $this->db->select('zone.name zone_name,zone.id zone_id');
-        $this->db->select('division.name division_name,division.id division_id');
-
-        $this->db->join($this->config->item('table_tm_fd_bud_budget').' fdb','fdb.id = fdb_details.budget_id','INNER');
-        $this->db->join($this->config->item('table_setup_classification_varieties').' v','v.id = fdb_details.variety_id','INNER');
-        $this->db->join($this->config->item('table_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
-        $this->db->join($this->config->item('table_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
-        $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
-        $this->db->join($this->config->item('table_setup_classification_varieties').' v1','v1.id = fdb_details.competitor_variety_id','LEFT');
-        $this->db->where('fdb_details.budget_id',$budgeted_id);
-        $this->db->where('fdb_details.revision',1);
-        $data['item_info']=$this->db->get()->row_array();
-        if(!$data['item_info'])
-        {
-            System_helper::invalid_try($this->config->item('system_edit_not_exists'),$budgeted_id);
-            $ajax['status']=false;
-            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-            $this->jsonReturn($ajax);
-        }
-        if(!$this->check_my_editable($data['item_info']))
-        {
-            System_helper::invalid_try($this->config->item('system_edit_others'),$budgeted_id);
-            $ajax['status']=false;
-            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
-            $this->jsonReturn($ajax);
-        }
-
-        $results=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
-        foreach($results as $result)
-        {
-            $data['expense_items'][$result['value']]=$result;
-        }
-        $data['expense_budget']=array();
-        $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-        foreach($results as $result)
-        {
-            $data['expense_budget'][$result['item_id']]=$result;
-        }
-
-        $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
-        $data['leading_farmers']=array();
-        foreach($results as $result)
-        {
-            $data['leading_farmers'][$result['value']]=$result;
-        }
-        $data['participants']=array();
-        $data['total']='';
-        $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-        foreach($results as $result)
-        {
-            $data['participants'][$result['farmer_id']]=$result;
-        }
-        $data['farmers']=array();
-
-        $data['file_details']=array();
-        $data['video_file_details']['file_name']='';
-        $data['video_file_details']['file_type']='';
-
-        $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),'*',array('budget_id ='.$budgeted_id));
-        if((isset($this->permissions['edit'])&&($this->permissions['edit']==1))&& $result)
-        {
-            foreach($result as $result)
-            {
-            $data['item']['date']=$result['date'];
-            $data['item']['date_of_fd']=$result['date_of_fd'];
-            $data['item']['recommendation']=$result['recommendation'];
-            }
-            $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_expense'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-            foreach($results as $res)
-            {
-                $data['expense_report'][$res['item_id']]=$res;
-            }
-
-            $result=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_info'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-            foreach($result as $res)
-            {
-                $data['new_item']=$res;
-            }
-            $data['item']['id']=$data['new_item']['id'];
-            $data['item']['budget_id']=$data['new_item']['budget_id'];
-
-            $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_participant'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-            foreach($results as $res)
-            {
-                $data['farmers'][$res['farmer_id']]=$res;
-            }
-
-            $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_picture'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
-            foreach($results as $result)
-            {
-                if(substr($result['file_type'],0,5)=='image')
-                {
-                    $data['file_details'][]=$result;
-                }
-                elseif(substr($result['file_type'],0,5)=='video')
-                {
-                    $data['video_file_details']=$result;
-                }
-            }
-
-            $data['title']='Editing Report On Field Day';
-            $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$budgeted_id);
-            $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
-            if($this->message)
-            {
-                $ajax['system_message']=$this->message;
-            }
-            $this->jsonReturn($ajax);
-
-        }
-        elseif(((isset($this->permissions['add'])&&($this->permissions['add']==1))||(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))&& !$result)
-        {
-            $data["item"] = Array(
-                'id' => 0,
-                'date' => time(),
-                'date_of_fd' => '',
-                'recommendation' => '',
-                'budget_id' => $budgeted_id
-            );
-            $data["new_item"] = Array(
-                'total_participant' => '',
-                'participant_through_customer' => '',
-                'participant_through_others' => '',
-                'guest' => '',
-                'total_expense' => 0,
-                'participant_comment' => '',
-                'next_sales_target' => ''
-            );
-            $data['title']='Reporting On Field Day';
-            $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$budgeted_id);
-            $ajax['status']=true;
-            $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
-            if($this->message)
-            {
-                $ajax['system_message']=$this->message;
-            }
-            $this->jsonReturn($ajax);
-        }
-        else
+        $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$budgeted_id));
+        if($result[0]['status_reporting']==$this->config->item('LABEL_FDR_FORWARDED'))
         {
             $ajax['status']=false;
             $ajax['system_message']=$this->lang->line("LABEL_NOT_EDITABLE");
             $this->jsonReturn($ajax);
+        }
+        else
+        {
+            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
+            $this->db->select('fdb_details.*');
+            $this->db->select('fdb.*');
+            $this->db->select('v.name variety_name');
+            $this->db->select('v1.name com_variety_name');
+            $this->db->select('crop.name crop_name,crop.id crop_id');
+            $this->db->select('type.name crop_type_name,type.id crop_type_id');
+            $this->db->select('u.name upazilla_name');
+            $this->db->select('d.name district_name,d.id district_id');
+            $this->db->select('t.name territory_name,t.id territory_id');
+            $this->db->select('zone.name zone_name,zone.id zone_id');
+            $this->db->select('division.name division_name,division.id division_id');
+
+            $this->db->join($this->config->item('table_tm_fd_bud_budget').' fdb','fdb.id = fdb_details.budget_id','INNER');
+            $this->db->join($this->config->item('table_setup_classification_varieties').' v','v.id = fdb_details.variety_id','INNER');
+            $this->db->join($this->config->item('table_setup_classification_crop_types').' type','type.id = v.crop_type_id','INNER');
+            $this->db->join($this->config->item('table_setup_classification_crops').' crop','crop.id = type.crop_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+            $this->db->join($this->config->item('table_setup_classification_varieties').' v1','v1.id = fdb_details.competitor_variety_id','LEFT');
+            $this->db->where('fdb_details.budget_id',$budgeted_id);
+            $this->db->where('fdb_details.revision',1);
+            $data['item_info']=$this->db->get()->row_array();
+            if(!$data['item_info'])
+            {
+                System_helper::invalid_try($this->config->item('system_edit_not_exists'),$budgeted_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if(!$this->check_my_editable($data['item_info']))
+            {
+                System_helper::invalid_try($this->config->item('system_edit_others'),$budgeted_id);
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+
+            $results=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value','name text','status'),array(),0,0,array('ordering ASC'));
+            foreach($results as $result)
+            {
+                $data['expense_items'][$result['value']]=$result;
+            }
+            $data['expense_budget']=array();
+            $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_expense'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+            foreach($results as $result)
+            {
+                $data['expense_budget'][$result['item_id']]=$result;
+            }
+
+            $results=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
+            $data['leading_farmers']=array();
+            foreach($results as $result)
+            {
+                $data['leading_farmers'][$result['value']]=$result;
+            }
+            $data['participants']=array();
+            $data['total']='';
+            $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+            foreach($results as $result)
+            {
+                $data['participants'][$result['farmer_id']]=$result;
+            }
+            $data['farmers']=array();
+
+            $data['file_details']=array();
+            $data['video_file_details']['file_name']='';
+            $data['video_file_details']['file_type']='';
+
+            $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),'*',array('budget_id ='.$budgeted_id));
+            if((isset($this->permissions['edit'])&&($this->permissions['edit']==1))&& $result)
+            {
+                foreach($result as $result)
+                {
+                $data['item']['date']=$result['date'];
+                $data['item']['date_of_fd']=$result['date_of_fd'];
+                $data['item']['recommendation']=$result['recommendation'];
+                }
+                $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_expense'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+                foreach($results as $res)
+                {
+                    $data['expense_report'][$res['item_id']]=$res;
+                }
+
+                $result=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_info'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+                foreach($result as $res)
+                {
+                    $data['new_item']=$res;
+                }
+                $data['item']['id']=$data['new_item']['id'];
+                $data['item']['budget_id']=$data['new_item']['budget_id'];
+
+                $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_participant'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+                foreach($results as $res)
+                {
+                    $data['farmers'][$res['farmer_id']]=$res;
+                }
+
+                $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_picture'),'*',array('budget_id ='.$budgeted_id,'revision=1'));
+                foreach($results as $result)
+                {
+                    if(substr($result['file_type'],0,5)=='image')
+                    {
+                        $data['file_details'][]=$result;
+                    }
+                    elseif(substr($result['file_type'],0,5)=='video')
+                    {
+                        $data['video_file_details']=$result;
+                    }
+                }
+
+                $data['title']='Editing Report On Field Day';
+                $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$budgeted_id);
+                $ajax['status']=true;
+                $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
+                if($this->message)
+                {
+                    $ajax['system_message']=$this->message;
+                }
+                $this->jsonReturn($ajax);
+
+            }
+            elseif(((isset($this->permissions['add'])&&($this->permissions['add']==1))||(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))&& !$result)
+            {
+                $data["item"] = Array(
+                    'id' => 0,
+                    'date' => time(),
+                    'date_of_fd' => '',
+                    'recommendation' => '',
+                    'budget_id' => $budgeted_id
+                );
+                $data["new_item"] = Array(
+                    'total_participant' => '',
+                    'participant_through_customer' => '',
+                    'participant_through_others' => '',
+                    'guest' => '',
+                    'total_expense' => 0,
+                    'participant_comment' => '',
+                    'next_sales_target' => ''
+                );
+                $data['title']='Reporting On Field Day';
+                $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$budgeted_id);
+                $ajax['status']=true;
+                $ajax['system_content'][]=array("id"=>"#system_content","html"=>$this->load->view($this->controller_url."/add_edit",$data,true));
+                if($this->message)
+                {
+                    $ajax['system_message']=$this->message;
+                }
+                $this->jsonReturn($ajax);
+            }
+            else
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("LABEL_NOT_EDITABLE");
+                $this->jsonReturn($ajax);
+            }
         }
     }
 
@@ -382,7 +430,6 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         else
@@ -392,7 +439,6 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         $participants=$this->input->post('farmers');
@@ -610,9 +656,9 @@ class Tm_fd_bud_reporting extends Root_Controller
             //file test details END
 
             //status_reporting start
-            $this->db->where('id',$budget_id);
-            $this->db->set('status_reporting','Complete');
-            $this->db->update($this->config->item('table_tm_fd_bud_budget'));
+//            $this->db->where('id',$budget_id);
+//            $this->db->set('status_reporting','Complete');
+//            $this->db->update($this->config->item('table_tm_fd_bud_budget'));
             //status_reporting end
 
             if ($this->db->trans_status() === TRUE)
@@ -669,6 +715,14 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $budget_id=$id;
             }
 
+            $data['report_item']=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),'*',array('budget_id ='.$budget_id));
+            if(!$data['report_item'])
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_HAVE_TO_COMPLETE");
+                $this->jsonReturn($ajax);
+            }
+
             $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
             $this->db->select('fdb_details.*');
             $this->db->select('fdb.*');
@@ -696,12 +750,6 @@ class Tm_fd_bud_reporting extends Root_Controller
             $this->db->where('fdb_details.revision',1);
             $data['item_info']=$this->db->get()->row_array();
 
-            if($data['item_info']['status_reporting']=='Pending')
-            {
-                $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("YOU_HAVE_TO_COMPLETE");
-                $this->jsonReturn($ajax);
-            }
             if(!$data['item_info'])
             {
                 System_helper::invalid_try($this->config->item('system_edit_not_exists'),$budget_id);
@@ -717,8 +765,11 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $this->jsonReturn($ajax);
             }
 
-            $data['report_item']=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),'*',array('budget_id ='.$budget_id));
             $user_ids=array();
+            if($data['item_info']['user_report_approved']>0)
+            {
+                $user_ids[$data['item_info']['user_report_approved']]=$data['item_info']['user_report_approved'];
+            }
             $info_details=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_info'),'*',array('budget_id='.$budget_id),0,0,array('id DESC','revision ASC'));
             $data['info_details']=array();;
             foreach($info_details as $info)
@@ -726,6 +777,7 @@ class Tm_fd_bud_reporting extends Root_Controller
                 $data['info_details'][$info['revision']][]=$info;
                 $user_ids[$info['user_created']]=$info['user_created'];
             }
+
             //get user info from login site
             $data['users_info']=System_helper::get_users_info($user_ids);
 

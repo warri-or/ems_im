@@ -2,17 +2,14 @@
 $CI = & get_instance();
 $action_data=array();
 
-if((isset($CI->permissions['add'])&&($CI->permissions['add']==1)) || (isset($CI->permissions['edit'])&&($CI->permissions['edit']==1)))
+
+if(isset($CI->permissions['report_approve'])&&($CI->permissions['report_approve']==1))
 {
-    $action_data["action_edit"]=base_url($CI->controller_url."/index/edit");
+    $action_data["action_fdr_approve"]=base_url($CI->controller_url."/index/approve");
 }
 if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
 {
     $action_data["action_details"]=base_url($CI->controller_url."/index/details");
-}
-if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
-{
-    $action_data["action_forward"]=base_url($CI->controller_url."/index/forward");
 }
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {

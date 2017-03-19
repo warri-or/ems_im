@@ -366,7 +366,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <label id="no_of_participant"><?php echo number_format($total_participant);?></label>
+        <label id="no_of_participant"><?php echo number_format($total_participant);?>  Persons</label>
     </div>
 </div>
 

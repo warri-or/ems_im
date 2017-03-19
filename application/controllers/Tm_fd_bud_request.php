@@ -382,7 +382,6 @@ class Tm_fd_bud_request extends Root_Controller
                     $field_budget_details['total_budget']+=$amount;
                 }
             }
-            echo $field_budget_details['total_budget'];exit;
             $this->db->trans_begin();  //DB Transaction Handle START
             $budget_id=$id;
             $field_budget['user_updated'] = $user->user_id;
@@ -411,12 +410,12 @@ class Tm_fd_bud_request extends Root_Controller
             $this->db->where('budget_id',$budget_id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_tm_fd_bud_details_expense'));
-            foreach($expense_budget as $item_id=>$amount)
+            foreach($expense_budget as $item_id=>$budget_amount)
             {
                 $data=array();
                 $data['budget_id']=$budget_id;
                 $data['item_id']=$item_id;
-                $data['amount']=$amount;
+                $data['amount']=$budget_amount;
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = $time;
                 $data['revision']=1;

@@ -8,7 +8,8 @@ if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 }
 $CI->load->view("action_buttons",$action_data);
 ?>
-
+<form class="form_valid" id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save_approval');?>" method="post">
+<input type="hidden" id="id" name="id" value="<?php echo $item_info['id']; ?>" />
 <div class="row widget">
 <div class="widget-header">
     <div class="title">
@@ -376,7 +377,7 @@ foreach($info_details as $revision=>$info)
                             <td>
                                 <video style="max-width: 250px;max-height:150px" controls>
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
-                                    type="<?php echo $video_file_details['file_type'];?>">
+                                            type="<?php echo $video_file_details['file_type'];?>">
                                 </video>
                                 <br>
                                 <a target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" class="btn btn-primary external">Download this video</a>
@@ -392,7 +393,7 @@ foreach($info_details as $revision=>$info)
                                 <td style="color: #263238;"><b><?php echo $file['file_name'];?></b></td>
                                 <td>
                                     <img style="max-width: 250px;max-height:150px"
-                                     src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
+                                         src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                 </td>
                                 <td><?php echo $file['file_remarks']?></td>
                             </tr>
@@ -401,6 +402,33 @@ foreach($info_details as $revision=>$info)
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div class="widget-header">
+            <div class="title">
+                Approval
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('ACTION_APPROVE_REJECT');?><span style="color:#FF0000">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <select id="status_report_approved" name="approve[status_report_approved]" class="form-control">
+                    <option value=""><?php echo $CI->lang->line('SELECT');?></option>
+                    <option value="<?php echo $CI->config->item('system_status_po_request_approved');?>"><?php echo $CI->config->item('system_status_po_request_approved');?></option>
+                    <option value="<?php echo $CI->config->item('system_status_po_approval_rejected');?>"><?php echo $CI->config->item('system_status_po_approval_rejected');?></option>
+                </select>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_REMARKS');?><span style="color: red;">*</span></label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <textarea class="form-control" name="approve[remarks_report_approved]"></textarea>
             </div>
         </div>
 
@@ -578,17 +606,17 @@ foreach($info_details as $revision=>$info)
 </div>
 
 <div class="clearfix"></div>
-
+</form>
 
 
 <script type="text/javascript">
-//    jQuery(document).ready(function()
-//    {
-//        turn_off_triggers();
-//        $('[class="Tooltip"]').tooltip({
-//            animated: 'fade',
-//            placement: 'bottom',
-//            html: true
-//        });
-//    });
+    //    jQuery(document).ready(function()
+    //    {
+    //        turn_off_triggers();
+    //        $('[class="Tooltip"]').tooltip({
+    //            animated: 'fade',
+    //            placement: 'bottom',
+    //            html: true
+    //        });
+    //    });
 </script>

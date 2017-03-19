@@ -256,7 +256,8 @@ class Tm_fd_bud_approve extends Root_Controller
 
             $data['leading_farmers']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),array('id value','name text','phone_no','status'),array('upazilla_id ='.$data['item_info']['upazilla_id']),0,0,array('ordering ASC'));
             $data['participants']=array();
-            $data['total']='';
+            $data['total_participant']='';
+            $data['total_budget']='';
             $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_participant'),'*',array('budget_id ='.$budget_id,'revision=1'));
             foreach($results as $result)
             {
@@ -422,16 +423,12 @@ class Tm_fd_bud_approve extends Root_Controller
             $this->db->where('budget_id',$budget_id);
             $this->db->set('revision', 'revision+1', FALSE);
             $this->db->update($this->config->item('table_tm_fd_bud_details_expense'));
-            foreach($expense_budget as $item_id=>$amount)
+            foreach($expense_budget as $item_id=>$budget_amount)
             {
                 $data=array();
                 $data['budget_id']=$budget_id;
                 $data['item_id']=$item_id;
-                $data['amount']=0;
-                if($amount>0)
-                {
-                    $data['amount']=$amount;
-                }
+                $data['amount']=$budget_amount;
                 $data['user_created'] = $user->user_id;
                 $data['date_created'] = $time;
                 $data['revision']=1;

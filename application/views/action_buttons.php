@@ -36,6 +36,28 @@
     }
     ?>
     <?php
+    if(isset($action_fdr_approve))
+    {
+        ?>
+        <div class="action_button">
+            <button id="button_action_fdr_approve" class="btn button_action_batch" data-action-link="<?php echo $action_fdr_approve; ?>"><?php echo $CI->lang->line("ACTION_FDR_APPROVE_REJECT"); ?></button>
+        </div>
+    <?php
+    }
+    ?>
+
+    <?php
+    if(isset($action_forward))
+    {
+        ?>
+        <div class="action_button">
+            <button id="button_action_forward" class="btn button_action_batch" data-action-link="<?php echo $action_forward; ?>"><?php echo $CI->lang->line("ACTION_FORWARD"); ?></button>
+        </div>
+    <?php
+    }
+    ?>
+
+    <?php
     if(isset($action_approve_get))
     {
         ?>

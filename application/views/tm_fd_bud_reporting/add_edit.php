@@ -232,7 +232,7 @@ foreach($expense_budget as $key=>$budget)
             <label class="control-label pull-right"><?php echo $expense_items[$key]['text'];?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
-            <label class="control-label"><?php if(isset($budget['amount'])){echo $budget['amount'];}?></label>
+            <label class="control-label"><?php if(isset($budget['amount'])){echo number_format($budget['amount'],2);}?></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <input type="text" name="expense_report[<?php echo $key;?>]" id="expense_report[<?php echo $key;?>]" class="expense_budget form-control float_type_positive total_expense" value="<?php if(isset($expense_report[$key]['amount'])){echo $expense_report[$key]['amount'];}?>"/>

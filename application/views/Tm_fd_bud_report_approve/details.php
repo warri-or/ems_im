@@ -376,7 +376,7 @@ foreach($info_details as $revision=>$info)
                             <td>
                                 <video style="max-width: 250px;max-height:150px" controls>
                                     <source src="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location']; ?>"
-                                    type="<?php echo $video_file_details['file_type'];?>">
+                                            type="<?php echo $video_file_details['file_type'];?>">
                                 </video>
                                 <br>
                                 <a target="_blank" href="<?php echo $CI->config->item('system_image_base_url').$video_file_details['file_location'];?>" class="btn btn-primary external">Download this video</a>
@@ -392,7 +392,7 @@ foreach($info_details as $revision=>$info)
                                 <td style="color: #263238;"><b><?php echo $file['file_name'];?></b></td>
                                 <td>
                                     <img style="max-width: 250px;max-height:150px"
-                                     src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
+                                         src="<?php echo $CI->config->item('system_image_base_url').$file['file_location']; ?>">
                                 </td>
                                 <td><?php echo $file['file_remarks']?></td>
                             </tr>
@@ -582,13 +582,13 @@ foreach($info_details as $revision=>$info)
 
 
 <script type="text/javascript">
-//    jQuery(document).ready(function()
-//    {
-//        turn_off_triggers();
-//        $('[class="Tooltip"]').tooltip({
-//            animated: 'fade',
-//            placement: 'bottom',
-//            html: true
-//        });
-//    });
+    //    jQuery(document).ready(function()
+    //    {
+    //        turn_off_triggers();
+    //        $('[class="Tooltip"]').tooltip({
+    //            animated: 'fade',
+    //            placement: 'bottom',
+    //            html: true
+    //        });
+    //    });
 </script>
