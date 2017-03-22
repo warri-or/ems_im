@@ -2,6 +2,10 @@
 $CI = & get_instance();
 $action_data=array();
 $action_data["action_back"]=base_url($CI->controller_url);
+if(isset($CI->permissions['edit']) && ($CI->permissions['edit']==1) && $item_info['id']>0)
+{
+    $action_data["action_edit_get"]=base_url($CI->controller_url."/index/edit/".$item_info['id']);
+}
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {
     $action_data["action_print_page"]='FIELD DAY BUDGET DETAILS';

@@ -483,6 +483,18 @@ class Tm_fd_bud_budget extends Root_Controller
                 $this->jsonReturn($ajax);
             }
         }
+
+        if($id>0)
+        {
+            $fdb_info=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$id),1);
+            if($fdb_info['status_requested']==$this->config->item('system_status_po_request_requested'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_FDB_EDIT_UNABLE");
+                $this->jsonReturn($ajax);
+            }
+        }
+
         $participants=$this->input->post('farmer_participant');
 //        echo '<pre>';
 //        print_r($participants);
@@ -506,11 +518,9 @@ class Tm_fd_bud_budget extends Root_Controller
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
             $field_budget_details['total_budget']=0;
             $expense_budget=$this->input->post('expense_budget');
-//            echo '<pre>';
-//            print_r($expense_budget);exit;
-            $participants=$this->input->post('farmer_participant');
-//            echo '<pre>';
-//            print_r($participants);exit;
+            $participants=$this->input->post('farmer_participant');;
+            $field_budget_details['participant_through_customer']=floor($field_budget_details['participant_through_customer']);
+            $field_budget_details['participant_through_others']=floor($field_budget_details['participant_through_others']);
             foreach($participants as &$no_of_participant)
             {
                 if($no_of_participant=='')
@@ -519,6 +529,7 @@ class Tm_fd_bud_budget extends Root_Controller
                 }
                 if($no_of_participant>0)
                 {
+                    $no_of_participant=floor($no_of_participant);
                     $field_budget_details['no_of_participant']+=$no_of_participant;
                 }
             }

@@ -57,10 +57,17 @@ class Sys_reset_approved_fdb extends Root_Controller
             $time=time();
             $fdb_no=intval(trim($this->input->post('fdb_no')));
             $fdb_info=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$fdb_no),1);
+            $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_reporting'),'*',array('budget_id ='.$fdb_no),1);
             if(!$fdb_info)
             {
                 $ajax['status']=false;
                 $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-danger">FDB not Found</div>');
+                $this->jsonReturn($ajax);
+            }
+            elseif($result)
+            {
+                $ajax['status']=false;
+                $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-danger">Field Day Reporting Complete. You Can Not Change This FBD Status.</div>');
                 $this->jsonReturn($ajax);
             }
             else

@@ -276,7 +276,7 @@ $CI->load->view("action_buttons",$action_data);
         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
-        <label id="no_of_participant"><?php echo number_format($total_participant);?></label>
+        <label id="no_of_participant"><?php echo number_format($total_participant);?> (Person)</label>
     </div>
 </div>
 
@@ -301,7 +301,7 @@ if(isset($expense_budget[$expense['value']]) || $expense['status']=='Active'){
                    value="<?php if(isset($expense_budget[$expense['value']]))
                    {
                        $total_budget+=$expense_budget[$expense['value']]['amount'];
-                       echo $expense_budget[$expense['value']]['amount'];
+                       echo number_format($expense_budget[$expense['value']]['amount'],2);
                    }?>"/>
         </div>
     </div>
@@ -746,7 +746,7 @@ jQuery(document).ready(function()
         {
             if($(this).val()==parseFloat($(this).val()))
             {
-                total_participant=total_participant+parseFloat($(this).val());
+                total_participant=total_participant+parseInt($(this).val());
             }
         });
         if(total_participant=>0)

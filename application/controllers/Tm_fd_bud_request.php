@@ -325,6 +325,13 @@ class Tm_fd_bud_request extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
             }
+            $fdb_info=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$id),1);
+            if($fdb_info['status_requested']==$this->config->item('system_status_po_request_requested'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("MSG_FDB_EDIT_UNABLE");
+                $this->jsonReturn($ajax);
+            }
         }
         elseif($id>0)
         {
@@ -359,6 +366,8 @@ class Tm_fd_bud_request extends Root_Controller
             $field_budget_details['no_of_participant']=0;
             $field_budget_details['expected_date']=System_helper::get_time($field_budget_details['expected_date']);
             $field_budget_details['total_budget']=0;
+            $field_budget_details['participant_through_customer']=floor($field_budget_details['participant_through_customer']);
+            $field_budget_details['participant_through_others']=floor($field_budget_details['participant_through_others']);
             foreach($participants as &$no_of_participant)
             {
                 if($no_of_participant=='')
@@ -367,6 +376,7 @@ class Tm_fd_bud_request extends Root_Controller
                 }
                 if($no_of_participant>0)
                 {
+                    $no_of_participant=floor($no_of_participant);
                     $field_budget_details['no_of_participant']+=$no_of_participant;
                 }
             }
@@ -860,7 +870,8 @@ class Tm_fd_bud_request extends Root_Controller
     private function system_save_request()
     {
         $id = $this->input->post("id");
-        if($id)
+        $user = User_helper::get_user();
+        if($id>0)
         {
             $data=array();
             $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id ='.$id));
@@ -873,8 +884,37 @@ class Tm_fd_bud_request extends Root_Controller
                 $this->message='Already '.$data['status_requested'];
                 $this->system_list();
             }
+
+            $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
+            $this->db->select('fdb_details.upazilla_id');
+            $this->db->select('u.district_id');
+            $this->db->select('d.territory_id');
+            $this->db->select('t.zone_id zone_id');
+            $this->db->select('zone.division_id division_id');
+
+            $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
+            $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+            $this->db->where('fdb_details.budget_id',$id);
+            //$this->db->where('fdb_details.id',$id);
+            $this->db->where('fdb_details.revision',1);
+            $data['item_info']=$this->db->get()->row_array();
+            if(!$this->check_my_editable($data['item_info']))
+            {
+                System_helper::invalid_try($this->config->item('system_edit_others').' (budget_id)',$id); //budget_id will be shown in history hack table
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+
         }
-        $user = User_helper::get_user();
+        if($id<=0)
+        {
+            $ajax['status']=false;
+            $ajax['system_message']='Invalid Try';
+            $this->jsonReturn($ajax);
+        }
         if(!(isset($this->permissions['edit'])&&($this->permissions['edit']==1)))
         {
             $ajax['status']=false;

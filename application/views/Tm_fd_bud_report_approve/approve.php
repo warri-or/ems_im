@@ -2,12 +2,14 @@
 $CI = & get_instance();
 $action_data=array();
 $action_data["action_back"]=base_url($CI->controller_url);
+$action_data["action_save"]='#save_form';
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {
     $action_data["action_print_page"]='FIELD DAY BUDGET DETAILS';
 }
 $CI->load->view("action_buttons",$action_data);
 ?>
+
 <form class="form_valid" id="save_form" action="<?php echo site_url($CI->controller_url.'/index/save_approval');?>" method="post">
 <input type="hidden" id="id" name="id" value="<?php echo $item_info['id']; ?>" />
 <div class="row widget">
@@ -351,12 +353,6 @@ foreach($info_details as $revision=>$info)
         <?php
         }
         ?>
-
-
-
-
-        <div style="overflow-x: auto;" class="row show-grid"></div>
-
         <div id="image" class="panel-collapse ">
             <div id="files_container" class="panel-collapse">
                 <div style="overflow-x: auto;" class="row show-grid">
@@ -425,7 +421,7 @@ foreach($info_details as $revision=>$info)
         </div>
         <div style="" class="row show-grid">
             <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_REMARKS');?><span style="color: red;">*</span></label>
+                <label class="control-label pull-right"><?php echo 'DI '. $CI->lang->line('LABEL_RECOMMENDATION');?><span style="color: red;">*</span></label>
             </div>
             <div class="col-sm-4 col-xs-8">
                 <textarea class="form-control" name="approve[remarks_report_approved]"></textarea>
@@ -599,8 +595,7 @@ foreach($info_details as $revision=>$info)
                 <div style="overflow-x: auto;" class="row show-grid"></div>
             </div>
         </div>
-    <?php }?>
-<?php }?>
+    <?php }}?>
 </div>
 
 </div>

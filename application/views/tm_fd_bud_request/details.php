@@ -215,7 +215,7 @@ foreach($info_details as $revision=>$info)
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
             </div>
             <div class="col-sm-3 col-xs-9">
-                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
+                <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> (Person)</label>
             </div>
         </div>
         <div class="row show-grid">
@@ -519,7 +519,7 @@ foreach($info_details as $revision=>$info)
                         <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
                     </div>
                     <div class="col-sm-3 col-xs-9">
-                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> Persons</label>
+                        <label class="control-label"><?php echo number_format($info[0]['no_of_participant']);?> (Person)</label>
                     </div>
                 </div>
                 <div class="row show-grid">
