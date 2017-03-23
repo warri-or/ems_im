@@ -113,12 +113,12 @@ $CI = & get_instance();
             </div>
         </div>
         <div class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><u>Expected</u></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><u>Actual</u></label>
             </div>
         </div>
@@ -127,63 +127,63 @@ $CI = & get_instance();
         {
             ?>
             <div class="row show-grid">
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <label class="control-label pull-right"><?php echo $leading_farmers[$key]['text'].' ('.$leading_farmers[$key]['phone_no'].')';?></label>
                 </div>
-                <div class="col-sm-2 col-sm-4">
+                <div class="col-sm-2 col-xs-4">
                     <label class="control-label"><?php if(isset($participant['number'])){echo $participant['number'];}?></label>
                 </div>
-                <div class="col-sm-2 col-sm-4">
+                <div class="col-sm-2 col-xs-4">
                     <label class="control-label"><?php echo $farmers[$key]['number'];?></label>
                 </div>
             </div>
         <?php } ?>
 
         <div style="" class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><?php echo $item_info['participant_through_customer'];?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><?php echo number_format($info['participant_through_customer']);?></label>
             </div>
         </div>
 
         <div style="" class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><?php echo number_format($info['participant_through_others']);?></label>
             </div>
         </div>
 
         <div style="" class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label">0</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><?php echo number_format($info['guest']);?></label>
             </div>
         </div>
 
         <div style="" class="row show-grid">
-            <div class="col-sm-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?> :</label>
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_EXPECTED_PARTICIPANT');?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
-                <label class="control-label"><?php echo $item_info['no_of_participant'];?></label>
+            <div class="col-sm-2 col-xs-4">
+                <label class="control-label"><?php echo number_format($item_info['no_of_participant']);?></label>
             </div>
-            <div class="col-sm-2 col-sm-4">
-                <label class="control-label"><?php echo number_format($info['total_participant']);?></label>
+            <div class="col-sm-2 col-xs-4">
+                <label class="control-label"><?php echo number_format($info['total_participant']);?> (person)</label>
             </div>
         </div>
 
@@ -194,9 +194,9 @@ $CI = & get_instance();
             </div>
         </div>
         <div class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label class="control-label"><u>Budgeted</u></label>
             </div>
             <div class="col-sm-2 col-xs-4">
@@ -207,38 +207,38 @@ $CI = & get_instance();
         foreach($expense_report as $key=>$report){
             ?>
             <div class="row show-grid">
-                <div class="col-sm-4">
+                <div class="col-xs-4">
                     <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                 </div>
-                <div class="col-sm-2 col-sm-4">
-                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo $expense_budget[$key]['amount'];}?></label>
+                <div class="col-sm-2 col-xs-4">
+                    <label class="control-label"><?php if(isset($expense_budget[$key]['amount'])){echo number_format($expense_budget[$key]['amount']);}?></label>
                 </div>
-                <div class="col-sm-2 col-sm-4">
+                <div class="col-sm-2 col-xs-4">
                     <label class="control-label"><?php echo number_format($report['amount']);?></label>
                 </div>
             </div>
         <?php } ?>
 
         <div style="" class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"> Total Amount :</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label id="total_budget"><?php echo number_format($info['total_expense']);?> Tk.</label>
             </div>
         </div>
 
         <div class="row show-grid">
-            <div class="col-sm-4">
+            <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_NEXT_SALES_TARGET');?> :</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label id="total_budget"><?php echo $item_info['sales_target'];?> kg</label>
             </div>
-            <div class="col-sm-2 col-sm-4">
+            <div class="col-sm-2 col-xs-4">
                 <label id="total_budget"><?php echo $info['next_sales_target'];?> kg</label>
             </div>
         </div>
@@ -258,8 +258,6 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $report_item[0]['recommendation'];?></label>
             </div>
         </div>
-
-
         <div style="" class="row show-grid">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDR_TIME_CREATED');?>:</label>
@@ -276,6 +274,34 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $user_info[$info['user_created']]['name'];?></label>
             </div>
         </div>
+
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDR_TIME_APPROVED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_report_approved']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDR_USER_APPROVED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_report_approved']]['name'];?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDR_REMARKS_APPROVED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $item_info['remarks_report_approved'];?></label>
+            </div>
+        </div>
+
+
         <div class="panel-group" id="accordion">
 
             <div class="panel panel-default">
@@ -412,17 +438,3 @@ $CI = & get_instance();
 
 <div class="clearfix"></div>
 
-
-
-<script type="text/javascript">
-    jQuery(document).ready(function()
-    {
-        turn_off_triggers();
-//        $('[class="Tooltip"]').tooltip({
-//            animated: 'fade',
-//            placement: 'bottom',
-//            html: true
-//        });
-    });
-</script>
-<!--class="Tooltip" title="<h5>--><?php //echo $b_fd_file_details[$pic_cat['value']]['competitor_file_remarks']?><!--</h5>"-->

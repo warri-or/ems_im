@@ -51,6 +51,16 @@ $CI = & get_instance();
                 </select>
             </div>
         </div>
+        <div style="display: none;" class="row show-grid" id="competitor_variety_id_container">
+            <div class="col-xs-6">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_COMPETITOR_VARIETY');?></label>
+            </div>
+            <div class="col-xs-6">
+                <select id="competitor_variety_id" name="report[competitor_variety_id]" class="form-control">
+                    <option value=""><?php echo $this->lang->line('SELECT');?></option>
+                </select>
+            </div>
+        </div>
 
         <div class="row show-grid">
             <div class="col-xs-6">
@@ -428,11 +438,13 @@ jQuery(document).ready(function()
     {
         $("#crop_type_id").val("");
         $("#variety_id").val("");
+        $("#competitor_variety_id").val("");
         var crop_id=$('#crop_id').val();
         if(crop_id>0)
         {
             $('#crop_type_id_container').show();
             $('#variety_id_container').hide();
+            $('#competitor_variety_id_container').hide();
             $.ajax({
                 url: base_url+"common_controller/get_dropdown_croptypes_by_cropid/",
                 type: 'POST',
@@ -453,11 +465,13 @@ jQuery(document).ready(function()
         {
             $('#crop_type_id_container').hide();
             $('#variety_id_container').hide();
+            $('#competitor_variety_id_container').hide();
         }
     });
     $(document).on("change","#crop_type_id",function()
     {
         $("#variety_id").val("");
+        $("#competitor_variety_id").val("");
         var crop_type_id=$('#crop_type_id').val();
         if(crop_type_id>0)
         {
@@ -478,10 +492,28 @@ jQuery(document).ready(function()
                 }
             });
 
+            $('#competitor_variety_id_container').show();
+            $.ajax({
+                url: base_url+"common_controller/get_dropdown_competitor_varieties_by_croptypeid/",
+                type: 'POST',
+                datatype: "JSON",
+                data:{crop_type_id:crop_type_id},
+                success: function (data, status)
+                {
+
+                },
+                error: function (xhr, desc, err)
+                {
+                    console.log("error");
+
+                }
+            });
+
         }
         else
         {
             $('#variety_id_container').hide();
+            $('#competitor_variety_id_container').hide();
         }
     });
 

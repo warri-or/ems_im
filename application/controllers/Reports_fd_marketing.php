@@ -246,6 +246,7 @@ class Reports_fd_marketing extends Root_Controller
         $crop_id=$this->input->post('crop_id');
         $crop_type_id=$this->input->post('crop_type_id');
         $variety_id=$this->input->post('variety_id');
+        $competitor_variety_id=$this->input->post('competitor_variety_id');
         $date_start=$this->input->post('date_start');
         $date_end=$this->input->post('date_end');
 
@@ -254,6 +255,7 @@ class Reports_fd_marketing extends Root_Controller
         $this->db->select('fbr.*');
         $this->db->select('fbid.*');
         $this->db->select('v.name variety_name');
+        $this->db->select('v1.name competitor_variety_name');
         $this->db->select('crop.name crop_name');
         $this->db->select('type.name crop_type_name');
         $this->db->select('u.name upazilla_name');
@@ -272,6 +274,7 @@ class Reports_fd_marketing extends Root_Controller
         $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
         $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+        $this->db->join($this->config->item('table_setup_classification_varieties').' v1','v1.id = fbid.competitor_variety_id','LEFT');
 
         if($crop_id>0)
         {
@@ -282,6 +285,10 @@ class Reports_fd_marketing extends Root_Controller
                 if($variety_id>0)
                 {
                     $this->db->where('v.id',$variety_id);
+                }
+                if($competitor_variety_id>0)
+                {
+                    $this->db->where('v1.id',$competitor_variety_id);
                 }
             }
         }
@@ -327,7 +334,7 @@ class Reports_fd_marketing extends Root_Controller
             $item=array();
             $item['id']=$result['budget_id'];
             $item['date_of_fd']=System_helper::display_date($result['date_of_fd']);
-            $item['crop_info']=$result['crop_name'].'<br>'.$result['crop_type_name'].'<br>'.$result['variety_name'];
+            $item['crop_info']=$result['crop_name'].'<br>'.$result['crop_type_name'].'<br>'.$result['variety_name'].'<br>'.$result['competitor_variety_name'];
             $item['location_info']=$result['division_name'].'<br>'.$result['zone_name'].'<br>'.$result['territory_name'].'<br>'.$result['district_name'].'<br>'.$result['upazilla_name'];
             $item['total_participant']=$result['total_participant'];
             $item['total_expense']=$result['total_expense'];
@@ -337,6 +344,7 @@ class Reports_fd_marketing extends Root_Controller
             $item['details']['crop_name']=$result['crop_name'];
             $item['details']['crop_type_name']=$result['crop_type_name'];
             $item['details']['variety_name']=$result['variety_name'];
+            $item['details']['competitor_variety_name']=$result['competitor_variety_name'];
 
             $items[]=$item;
         }

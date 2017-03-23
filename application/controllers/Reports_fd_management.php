@@ -190,6 +190,7 @@ class Reports_fd_management extends Root_Controller
             $data['info']=$info;
             $user_ids[$info['user_created']]=$info['user_created'];
         }
+        $user_ids[$data['item_info']['user_report_approved']]=$data['item_info']['user_report_approved'];
         //get user info from login site
         $data['user_info']=System_helper::get_users_info($user_ids);
 
@@ -270,7 +271,7 @@ class Reports_fd_management extends Root_Controller
         {
             $ajax['system_message']=$this->message;
         }
-        $ajax['status']=true;
+        //$ajax['status']=true;
         $this->jsonReturn($ajax);
     }
 
@@ -285,14 +286,17 @@ class Reports_fd_management extends Root_Controller
         $crop_id=$this->input->post('crop_id');
         $crop_type_id=$this->input->post('crop_type_id');
         $variety_id=$this->input->post('variety_id');
+        $competitor_variety_id=$this->input->post('competitor_variety_id');
         $date_start=$this->input->post('date_start');
         $date_end=$this->input->post('date_end');
 
-        $this->db->from($this->config->item('table_tm_fd_rep_details_info').' frdi');
+        $this->db->from($this->config->item('table_tm_fd_bud_budget').' fdb');
+        $this->db->select('fdb.*');
         $this->db->select('frdi.*');
         $this->db->select('fbr.*');
         $this->db->select('fbid.*');
         $this->db->select('v.name variety_name');
+        $this->db->select('v1.name competitor_variety_name');
         $this->db->select('crop.name crop_name');
         $this->db->select('type.name crop_type_name');
         $this->db->select('u.name upazilla_name');
@@ -301,6 +305,7 @@ class Reports_fd_management extends Root_Controller
         $this->db->select('zone.name zone_name');
         $this->db->select('division.name division_name');
 
+        $this->db->join($this->config->item('table_tm_fd_rep_details_info').' frdi','frdi.budget_id = fdb.id','INNER');
         $this->db->join($this->config->item('table_tm_fd_bud_reporting').' fbr','fbr.budget_id = frdi.budget_id','INNER');
         $this->db->join($this->config->item('table_tm_fd_bud_info_details').' fbid','fbid.budget_id = fbr.budget_id','INNER');
         $this->db->join($this->config->item('table_setup_classification_varieties').' v','v.id = fbid.variety_id','INNER');
@@ -311,6 +316,7 @@ class Reports_fd_management extends Root_Controller
         $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
         $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
         $this->db->join($this->config->item('table_setup_location_divisions').' division','division.id = zone.division_id','INNER');
+        $this->db->join($this->config->item('table_setup_classification_varieties').' v1','v1.id = fbid.competitor_variety_id','LEFT');
 
         if($crop_id>0)
         {
@@ -321,6 +327,10 @@ class Reports_fd_management extends Root_Controller
                 if($variety_id>0)
                 {
                     $this->db->where('v.id',$variety_id);
+                }
+                if($competitor_variety_id>0)
+                {
+                    $this->db->where('v1.id',$competitor_variety_id);
                 }
             }
         }
@@ -353,6 +363,7 @@ class Reports_fd_management extends Root_Controller
             $this->db->where('fbr.date_of_fd <=',$date_end);
         }
         $this->db->where('fbid.revision',1);
+        $this->db->where('fdb.status_report_approved',$this->config->item('system_status_po_request_approved'));
         $this->db->where('frdi.revision',1);
         $this->db->order_by('fbr.date_of_fd DESC');
         $results=$this->db->get()->result_array();
@@ -366,7 +377,7 @@ class Reports_fd_management extends Root_Controller
             $item=array();
             $item['id']=$result['budget_id'];
             $item['date_of_fd']=System_helper::display_date($result['date_of_fd']);
-            $item['crop_info']=$result['crop_name'].'<br>'.$result['crop_type_name'].'<br>'.$result['variety_name'];
+            $item['crop_info']=$result['crop_name'].'<br>'.$result['crop_type_name'].'<br>'.$result['variety_name'].'<br>'.$result['competitor_variety_name'];
             $item['location_info']=$result['division_name'].'<br>'.$result['zone_name'].'<br>'.$result['territory_name'].'<br>'.$result['district_name'].'<br>'.$result['upazilla_name'];
             $item['total_participant']=$result['total_participant'];
             $item['total_expense']=$result['total_expense'];
@@ -376,6 +387,7 @@ class Reports_fd_management extends Root_Controller
             $item['details']['crop_name']=$result['crop_name'];
             $item['details']['crop_type_name']=$result['crop_type_name'];
             $item['details']['variety_name']=$result['variety_name'];
+            $item['details']['competitor_variety_name']=$result['competitor_variety_name'];
 
             $items[]=$item;
         }
