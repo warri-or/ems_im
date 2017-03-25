@@ -496,11 +496,7 @@ class Tm_fd_bud_budget extends Root_Controller
         }
 
         $participants=$this->input->post('farmer_participant');
-//        echo '<pre>';
-//        print_r($participants);
         $expense_budget=$this->input->post('expense_budget');
-//        echo '<pre>';
-//        print_r($expense_budget);exit;
         $upazilla_id=$this->input->post('item_info[upazilla_id]');
         if(!$this->check_validation($participants,$expense_budget,$upazilla_id))
         {

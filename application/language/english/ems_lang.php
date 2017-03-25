@@ -292,6 +292,7 @@ $lang['LABEL_FDR_TIME_APPROVED'] = 'Field Day Report Approval Created Time';
 $lang['LABEL_FDR_USER_APPROVED'] = 'Field Day Report Approval User';
 $lang['LABEL_FDR_REMARKS_APPROVED'] = 'Remarks of Field Day Report Approval';
 $lang['ACTION_FORWARD'] = 'Forward';
+$lang['LABEL_BUDGET_STATUS'] = 'Budget Status';
 $lang['ACTION_FDR_APPROVE_REJECT'] = 'Report Approve';
 $lang['MSG_FDB_APPROVED_UNABLE'] = 'This Field Day Budget approved already.';
 $lang['MSG_FDR_APPROVED_UNABLE'] = 'This Field Day Report approved already.';

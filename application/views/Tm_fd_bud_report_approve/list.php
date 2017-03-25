@@ -52,7 +52,7 @@ $CI->load->view("action_buttons",$action_data);
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  value="territory_name"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="district_name"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="upazilla_name"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?></label>
-            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_reporting"><?php echo $CI->lang->line('LABEL_REPORTING'); ?></label>
+<!--            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_reporting">--><?php //echo $CI->lang->line('LABEL_REPORTING'); ?><!--</label>-->
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_report_approved"><?php echo $CI->lang->line('LABEL_APPROVAL'); ?></label>
 
 
@@ -89,8 +89,8 @@ $CI->load->view("action_buttons",$action_data);
                 { name: 'territory_name', type: 'string' },
                 { name: 'district_name', type: 'string' },
                 { name: 'upazilla_name', type: 'string' },
-                { name: 'status_report_approved', type: 'string' },
-                { name: 'status_reporting', type: 'string' }
+                { name: 'status_report_approved', type: 'string' }
+//                { name: 'status_reporting', type: 'string' }
 
             ],
             id: 'id',
@@ -137,7 +137,7 @@ $CI->load->view("action_buttons",$action_data);
                     { text: '<?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?>', dataField: 'territory_name',width:'100',cellsalign: 'right',hidden: true},
                     { text: '<?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?>', dataField: 'district_name',width:'130',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?>', dataField: 'upazilla_name',width:'130',cellsalign: 'right'},
-                    { text: '<?php echo $CI->lang->line('LABEL_REPORTING'); ?>', dataField: 'status_reporting',width:'100',cellsalign: 'right',filtertype: 'list'},
+<!--                    { text: '--><?php //echo $CI->lang->line('LABEL_REPORTING'); ?><!--', dataField: 'status_reporting',width:'100',cellsalign: 'right',filtertype: 'list'},-->
                     { text: '<?php echo $CI->lang->line('LABEL_APPROVAL'); ?>', dataField: 'status_report_approved',width:'100',cellsalign: 'right',filtertype: 'list'}
 
                 ]

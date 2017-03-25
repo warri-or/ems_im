@@ -435,6 +435,8 @@ class Tm_fd_bud_reporting extends Root_Controller
 
     private function system_save()
     {
+//        echo '<pre>';
+//        print_r($_FILES);exit;
         $id = $this->input->post("id");
         $budget_id = $this->input->post("item[budget_id]");
         $user = User_helper::get_user();

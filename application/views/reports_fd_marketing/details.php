@@ -144,10 +144,10 @@ $CI = & get_instance();
                 <label class="control-label pull-right"> Total Expense Amount :</label>
             </div>
             <div class="col-sm-2 col-xs-4">
-                <label id="total_budget"><?php echo number_format($item_info['total_budget']);?> Tk.</label>
+                <label id="total_budget"><?php echo number_format($item_info['total_budget'],2);?> Tk.</label>
             </div>
             <div class="col-sm-2 col-xs-4">
-                <label id="total_budget"><?php echo number_format($info['total_expense']);?> Tk.</label>
+                <label id="total_budget"><?php echo number_format($info['total_expense'],2);?> Tk.</label>
             </div>
         </div>
 

@@ -10,6 +10,10 @@ if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
 {
     $action_data["action_edit"]=base_url($CI->controller_url."/index/edit");
 }
+if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
+{
+    $action_data["action_forward"]=base_url($CI->controller_url."/index/forward");
+}
 if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
 {
     $action_data["action_details"]=base_url($CI->controller_url."/index/details");
@@ -53,6 +57,7 @@ $CI->load->view("action_buttons",$action_data);
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  value="territory_name"><?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="district_name"><?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="upazilla_name"><?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?></label>
+            <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_budget"><?php echo $CI->lang->line('LABEL_BUDGET_STATUS'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_requested"><?php echo $CI->lang->line('LABEL_REQUESTED'); ?></label>
             <label class="checkbox-inline"><input type="checkbox" class="system_jqx_column"  checked value="status_approved"><?php echo $CI->lang->line('LABEL_APPROVAL'); ?></label>
 
@@ -90,6 +95,7 @@ $CI->load->view("action_buttons",$action_data);
                 { name: 'territory_name', type: 'string' },
                 { name: 'district_name', type: 'string' },
                 { name: 'upazilla_name', type: 'string' },
+                { name: 'status_budget', type: 'string' },
                 { name: 'status_requested', type: 'string' },
                 { name: 'status_approved', type: 'string' }
 
@@ -139,6 +145,7 @@ $CI->load->view("action_buttons",$action_data);
                     { text: '<?php echo $CI->lang->line('LABEL_TERRITORY_NAME'); ?>', dataField: 'territory_name',width:'100',cellsalign: 'right',hidden: true},
                     { text: '<?php echo $CI->lang->line('LABEL_DISTRICT_NAME'); ?>', dataField: 'district_name',width:'130',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('LABEL_UPAZILLA_NAME'); ?>', dataField: 'upazilla_name',width:'130',cellsalign: 'right'},
+                    { text: '<?php echo $CI->lang->line('LABEL_BUDGET_STATUS'); ?>', dataField: 'status_budget',width:'130',cellsalign: 'right'},
                     { text: '<?php echo $CI->lang->line('LABEL_REQUESTED'); ?>', dataField: 'status_requested',width:'100',cellsalign: 'right',filtertype: 'list'},
                     { text: '<?php echo $CI->lang->line('LABEL_APPROVAL'); ?>', dataField: 'status_approved',width:'100',cellsalign: 'right',filtertype: 'list'}
 

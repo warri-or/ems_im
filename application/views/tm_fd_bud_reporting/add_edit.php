@@ -179,7 +179,7 @@ if($item_info['com_variety_name']){
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_CUSTOMER');?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
-            <label class="control-label"><?php echo number_format($item_info['participant_through_customer']);?></label>
+            <label class="control-label"><?php echo $item_info['participant_through_customer']?></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <input type="text" name="new_item[participant_through_customer]" id="participant_through_customer" class="participant_budget form-control float_type_positive" value="<?php if(isset($new_item['participant_through_customer'])){echo $new_item['participant_through_customer'];}?>"/>
@@ -190,7 +190,7 @@ if($item_info['com_variety_name']){
             <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_PARTICIPANT_THROUGH_OTHERS');?><span style="color: red;">*</span></label>
         </div>
         <div class="col-sm-2 col-sm-4">
-            <label class="control-label"><?php echo number_format($item_info['participant_through_others']);?></label>
+            <label class="control-label"><?php echo $item_info['participant_through_others'];?></label>
         </div>
         <div class="col-sm-2 col-sm-4">
             <input type="text" name="new_item[participant_through_others]" id="participant_through_others" class="participant_budget form-control float_type_positive" value="<?php if(isset($new_item['participant_through_others'])){echo $new_item['participant_through_others'];}?>"/>

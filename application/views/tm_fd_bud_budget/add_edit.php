@@ -394,7 +394,7 @@ $CI->load->view("action_buttons",$action_data);
                     value="<?php if(isset($expense_budget[$expense['value']]))
                     {
                         $total_budget+=$expense_budget[$expense['value']]['amount'];
-                        echo number_format($expense_budget[$expense['value']]['amount'],2);
+                        echo $expense_budget[$expense['value']]['amount'];
                     }?>"/>
          </div>
     </div>
