@@ -96,14 +96,6 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $item_info['upazilla_name'];?></label>
             </div>
         </div>
-        <div style="" class="row show-grid">
-            <div class="col-xs-4">
-                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_GUEST');?> :</label>
-            </div>
-            <div class="col-sm-4 col-xs-8">
-                <label class="control-label"><?php echo number_format($info['guest']);?></label>
-            </div>
-        </div>
 
         <div class="row show-grid">
             <div class="col-xs-4">
@@ -124,7 +116,7 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo number_format($item_info['no_of_participant']);?></label>
             </div>
             <div class="col-sm-2 col-xs-4">
-                <label class="control-label"><?php echo number_format($info['total_participant']);?> (person)</label>
+                <label class="control-label"><?php echo number_format($info['total_participant']);?> (person) Where <?php echo $CI->lang->line('LABEL_GUEST');?> : <?php echo number_format($info['guest']);?></label>
             </div>
         </div>
 
@@ -176,6 +168,57 @@ $CI = & get_instance();
             </div>
             <div class="col-sm-4 col-xs-8">
                 <label class="control-label"><?php echo $report_item[0]['recommendation'];?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_CREATED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_created']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_CREATED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_created']]['name'];?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_REQUESTED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_requested']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_REQUESTED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_requested']]['name'];?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_APPROVED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_approved']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_APPROVED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_approved']]['name'];?></label>
             </div>
         </div>
 

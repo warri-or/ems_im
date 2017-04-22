@@ -125,6 +125,7 @@ $config['table_tm_fd_bud_details_participant'] = 'ems_tm_fd_bud_details_particip
 $config['table_tm_fd_bud_details_expense'] = 'ems_tm_fd_bud_details_expense';
 $config['table_tm_fd_rep_details_participant'] = 'ems_tm_fd_rep_details_participant';
 $config['table_tm_fd_rep_details_expense'] = 'ems_tm_fd_rep_details_expense';
+$config['table_tm_fd_rep_expense_picture'] = 'ems_tm_fd_rep_expense_picture';
 $config['table_tm_fd_bud_details_picture'] = 'ems_tm_fd_bud_details_picture';
 $config['table_tm_fd_rep_details_picture'] = 'ems_tm_fd_rep_details_picture';
 

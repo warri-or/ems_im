@@ -181,7 +181,7 @@ class Setup_fsetup_leading_farmer extends Root_Controller
                 $item_id=$id;
             }
 
-            $data['item']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),'*',array('id ='.$item_id),1);
+            //$data['item']=Query_helper::get_info($this->config->item('table_setup_fsetup_leading_farmer'),'*',array('id ='.$item_id),1);
             $this->db->from($this->config->item('table_setup_fsetup_leading_farmer').' lf');
             $this->db->select('lf.*');
             $this->db->select('u.district_id');
@@ -265,7 +265,6 @@ class Setup_fsetup_leading_farmer extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
             }
         }
         else
@@ -275,8 +274,6 @@ class Setup_fsetup_leading_farmer extends Root_Controller
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
-                die();
-
             }
         }
         if(!$this->check_validation())

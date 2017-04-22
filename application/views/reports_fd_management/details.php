@@ -96,16 +96,6 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $item_info['upazilla_name'];?></label>
             </div>
         </div>
-<!--        <div style="" class="row show-grid">-->
-<!--            <div class="col-xs-4">-->
-<!--                <label class="control-label pull-right">--><?php //echo $CI->lang->line('LABEL_GUEST');?><!-- :</label>-->
-<!--            </div>-->
-<!--            <div class="col-sm-4 col-xs-8">-->
-<!--                <label class="control-label">--><?php //echo number_format($info['guest']);?><!--</label>-->
-<!--            </div>-->
-<!--        </div>-->
-
-
 
         <div class="row show-grid">
             <div class="col-xs-4">
@@ -216,8 +206,64 @@ $CI = & get_instance();
                 <div class="col-sm-2 col-xs-4">
                     <label class="control-label"><?php echo number_format($report['amount'],2);?></label>
                 </div>
+
+                <?php if(isset($expense_files[$key])){ ?>
+
+                <div class="col-xs-4">
+                    <div class="panel panel-default" id="expense_files_container_<?php echo $key;?>">
+                        <div class="panel-heading">
+                            <h4 class="panel-title" style="text-align: center;">
+                                <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_<?php echo $key;?>" href="#">
+                                    <?php echo $expense_items[$key]['text']?> Vouchers
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="collapse_<?php echo $key;?>" class="panel-collapse collapse">
+
+                            <table class="table table-responsive table-bordered" style="table-layout: fixed;">
+                                <tbody>
+
+                                <?php
+                                $id=0;
+                                if(isset($expense_files[$key]))
+                                {
+                                    foreach($expense_files[$key] as $expense_file)
+                                    {
+                                        $id=$id+1;
+                                        ?>
+
+
+                                        <tr style="width: 100%;">
+                                            <td style="width: 30%;"><p style="color: black; font-weight: bold; text-align: right;">File <?php echo $id;?>:</p></td>
+                                            <td style="width: 70%; margin: 0 auto; ">
+                                                <p class="popup_image" id="popup_image_<?php echo $key;?>_<?php echo $id;?>" data-popup-id="<?php echo $key;?>_<?php echo $id;?>" style="margin-left: 5px; color: forestgreen; font-weight: bold; text-align: left;"  width="300" height="200" title="<?php echo $expense_file['file_name'];?>" file-link="<?php echo $CI->config->item('system_image_base_url').$expense_file['file_location'];?>"><?php echo $expense_file['file_name'];?></p>
+                                                <div id="myModal_<?php echo $key;?>_<?php echo $id;?>" class="modal" style="display: none;">
+                                                    <span class="close" data-popup-id="<?php echo $key;?>_<?php echo $id;?>">&times;</span>
+                                                    <img class="modal-content" id="modal-image_<?php echo $key;?>_<?php echo $id;?>">
+                                                    <div id="caption_<?php echo $key;?>_<?php echo $id;?>" class="caption"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+
+                                    <?php
+                                    }
+                                }
+                                ?>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+<?php
+                }
+?>
             </div>
-        <?php } ?>
+<?php
+ } ?>
 
         <div style="" class="row show-grid">
             <div class="col-xs-4">
@@ -258,6 +304,58 @@ $CI = & get_instance();
                 <label class="control-label"><?php echo $report_item[0]['recommendation'];?></label>
             </div>
         </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_CREATED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_created']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_CREATED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_created']]['name'];?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_REQUESTED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_requested']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_REQUESTED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_requested']]['name'];?></label>
+            </div>
+        </div>
+
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_TIME_APPROVED');?>:</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo System_helper::display_date_time($item_info['date_approved']);?></label>
+            </div>
+        </div>
+        <div style="" class="row show-grid">
+            <div class="col-xs-4">
+                <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDB_USER_APPROVED');?> :</label>
+            </div>
+            <div class="col-sm-4 col-xs-8">
+                <label class="control-label"><?php echo $user_info[$item_info['user_approved']]['name'];?></label>
+            </div>
+        </div>
+
         <div style="" class="row show-grid">
             <div class="col-xs-4">
                 <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_FDR_TIME_CREATED');?>:</label>
@@ -307,11 +405,11 @@ $CI = & get_instance();
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_2" href="#">
+                        <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_bfd" href="#">
                             Before Field Day (Files)</a>
                     </h4>
                 </div>
-                <div id="collapse_2" class="panel-collapse collapse">
+                <div id="collapse_bfd" class="panel-collapse collapse">
 
                     <table class="table table-bordered table-responsive" style="width: 700px; margin-left: 50px;">
                         <thead>
@@ -373,11 +471,11 @@ $CI = & get_instance();
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_1" href="#">
+                    <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_afd" href="#">
                         After Field Day (Files)</a>
                 </h4>
             </div>
-            <div id="collapse_1" class="panel-collapse collapse">
+            <div id="collapse_afd" class="panel-collapse collapse">
 
                     <table class="table table-bordered table-responsive">
                         <thead>
@@ -438,3 +536,23 @@ $CI = & get_instance();
 
 <div class="clearfix"></div>
 
+<script type="text/javascript">
+
+    jQuery(document).ready(function()
+    {
+        $(document).on('click','.popup_image',function()
+        {
+            var popup_id=$(this).attr('data-popup-id');
+            $('#myModal_'+popup_id).show();
+            $('#modal-image_'+popup_id).attr('src',$('#popup_image_'+popup_id).attr('file-link'));
+            $('#caption_'+popup_id).html($('#popup_image_'+popup_id).attr('title'));
+        });
+        $(document).on('click','.close',function(e)
+        {
+            var popup_id=$(this).attr('data-popup-id');
+            $('#myModal_'+popup_id).hide();
+        });
+    });
+
+
+</script>

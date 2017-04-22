@@ -142,6 +142,7 @@ class Tm_fd_bud_request extends Root_Controller
             }
         }
         $this->db->where('fdb_details.revision',1);
+        $this->db->where('fdb.status_budget',$this->config->item('LABEL_FDR_FORWARDED'));
         $this->db->group_by('fdb.id');
         $this->db->order_by('fdb.id','DESC');
         $items=$this->db->get()->result_array();
@@ -205,6 +206,12 @@ class Tm_fd_bud_request extends Root_Controller
                 System_helper::invalid_try($this->config->item('system_edit_others'),$budget_id);
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_budget']!=$this->config->item('LABEL_FDR_FORWARDED'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid try';
                 $this->jsonReturn($ajax);
             }
             if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_requested'))
@@ -653,6 +660,12 @@ class Tm_fd_bud_request extends Root_Controller
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
                 $this->jsonReturn($ajax);
             }
+            if($data['item_info']['status_budget']!=$this->config->item('LABEL_FDR_FORWARDED'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid try';
+                $this->jsonReturn($ajax);
+            }
             $user_ids=array();
             $user_ids[$data['item_info']['user_created']]=$data['item_info']['user_created'];
             if($data['item_info']['user_requested']>0)
@@ -778,6 +791,12 @@ class Tm_fd_bud_request extends Root_Controller
                 System_helper::invalid_try($this->config->item('system_edit_others'),$budget_id);
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_budget']!=$this->config->item('LABEL_FDR_FORWARDED'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Invalid Try';
                 $this->jsonReturn($ajax);
             }
             if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_requested'))

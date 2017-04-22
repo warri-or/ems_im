@@ -96,6 +96,21 @@ $CI = & get_instance();
             <input type="text" id="date_end" name="report[date_end]" class="form-control date_large" value="<?php echo System_helper::display_date(time());; ?>">
         </div>
     </div>
+
+
+    <div class="row show-grid">
+        <div class="col-xs-6">
+            <label class="control-label pull-right">Report Type</label>
+        </div>
+        <div class="col-xs-6">
+            <select name="report[report_name]" class="form-control">
+                <option value="field_day">Field Day Report</option>
+                <option value="area">Area Wise Market Condition Report</option>
+            </select>
+        </div>
+
+    </div>
+
 </div>
 <div class="col-xs-6">
     <div style="" class="row show-grid">
@@ -284,240 +299,175 @@ $CI = & get_instance();
 
 <script type="text/javascript">
 
-jQuery(document).ready(function()
-{
-    turn_off_triggers();
-    $(".date_large").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "2015:+2"});
-    $(document).on("change","#fiscal_year_id",function()
+    jQuery(document).ready(function()
     {
-
-        var fiscal_year_ranges=$('#fiscal_year_id').val();
-        if(fiscal_year_ranges!='')
+        turn_off_triggers();
+        $(".date_large").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "2015:+2"});
+        $(document).on("change","#fiscal_year_id",function()
         {
-            var dates = fiscal_year_ranges.split("/");
-            $("#date_start").val(dates[0]);
-            $("#date_end").val(dates[1]);
+            var fiscal_year_ranges=$('#fiscal_year_id').val();
+            if(fiscal_year_ranges!='')
+            {
+                var dates = fiscal_year_ranges.split("/");
+                $("#date_start").val(dates[0]);
+                $("#date_end").val(dates[1]);
 
-        }
-    });
+            }
+        });
 
 
-    $(document).on("change","#division_id",function()
-    {
-        $("#zone_id").val("");
-        $("#territory_id").val("");
-        $("#district_id").val("");
-        $("#upazilla_id").val("");
-        var division_id=$('#division_id').val();
-        if(division_id>0)
+        $(document).on("change","#division_id",function()
         {
-            $('#zone_id_container').show();
-            $('#territory_id_container').hide();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_zones_by_divisionid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{division_id:division_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
+            $("#zone_id").val("");
+            $("#territory_id").val("");
+            $("#district_id").val("");
+            $("#upazilla_id").val("");
+            var division_id=$('#division_id').val();
             $('#zone_id_container').hide();
             $('#territory_id_container').hide();
             $('#district_id_container').hide();
             $('#upazilla_id_container').hide();
-        }
-    });
-    $(document).on("change","#zone_id",function()
-    {
-        $("#territory_id").val("");
-        $("#district_id").val("");
-        $("#upazilla_id").val("");
-        var zone_id=$('#zone_id').val();
-        if(zone_id>0)
-        {
-            $('#territory_id_container').show();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_territories_by_zoneid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{zone_id:zone_id},
-                success: function (data, status)
+            if(division_id>0)
+            {
+                $('#zone_id_container').show();
+                if(system_zones[division_id]!==undefined)
                 {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
+                    $("#zone_id").html(get_dropdown_with_select(system_zones[division_id]));
                 }
-            });
-        }
-        else
+            }
+        });
+        $(document).on("change","#zone_id",function()
         {
+            $("#territory_id").val("");
+            $("#district_id").val("");
+            $("#upazilla_id").val("");
+            var zone_id=$('#zone_id').val();
             $('#territory_id_container').hide();
             $('#district_id_container').hide();
             $('#upazilla_id_container').hide();
-        }
-    });
-    $(document).on("change","#territory_id",function()
-    {
-        $("#district_id").val("");
-        $("#upazilla_id").val("");
-        var territory_id=$('#territory_id').val();
-        if(territory_id>0)
-        {
-            $('#district_id_container').show();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_districts_by_territoryid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{territory_id:territory_id},
-                success: function (data, status)
+            if(zone_id>0)
+            {
+                $('#territory_id_container').show();
+                if(system_territories[zone_id]!==undefined)
                 {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
+                    $("#territory_id").html(get_dropdown_with_select(system_territories[zone_id]));
                 }
-            });
-        }
-        else
+            }
+        });
+        $(document).on("change","#territory_id",function()
         {
-            $('#upazilla_id_container').hide();
+            $("#district_id").val("");
+            $("#upazilla_id").val("");
+            var territory_id=$('#territory_id').val();
             $('#district_id_container').hide();
-        }
-    });
-    $(document).on("change","#district_id",function()
-    {
-        $("#upazilla_id").val("");
-        var district_id=$('#district_id').val();
-        if(district_id>0)
-        {
-            $('#upazilla_id_container').show();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_upazillas_by_districtid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{district_id:district_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
             $('#upazilla_id_container').hide();
-        }
-    });
-
-
-    $(document).on("change","#crop_id",function()
-    {
-        $("#crop_type_id").val("");
-        $("#variety_id").val("");
-        $("#competitor_variety_id").val("");
-        var crop_id=$('#crop_id').val();
-        if(crop_id>0)
-        {
-            $('#crop_type_id_container').show();
-            $('#variety_id_container').hide();
-            $('#competitor_variety_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_croptypes_by_cropid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{crop_id:crop_id},
-                success: function (data, status)
+            if(territory_id>0)
+            {
+                $('#district_id_container').show();
+                if(system_districts[territory_id]!==undefined)
                 {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
+                    $("#district_id").html(get_dropdown_with_select(system_districts[territory_id]));
                 }
-            });
-        }
-        else
+            }
+        });
+        $(document).on("change","#district_id",function()
         {
+            $("#upazilla_id").val("");
+            var district_id=$("#district_id").val();
+            if(district_id>0)
+            {
+                $('#upazilla_id_container').show();
+                $.ajax({
+                    url: base_url+"common_controller/get_dropdown_upazillas_by_districtid/",
+                    type: 'POST',
+                    datatype: "JSON",
+                    data:{district_id:district_id},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+
+                    }
+                });
+            }
+            else
+            {
+                $('#upazilla_id_container').hide();
+            }
+        });
+
+
+        $(document).on("change","#crop_id",function()
+        {
+            $("#crop_type_id").val("");
+            $("#variety_id").val("");
+            $("#competitor_variety_id").val("");
+            var crop_id=$('#crop_id').val();
             $('#crop_type_id_container').hide();
             $('#variety_id_container').hide();
             $('#competitor_variety_id_container').hide();
-        }
-    });
-    $(document).on("change","#crop_type_id",function()
-    {
-        $("#variety_id").val("");
-        $("#competitor_variety_id").val("");
-        var crop_type_id=$('#crop_type_id').val();
-        if(crop_type_id>0)
-        {
-            $('#variety_id_container').show();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_arm_and_upcoming_varieties_by_croptypeid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{crop_type_id:crop_type_id},
-                success: function (data, status)
+            if(crop_id>0)
+            {
+                $('#crop_type_id_container').show();
+                if(system_types[crop_id]!==undefined)
                 {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
+                    $("#crop_type_id").html(get_dropdown_with_select(system_types[crop_id]));
                 }
-            });
-
-            $('#competitor_variety_id_container').show();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_competitor_varieties_by_croptypeid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{crop_type_id:crop_type_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-
-        }
-        else
+            }
+        });
+        $(document).on("change","#crop_type_id",function()
         {
-            $('#variety_id_container').hide();
-            $('#competitor_variety_id_container').hide();
-        }
+            $("#variety_id").val("");
+            $("#competitor_variety_id").val("");
+            var crop_type_id=$('#crop_type_id').val();
+            if(crop_type_id>0)
+            {
+                $('#variety_id_container').show();
+                $.ajax({
+                    url: base_url+"common_controller/get_dropdown_arm_and_upcoming_varieties_by_croptypeid/",
+                    type: 'POST',
+                    datatype: "JSON",
+                    data:{crop_type_id:crop_type_id},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+
+                    }
+                });
+
+                $('#competitor_variety_id_container').show();
+                $.ajax({
+                    url: base_url+"common_controller/get_dropdown_competitor_varieties_by_croptypeid/",
+                    type: 'POST',
+                    datatype: "JSON",
+                    data:{crop_type_id:crop_type_id},
+                    success: function (data, status)
+                    {
+
+                    },
+                    error: function (xhr, desc, err)
+                    {
+                        console.log("error");
+
+                    }
+                });
+
+            }
+            else
+            {
+                $('#variety_id_container').hide();
+                $('#competitor_variety_id_container').hide();
+            }
+        });
+
+
+
     });
-
-
-
-});
 </script>

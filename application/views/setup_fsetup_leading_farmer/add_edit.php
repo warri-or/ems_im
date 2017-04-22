@@ -194,7 +194,7 @@ $CI->load->view("action_buttons",$action_data);
                 <label class="control-label pull-right"><?php echo $this->lang->line('LABEL_ADDRESS');?></label>
             </div>
             <div class="col-sm-4 col-xs-8">
-                <textarea name="item[address]" class="form-control" value="<?php echo $item['address'];?>"></textarea>
+                <textarea name="item[address]" class="form-control"><?php echo $item['address'];?></textarea>
             </div>
         </div>
         <div style="" class="row show-grid">
@@ -246,34 +246,17 @@ $CI->load->view("action_buttons",$action_data);
             $("#district_id").val("");
             $("#upazilla_id").val("");
             var division_id=$('#division_id').val();
+            $('#zone_id_container').hide();
+            $('#territory_id_container').hide();
+            $('#district_id_container').hide();
+            $('#upazilla_id_container').hide();
             if(division_id>0)
             {
                 $('#zone_id_container').show();
-                $('#territory_id_container').hide();
-                $('#district_id_container').hide();
-                $('#upazilla_id_container').hide();
-                $.ajax({
-                    url: base_url+"common_controller/get_dropdown_zones_by_divisionid/",
-                    type: 'POST',
-                    datatype: "JSON",
-                    data:{division_id:division_id},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-
-                    }
-                });
-            }
-            else
-            {
-                $('#zone_id_container').hide();
-                $('#territory_id_container').hide();
-                $('#district_id_container').hide();
-                $('#upazilla_id_container').hide();
+                if(system_zones[division_id]!==undefined)
+                {
+                    $("#zone_id").html(get_dropdown_with_select(system_zones[division_id]));
+                }
             }
         });
         $(document).on("change","#zone_id",function()
@@ -282,32 +265,16 @@ $CI->load->view("action_buttons",$action_data);
             $("#district_id").val("");
             $("#upazilla_id").val("");
             var zone_id=$('#zone_id').val();
+            $('#territory_id_container').hide();
+            $('#district_id_container').hide();
+            $('#upazilla_id_container').hide();
             if(zone_id>0)
             {
                 $('#territory_id_container').show();
-                $('#district_id_container').hide();
-                $('#upazilla_id_container').hide();
-                $.ajax({
-                    url: base_url+"common_controller/get_dropdown_territories_by_zoneid/",
-                    type: 'POST',
-                    datatype: "JSON",
-                    data:{zone_id:zone_id},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-
-                    }
-                });
-            }
-            else
-            {
-                $('#territory_id_container').hide();
-                $('#district_id_container').hide();
-                $('#upazilla_id_container').hide();
+                if(system_territories[zone_id]!==undefined)
+                {
+                    $("#territory_id").html(get_dropdown_with_select(system_territories[zone_id]));
+                }
             }
         });
         $(document).on("change","#territory_id",function()
@@ -315,30 +282,15 @@ $CI->load->view("action_buttons",$action_data);
             $("#district_id").val("");
             $("#upazilla_id").val("");
             var territory_id=$('#territory_id').val();
+            $('#district_id_container').hide();
+            $('#upazilla_id_container').hide();
             if(territory_id>0)
             {
                 $('#district_id_container').show();
-                $('#upazilla_id_container').hide();
-                $.ajax({
-                    url: base_url+"common_controller/get_dropdown_districts_by_territoryid/",
-                    type: 'POST',
-                    datatype: "JSON",
-                    data:{territory_id:territory_id},
-                    success: function (data, status)
-                    {
-
-                    },
-                    error: function (xhr, desc, err)
-                    {
-                        console.log("error");
-
-                    }
-                });
-            }
-            else
-            {
-                $('#district_id_container').hide();
-                $('#upazilla_id_container').hide();
+                if(system_districts[territory_id]!==undefined)
+                {
+                    $("#district_id").html(get_dropdown_with_select(system_districts[territory_id]));
+                }
             }
         });
         $(document).on("change","#district_id",function()

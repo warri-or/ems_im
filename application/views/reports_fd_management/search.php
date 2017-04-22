@@ -96,6 +96,21 @@ $CI = & get_instance();
                 <input type="text" id="date_end" name="report[date_end]" class="form-control date_large" value="<?php echo System_helper::display_date(time());; ?>">
             </div>
         </div>
+
+        <div class="row show-grid">
+            <div class="col-xs-6">
+                <label class="control-label pull-right">Report Type</label>
+            </div>
+            <div class="col-xs-6">
+                <select name="report[report_name]" class="form-control">
+                    <option value="field_day">Field Day Report</option>
+                    <option value="area">Area Wise Market Condition Report</option>
+                </select>
+            </div>
+
+        </div>
+
+
     </div>
     <div class="col-xs-6">
         <div style="" class="row show-grid">
@@ -278,8 +293,8 @@ $CI = & get_instance();
 
 <div class="clearfix"></div>
 </form>
-<div id="system_report_container">
 
+<div id="system_report_container">
 </div>
 
 <script type="text/javascript">
@@ -290,7 +305,6 @@ jQuery(document).ready(function()
     $(".date_large").datepicker({dateFormat : display_date_format,changeMonth: true,changeYear: true,yearRange: "2015:+2"});
     $(document).on("change","#fiscal_year_id",function()
     {
-
         var fiscal_year_ranges=$('#fiscal_year_id').val();
         if(fiscal_year_ranges!='')
         {
@@ -309,34 +323,17 @@ jQuery(document).ready(function()
         $("#district_id").val("");
         $("#upazilla_id").val("");
         var division_id=$('#division_id').val();
+        $('#zone_id_container').hide();
+        $('#territory_id_container').hide();
+        $('#district_id_container').hide();
+        $('#upazilla_id_container').hide();
         if(division_id>0)
         {
             $('#zone_id_container').show();
-            $('#territory_id_container').hide();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_zones_by_divisionid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{division_id:division_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
-            $('#zone_id_container').hide();
-            $('#territory_id_container').hide();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
+            if(system_zones[division_id]!==undefined)
+            {
+                $("#zone_id").html(get_dropdown_with_select(system_zones[division_id]));
+            }
         }
     });
     $(document).on("change","#zone_id",function()
@@ -345,32 +342,16 @@ jQuery(document).ready(function()
         $("#district_id").val("");
         $("#upazilla_id").val("");
         var zone_id=$('#zone_id').val();
+        $('#territory_id_container').hide();
+        $('#district_id_container').hide();
+        $('#upazilla_id_container').hide();
         if(zone_id>0)
         {
             $('#territory_id_container').show();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_territories_by_zoneid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{zone_id:zone_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
-            $('#territory_id_container').hide();
-            $('#district_id_container').hide();
-            $('#upazilla_id_container').hide();
+            if(system_territories[zone_id]!==undefined)
+            {
+                $("#territory_id").html(get_dropdown_with_select(system_territories[zone_id]));
+            }
         }
     });
     $(document).on("change","#territory_id",function()
@@ -378,36 +359,21 @@ jQuery(document).ready(function()
         $("#district_id").val("");
         $("#upazilla_id").val("");
         var territory_id=$('#territory_id').val();
+        $('#district_id_container').hide();
+        $('#upazilla_id_container').hide();
         if(territory_id>0)
         {
             $('#district_id_container').show();
-            $('#upazilla_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_districts_by_territoryid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{territory_id:territory_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
-            $('#upazilla_id_container').hide();
-            $('#district_id_container').hide();
+            if(system_districts[territory_id]!==undefined)
+            {
+                $("#district_id").html(get_dropdown_with_select(system_districts[territory_id]));
+            }
         }
     });
     $(document).on("change","#district_id",function()
     {
         $("#upazilla_id").val("");
-        var district_id=$('#district_id').val();
+        var district_id=$("#district_id").val();
         if(district_id>0)
         {
             $('#upazilla_id_container').show();
@@ -440,32 +406,16 @@ jQuery(document).ready(function()
         $("#variety_id").val("");
         $("#competitor_variety_id").val("");
         var crop_id=$('#crop_id').val();
+        $('#crop_type_id_container').hide();
+        $('#variety_id_container').hide();
+        $('#competitor_variety_id_container').hide();
         if(crop_id>0)
         {
             $('#crop_type_id_container').show();
-            $('#variety_id_container').hide();
-            $('#competitor_variety_id_container').hide();
-            $.ajax({
-                url: base_url+"common_controller/get_dropdown_croptypes_by_cropid/",
-                type: 'POST',
-                datatype: "JSON",
-                data:{crop_id:crop_id},
-                success: function (data, status)
-                {
-
-                },
-                error: function (xhr, desc, err)
-                {
-                    console.log("error");
-
-                }
-            });
-        }
-        else
-        {
-            $('#crop_type_id_container').hide();
-            $('#variety_id_container').hide();
-            $('#competitor_variety_id_container').hide();
+            if(system_types[crop_id]!==undefined)
+            {
+                $("#crop_type_id").html(get_dropdown_with_select(system_types[crop_id]));
+            }
         }
     });
     $(document).on("change","#crop_type_id",function()

@@ -20,11 +20,26 @@ if(sizeof($action_data)>0)
     <div class="widget-header">
         <div class="title">
             <?php echo $title; ?>
-            <br>
-            <?php echo '(No. of Field Days : '.$number.')';?>
         </div>
         <div class="clearfix"></div>
     </div>
+    <?php
+    if($summary){
+    ?>
+    <table class="table-responsive" style=" border: 1px solid #ddd;border-collapse: collapse;width: 100%;">
+        <th style="padding: 15px; border: 1px solid #ddd;height: 50px;">Total Market Size</th>
+        <th style="padding: 15px; border: 1px solid #ddd;height: 50px;">ARM Market Size</th>
+        <th style="padding: 15px; border: 1px solid #ddd;height: 50px;">Next Year Sales Target</th>
+        <th style="padding: 15px; border: 1px solid #ddd;height: 50px;">Number Of Field Day</th>
+        <tr>
+            <td style="padding: 15px; border: 1px solid #ddd;"><?php echo $summary['total_market_size_summary'];?> Kg.</td>
+            <td style="padding: 15px; border: 1px solid #ddd;"><?php echo $summary['arm_market_size_summary'];?> Kg.</td>
+            <td style="padding: 15px; border: 1px solid #ddd;"><?php echo $summary['sales_target_summary'];?> Kg.</td>
+            <td style="padding: 15px; border: 1px solid #ddd;"><?php echo $summary['number_of_fd_summary'];?></td>
+        </tr>
+    </table>
+        <br><br>
+    <?php } ?>
     <?php
     if(isset($CI->permissions['column_headers'])&&($CI->permissions['column_headers']==1))
     {
@@ -96,7 +111,7 @@ if(sizeof($action_data)>0)
                 { name: 'location_info', type: 'string' },
                 { name: 'total_participant', type: 'string' },
                 { name: 'total_expense', type: 'string' },
-                { name: 'sales_target', type: 'string' },
+                { name: 'next_sales_target', type: 'string' },
                 { name: 'recommendation', type: 'string' },
                 { name: 'details', type: 'string' }
             ],
@@ -137,10 +152,27 @@ if(sizeof($action_data)>0)
                     { text: 'Location Info', dataField: 'location_info',width: '137',cellsrenderer: cellsrenderer,pinned:true,rendered: tooltiprenderer},
                     { text: 'No. of Participant', dataField: 'total_participant',width: '127',cellsrenderer: cellsrenderer,rendered: tooltiprenderer},
                     { text: 'Total Expense', dataField: 'total_expense',width: '106',cellsrenderer: cellsrenderer,rendered: tooltiprenderer},
-                    { text: 'Next Year Sales Target', dataField: 'sales_target',width: '163',cellsrenderer: cellsrenderer,rendered: tooltiprenderer},
+                    { text: 'Next Year Sales Target', dataField: 'next_sales_target',width: '163',cellsrenderer: cellsrenderer,rendered: tooltiprenderer},
                     { text: 'Recommendation', dataField: 'recommendation',width: '374',cellsrenderer: cellsrenderer,rendered: tooltiprenderer},
                     { text: 'Details', dataField: 'details_button',width: '105',cellsrenderer: cellsrenderer,rendered: tooltiprenderer}
                 ]
             });
+//        $("#system_jqx_container").jqxGrid(
+//            {
+//                width: '100%',
+//                height:'100px',
+//                source: dataAdapter,
+//                columnsresize: true,
+//                columnsreorder: true,
+//                altrows: true,
+//                rowsheight: 110,
+//                columns: [
+//                    { text: 'Date of Field Day', dataField: 'date_of_fd',width: '25%',cellsrenderer: cellsrenderer,pinned:true,rendered: tooltiprenderer},
+//                    { text: 'Crop Info', dataField: 'crop_info',width: '25%',cellsrenderer: cellsrenderer,pinned:true,rendered: tooltiprenderer},
+//                    { text: 'Location Info', dataField: 'location_info',width: '25%',cellsrenderer: cellsrenderer,pinned:true,rendered: tooltiprenderer},
+//                    { text: 'No. of Participant', dataField: 'total_participant',width: '25%',cellsrenderer: cellsrenderer,rendered: tooltiprenderer}
+//                ]
+//            });
+
     });
 </script>

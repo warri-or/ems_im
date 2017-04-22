@@ -205,7 +205,6 @@ class Reports_sales extends Root_Controller
             $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
             $this->jsonReturn($ajax);
         }
-
     }
 
     public function get_items_sales_customer()
@@ -1556,7 +1555,8 @@ class Reports_sales extends Root_Controller
 
         $this->db->order_by('crop.ordering,crop.id,crop_type.ordering,crop_type.id,v.ordering,v.id');
         $results=$this->db->get()->result_array();
-
+//        echo '<pre>';
+//        print_r($results);exit;
 
         $varieties=array();
         foreach($results as $result)
@@ -1831,6 +1831,8 @@ class Reports_sales extends Root_Controller
         }
         $items[]=$this->get_total_sales_area_row('total',$report_type,$areas,$total_quantity_crop,$total_price_crop,$area_totals_crop);
         $items[]=$this->get_total_sales_area_row('grand',$report_type,$areas,$total_quantity_grand,$total_price_grand,$area_totals_grand);
+        echo '<pre>';
+        print_r($items);exit;
         $this->jsonReturn($items);
     }
     private function get_total_sales_area_row($total_type,$report_type,$areas,$total_quantity,$total_price,$area_totals)

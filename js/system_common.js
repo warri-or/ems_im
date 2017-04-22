@@ -197,14 +197,14 @@ $(document).ready(function()
     $(document).on("click", ".button_action_batch", function(event)
     {
         /*if($(this).attr('id')=='button_action_request_po_approve')
-        {
+         {
 
-            var sure = confirm('Are You sure?');
-            if(!sure)
-            {
-                return;
-            }
-        }*/
+         var sure = confirm('Are You sure?');
+         if(!sure)
+         {
+         return;
+         }
+         }*/
 
         var jqxgrid_id='#system_jqx_container';
 
@@ -326,6 +326,54 @@ $(document).ready(function()
         }
 
     });
+    $(document).on("click", "#button_jqx_load_more", function(event)
+    {
+        var jqx_grid_id='#system_jqx_container';
+        var jqx_source=$(jqx_grid_id).jqxGrid('source');
+        var url=jqx_source['_source']['url'];
+        var data=jqx_source['_source']['data'];
+        var type=jqx_source['_source']['type'];
+        var total_records = $(jqx_grid_id).jqxGrid('getboundrows').length;
+        if(data!==undefined)
+        {
+            data['total_records']=total_records;
+        }
+        else
+        {
+            data={};
+            data['total_records']=total_records;
+        }
+        var datainformation = $(jqx_grid_id).jqxGrid('getdatainformation');
+        data['pagesize']=datainformation.paginginformation.pagesize;
+        $.ajax({
+            url: url,
+            type: type,
+            dataType: "JSON",
+            data: data,
+            success: function (data, status)
+            {
+                if(data.length>0)
+                {
+                    $(jqx_grid_id).jqxGrid('beginupdate');
+                    for (var i = 0; i < data.length; i++) {
+
+                        $(jqx_grid_id).jqxGrid('addrow', id, data[i]);
+                    }
+                    $(jqx_grid_id).jqxGrid('endupdate');
+                    $(jqx_grid_id).jqxGrid('refreshfilterrow');
+                }
+                else
+                {
+                    animate_message('No More Record available');
+                }
+            },
+            error: function (xhr, desc, err)
+            {
+
+
+            }
+        });
+    });
     $(document).on("click", "#button_action_print", function(event)
     {
         var jqxgrid_id='#system_jqx_container';
@@ -350,7 +398,7 @@ $(document).ready(function()
     {
         //previous csv file
         /*var jqxgrid_id='#system_jqx_container';
-        $(jqxgrid_id).jqxGrid('exportdata', 'csv', $(this).attr('data-title'));*/
+         $(jqxgrid_id).jqxGrid('exportdata', 'csv', $(this).attr('data-title'));*/
         var jqxgrid_id='#system_jqx_container';
 
         var gridContent = $(jqxgrid_id).jqxGrid('exportdata', 'html');
@@ -451,9 +499,8 @@ function load_style(content)
 }
 function animate_message(message)
 {
-    $("#system_message").hide();
     $("#system_message").html(message);
-    $('#system_message').slideToggle("slow").delay(3000).slideToggle("slow");
+    $("#system_message").animate({right:"100px"}).animate({right:"30px"}).delay(3000).animate({right:"100px"}).animate({right:"-5000px"});
 }
 
 function turn_off_triggers()
@@ -479,6 +526,7 @@ function turn_off_triggers()
     $(document).off("change", "#arm_bank_id");
     //po
     $(document).off("click", ".system_button_add_more");
+    $(document).off("click", ".system_button_exp_add_more");
     $(document).off("click", ".system_button_add_delete");
     $(document).off("change", ".crop_id");
     $(document).off("change", ".crop_type_id");
@@ -490,6 +538,20 @@ function turn_off_triggers()
     $(document).off("change", "#purpose");
     $(document).off("change", "#customer_id");
     $(document).off("change", "#date");
-    
 
+
+}
+function get_dropdown_with_select(items,selected_value = '')
+{
+    var dropdown_html='<option value="">Select</option>';
+    for(var i=0;i<items.length;++i)
+    {
+        dropdown_html+='<option value="'+items[i].value+'"';
+        if(items[i].value==selected_value)
+        {
+            dropdown_html+=' selected';
+        }
+        dropdown_html+='>'+items[i].text+'</option>';
+    }
+    return dropdown_html;
 }

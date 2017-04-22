@@ -385,6 +385,16 @@ class Tm_fd_bud_reporting extends Root_Controller
                     }
                 }
 
+                $expense_files=Query_helper::get_info($this->config->item('table_tm_fd_rep_expense_picture'),'*',array('budget_id='.$budgeted_id,'revision=1'));
+                $data['expense_files']=array();
+                foreach($expense_files as $expense)
+                {
+                    $data['expense_files'][$expense['item_id']][]=$expense;
+                }
+//                echo '<pre>';
+//                print_r($data['expense_files']);exit;
+
+
                 $data['title']='Editing Report On Field Day';
                 $ajax['system_page_url']=site_url($this->controller_url."/index/edit/".$budgeted_id);
                 $ajax['status']=true;
@@ -435,8 +445,19 @@ class Tm_fd_bud_reporting extends Root_Controller
 
     private function system_save()
     {
+
 //        echo '<pre>';
 //        print_r($_FILES);exit;
+
+        if(isset($_FILES['video']))
+        {
+            if($_FILES['video']['size']>10000000 && $_FILES['video']['type']!='video/mp4')
+            {
+                $ajax['status']=false;
+                $ajax['system_message']=$this->lang->line("Please Upload a Short Video File (Below 10MB)");
+                $this->jsonReturn($ajax);
+            }
+        }
         $id = $this->input->post("id");
         $budget_id = $this->input->post("item[budget_id]");
         $user = User_helper::get_user();
@@ -581,7 +602,6 @@ class Tm_fd_bud_reporting extends Root_Controller
                     $ajax['status']=false;
                     $ajax['system_message']=$this->lang->line("MSG_SAVED_FAIL");
                     $this->jsonReturn($ajax);
-                    die();
                 }
             }
             //reporting details start
@@ -641,7 +661,6 @@ class Tm_fd_bud_reporting extends Root_Controller
             }
             $types='gif|jpg|png|jpeg|wmv|mp4|mov|ftv|mkv|3gp|avi';
             $uploaded_files = System_helper::upload_file($file_folder,$types);
-            //print_r($uploaded_files);
             foreach($uploaded_files as $file)
             {
                 if(!$file['status'])
@@ -650,13 +669,93 @@ class Tm_fd_bud_reporting extends Root_Controller
                     $ajax['status']=false;
                     $ajax['system_message']=$file['message'];
                     $this->jsonReturn($ajax);
-                    die();
                 }
             }
+
+            //-----file expense
+
+            if($this->input->post('h_expense_files'))
+            {
+                $h_expense_files=$this->input->post('h_expense_files');
+            }
+            if($this->input->post('demo'))
+            {
+                $total_index=$this->input->post('demo');
+            }
+            else
+            {
+                $total_index=array();
+            }
+            //print_r($total_index);
+
+
+            $this->db->where('budget_id',$budget_id);
+            $this->db->set('revision','revision+1', FALSE);
+            $this->db->update($this->config->item('table_tm_fd_rep_expense_picture'));
+            $results=Query_helper::get_info($this->config->item('table_setup_fd_bud_expense_items'),array('id value'),array(),0,0,array('ordering ASC'));
+            foreach($results as $result)
+            {
+                $items[$result['value']]=$result['value'];
+            }
+            foreach($items as $item_id=>$demo)
+            {
+                if(isset($total_index[$item_id]))
+                {
+
+                }
+                else
+                {
+                    $total_index[$item_id]=array();
+                }
+                foreach($total_index[$item_id] as $i=>$val)
+                {
+                    if(isset($uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name']) && $uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['is_image']==1)
+                    {
+                        $data=array();
+                        $data['budget_id']=$budget_id;
+                        $data['item_id']=$item_id;
+                        $data['file_location']=$file_folder.'/'.$uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name'];
+                        $data['file_name']=$uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name'];
+                        $data['user_created'] = $user->user_id;
+                        $data['date_created'] = $time;
+                        $data['revision']=1;
+                        Query_helper::add($this->config->item('table_tm_fd_rep_expense_picture'),$data);
+                    }
+                    elseif(isset($uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name']) && $uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['is_image']!=1)
+                    {
+                        $this->db->trans_rollback();
+                        $dlt=(FCPATH).$file_folder.'/'.$uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name'];
+                        unlink($dlt);
+                        $ajax['status']=false;
+                        $ajax['system_message']=$this->lang->line("Please Upload a Image File for Field Day Expense");
+                        $this->jsonReturn($ajax);
+                    }
+                    elseif(!isset($uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name']) && isset($h_expense_files[$item_id][$i]) && $h_expense_files[$item_id][$i]!='')
+                    {
+                        $data=array();
+                        $data['budget_id']=$budget_id;
+                        $data['item_id']=$item_id;
+                        $data['file_location']=$file_folder.'/'.$h_expense_files[$item_id][$i];
+                        $data['file_name']=$h_expense_files[$item_id][$i];
+                        $data['user_created'] = $user->user_id;
+                        $data['date_created'] = $time;
+                        $data['revision']=1;
+                        Query_helper::add($this->config->item('table_tm_fd_rep_expense_picture'),$data);
+                    }
+                    elseif(!isset($uploaded_files['expense_file_'.$item_id.'_'.$i]['info']['file_name']) && !isset($h_expense_files[$item_id][$i]))
+                    {
+                        $data=array();
+                    }
+                }
+            }
+
+
+            //-----file expense
+
+
             $files=array();
             $remarks=array();
             if($this->input->post('files')){$files=$this->input->post('files');}
-            //print_r($files);exit;
             if($this->input->post('remarks')){$remarks=$this->input->post('remarks');}
             foreach($remarks as $index=>$remark)
             {
@@ -693,20 +792,29 @@ class Tm_fd_bud_reporting extends Root_Controller
                 else
                 {
                     $this->db->trans_rollback();
+                    $dlt=(FCPATH).$file_folder.'/'.$uploaded_files['file_'.$index]['info']['file_name'];
+                    unlink($dlt);
                     $ajax['status']=false;
-                    $ajax['system_message']=$this->lang->line("Please Upload a Image File");
+                    $ajax['system_message']=$this->lang->line("Please Upload a Image File for Program Picture");
                     $this->jsonReturn($ajax);
                 }
             }
             $data=array();
-            $video_file=$this->input->post('video_file');
-            if((isset($uploaded_files['video'])))
+            if($this->input->post('video_file'))
+            {
+                $video_file=$this->input->post('video_file');
+            }
+            if(isset($uploaded_files['video']))
             {
                 $type=substr($uploaded_files['video']['info']['file_type'],0,5);
             }
-            else
+            elseif(isset($video_file['file_type']))
             {
                 $type=substr($video_file['file_type'],0,5);
+            }
+            else
+            {
+                $type='';
             }
             if($type=='video')
             {
@@ -731,18 +839,18 @@ class Tm_fd_bud_reporting extends Root_Controller
             else
             {
                 $this->db->trans_rollback();
+                if($type)
+                {
+                    $dlt=(FCPATH).$file_folder.'/'.$uploaded_files['video']['info']['file_name'];
+                    unlink($dlt);
+                }
                 $ajax['status']=false;
-                $ajax['system_message']=$this->lang->line("Please Upload a Video File");
+                $ajax['system_message']=$this->lang->line("Please Upload a Short Video File");
                 $this->jsonReturn($ajax);
             }
 
             //file test details END
 
-            //status_reporting start
-//            $this->db->where('id',$budget_id);
-//            $this->db->set('status_reporting','Complete');
-//            $this->db->update($this->config->item('table_tm_fd_bud_budget'));
-            //status_reporting end
 
             if ($this->db->trans_status() === TRUE)
             {
@@ -945,6 +1053,14 @@ class Tm_fd_bud_reporting extends Root_Controller
                     $data['video_file_details']=$result;
                 }
             }
+            $expense_files=Query_helper::get_info($this->config->item('table_tm_fd_rep_expense_picture'),'*',array('budget_id='.$budget_id),0,0,array('id ASC','revision ASC'));
+            $data['expense_files']=array();
+            foreach($expense_files as $expense)
+            {
+                $data['expense_files'][$expense['revision']][$expense['item_id']][]=$expense;
+            }
+//            echo '<pre>';
+//            print_r($data['expense_files']);exit;
 
             $data['title']='Field Day Reporting Details';
             $ajax['status']=true;

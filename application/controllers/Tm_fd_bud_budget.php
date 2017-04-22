@@ -52,6 +52,10 @@ class Tm_fd_bud_budget extends Root_Controller
         {
             $this->system_save();
         }
+        elseif($action=="forward")
+        {
+            $this->system_forward($id);
+        }
         elseif($action=="details")
         {
             $this->system_details($id);
@@ -219,6 +223,12 @@ class Tm_fd_bud_budget extends Root_Controller
                 System_helper::invalid_try($this->config->item('system_edit_others'),$budget_id);
                 $ajax['status']=false;
                 $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+                $this->jsonReturn($ajax);
+            }
+            if($data['item_info']['status_budget']==$this->config->item('LABEL_FDR_FORWARDED'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Budget Already Forwarded. You Cannot Edit It';
                 $this->jsonReturn($ajax);
             }
             if($data['item_info']['status_requested']==$this->config->item('system_status_po_request_requested'))
@@ -435,6 +445,49 @@ class Tm_fd_bud_budget extends Root_Controller
             return false;
         }
         return true;
+    }
+
+    private function system_forward($id)
+    {
+        if(isset($this->permissions['edit'])&&($this->permissions['edit']==1))
+        {
+            if(($this->input->post('id')))
+            {
+                $id=$this->input->post('id');
+            }
+            else
+            {
+                $id=$id;
+            }
+            $result=Query_helper::get_info($this->config->item('table_tm_fd_bud_budget'),'*',array('id='.$id),0,0);
+            if($result[0]['status_budget']==$this->config->item('LABEL_FDR_FORWARDED'))
+            {
+                $ajax['status']=false;
+                $ajax['system_message']='Budget Already Forwarded';
+                $this->jsonReturn($ajax);
+            }
+            $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_picture'),'*',array('budget_id='.$id,'revision=1'),0,0,array('item_id ASC'));
+            foreach($results as $result)
+            {
+                if(!$result['arm_file_location'] || !$result['competitor_file_location'])
+                {
+                    $ajax['status']=false;
+                    $ajax['system_message']='Please Upload All Images to Forward This Budget';
+                    $this->jsonReturn($ajax);
+                }
+            }
+            $this->db->where('id',$id);
+            $this->db->set('status_budget',$this->config->item('LABEL_FDR_FORWARDED'));
+            $this->db->update($this->config->item('table_tm_fd_bud_budget'));
+            $this->message='Budget Forwarded Successfully';
+            $this->system_list();
+        }
+        else
+        {
+            $ajax['status']=false;
+            $ajax['system_message']=$this->lang->line("YOU_DONT_HAVE_ACCESS");
+            $this->jsonReturn($ajax);
+        }
     }
 
     private function system_save()

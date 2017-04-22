@@ -226,9 +226,12 @@ foreach($info_details as $revision=>$info)
             </div>
         </div>
         <?php
-        foreach($expense_details[$index] as $key=>$details){
+        foreach($expense_details[$index] as $key=>$details)
+        {
             ?>
+
             <div class="row show-grid">
+
                 <div class="col-xs-4">
                     <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                 </div>
@@ -238,8 +241,47 @@ foreach($info_details as $revision=>$info)
                 <div class="col-sm-2 col-xs-4">
                     <label class="control-label"><?php echo number_format($details['amount'],2);?></label>
                 </div>
+                <?php if(isset($expense_files[$index][$key])){ $num=count($expense_files[$index][$key]); ?>
+                    <div class="col-sm-3 col-xs-4">
+
+                        <div class="panel panel-default" id="expense_files_container_<?php echo $key;?>">
+
+                            <div class="panel-heading">
+                                <h4 class="panel-title" style="text-align: center;">
+                                    <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_<?php echo $index;?>_<?php echo $key;?>" href="#">
+                                        <?php echo $expense_items[$key]['text']?> Vouchers
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <div id="collapse_<?php echo $index;?>_<?php echo $key;?>" class="panel-collapse collapse">
+                                <?php
+                                for($i=0;$i<$num;$i++){
+                                    ?>
+                                    <table class="table table-responsive table-bordered" width="100%">
+                                        <tr width="100%">
+                                            <td width="30%"><p style="color: black; font-weight: bold; text-align: right;">File <?php echo $i+1;?> :</p></td>
+                                            <td width="70%">
+                                                <p class="popup_image" id="popup_image_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" data-popup-id="<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" file-link="<?php echo $CI->config->item('system_image_base_url').$expense_files[$index][$key][$i]['file_location'];?>" style="margin-left: 5px; color: forestgreen; font-weight: bold; text-align: left;" width="300" height="200" title="<?php echo $expense_files[$index][$key][$i]['file_name'];?>"><?php echo $expense_files[$index][$key][$i]['file_name'];?></p>
+                                                <div id="myModal_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" class="modal" style="display: none;">
+                                                    <span class="close" data-popup-id="<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>">&times;</span>
+                                                    <img class="modal-content" id="modal-image_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>">
+                                                    <div id="caption_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" class="caption"></div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                    </div>
+                <?php } ?>
+
             </div>
-        <?php } ?>
+        <?php
+        }
+        ?>
 
         <div style="" class="row show-grid">
             <div class="col-xs-4">
@@ -553,9 +595,12 @@ foreach($info_details as $revision=>$info)
                     </div>
                 </div>
                 <?php
-                foreach($expense_details[$index] as $key=>$details){
+                foreach($expense_details[$index] as $key=>$details)
+                {
                     ?>
+
                     <div class="row show-grid">
+
                         <div class="col-xs-4">
                             <label class="control-label pull-right"><?php echo $expense_items[$key]['text']?></label>
                         </div>
@@ -565,8 +610,47 @@ foreach($info_details as $revision=>$info)
                         <div class="col-sm-2 col-xs-4">
                             <label class="control-label"><?php echo number_format($details['amount'],2);?></label>
                         </div>
+                        <?php if(isset($expense_files[$index][$key])){ $num=count($expense_files[$index][$key]); ?>
+                            <div class="col-sm-3 col-xs-4">
+
+                                <div class="panel panel-default" id="expense_files_container_<?php echo $key;?>">
+
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title" style="text-align: center;">
+                                            <a class="accordion-toggle external" data-toggle="collapse"  data-target="#collapse_<?php echo $index;?>_<?php echo $key;?>" href="#">
+                                                <?php echo $expense_items[$key]['text']?> Vouchers
+                                            </a>
+                                        </h4>
+                                    </div>
+
+                                    <div id="collapse_<?php echo $index;?>_<?php echo $key;?>" class="panel-collapse collapse">
+                                        <?php
+                                        for($i=0;$i<$num;$i++){
+                                            ?>
+                                            <table class="table table-responsive table-bordered" width="100%">
+                                                <tr width="100%">
+                                                    <td width="30%"><p style="color: black; font-weight: bold; text-align: right;">File <?php echo $i+1;?> :</p></td>
+                                                    <td width="70%">
+                                                        <p class="popup_image" id="popup_image_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" data-popup-id="<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" file-link="<?php echo $CI->config->item('system_image_base_url').$expense_files[$index][$key][$i]['file_location'];?>" style="margin-left: 5px; color: forestgreen; font-weight: bold; text-align: left;" width="300" height="200" title="<?php echo $expense_files[$index][$key][$i]['file_name'];?>"><?php echo $expense_files[$index][$key][$i]['file_name'];?></p>
+                                                        <div id="myModal_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" class="modal" style="display: none;">
+                                                            <span class="close" data-popup-id="<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>">&times;</span>
+                                                            <img class="modal-content" id="modal-image_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>">
+                                                            <div id="caption_<?php echo $index;?>_<?php echo $key;?>_<?php echo $i+1;?>" class="caption"></div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+
+                            </div>
+                        <?php } ?>
+
                     </div>
-                <?php } ?>
+                <?php
+                }
+                ?>
 
                 <div style="" class="row show-grid">
                     <div class="col-xs-4">
@@ -605,13 +689,19 @@ foreach($info_details as $revision=>$info)
 
 
 <script type="text/javascript">
-    //    jQuery(document).ready(function()
-    //    {
-    //        turn_off_triggers();
-    //        $('[class="Tooltip"]').tooltip({
-    //            animated: 'fade',
-    //            placement: 'bottom',
-    //            html: true
-    //        });
-    //    });
+    jQuery(document).ready(function()
+    {
+        $(document).on('click','.popup_image',function()
+        {
+            var popup_id=$(this).attr('data-popup-id');
+            $('#myModal_'+popup_id).show();
+            $('#modal-image_'+popup_id).attr('src',$('#popup_image_'+popup_id).attr('file-link'));
+            $('#caption_'+popup_id).html($('#popup_image_'+popup_id).attr('title'));
+        });
+        $(document).on('click','.close',function(e)
+        {
+            var popup_id=$(this).attr('data-popup-id');
+            $('#myModal_'+popup_id).hide();
+        });
+    });
 </script>
