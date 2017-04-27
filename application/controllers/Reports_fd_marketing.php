@@ -367,13 +367,15 @@ class Reports_fd_marketing extends Root_Controller
 //        {
 //            $data['new_item']=$res;
 //        }
+        $data['b_fd_file_details']=array();
         $data['picture_categories']=Query_helper::get_info($this->config->item('table_setup_fd_bud_picture_category'),array('id value','name text'),array('status ="'.$this->config->item('system_status_active').'"'),0,0,array('ordering ASC'));
         $results=Query_helper::get_info($this->config->item('table_tm_fd_bud_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1','status ="'.$this->config->item('system_status_active').'"'));
         foreach($results as $result)
         {
             $data['b_fd_file_details'][$result['item_id']]=$result;
         }
-
+        $data['a_fd_file_details']=array();
+        $data['video_file_details']=array();
         $results=Query_helper::get_info($this->config->item('table_tm_fd_rep_details_picture'),'*',array('budget_id ='.$budget_id,'revision=1'));
         foreach($results as $result)
         {

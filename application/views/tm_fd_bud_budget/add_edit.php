@@ -30,7 +30,7 @@ $CI->load->view("action_buttons",$action_data);
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DATE');?><span style="color:#FF0000">*</span></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_BUDGET_PROPOSAL_DATE');?><span style="color:#FF0000">*</span></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <input type="text" name="item[date]" id="date" class="form-control datepicker" value="<?php echo System_helper::display_date($item['date']); ?>"/>

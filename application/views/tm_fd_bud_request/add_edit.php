@@ -23,7 +23,7 @@ $CI->load->view("action_buttons",$action_data);
 
 <div class="row show-grid">
     <div class="col-xs-4">
-        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_DATE');?></label>
+        <label class="control-label pull-right"><?php echo $CI->lang->line('LABEL_BUDGET_PROPOSAL_DATE');?></label>
     </div>
     <div class="col-sm-4 col-xs-8">
         <label class="control-label pull-left"><?php echo System_helper::display_date($item['date']); ?></label>

@@ -72,10 +72,10 @@ class Sys_reset_approved_fdb extends Root_Controller
             }
             else
             {
-                if($fdb_info['status_approved']==$this->config->item('system_status_po_approval_pending') && $fdb_info['status_requested']==$this->config->item('system_status_po_approval_pending'))
+                if($fdb_info['status_approved']==$this->config->item('system_status_po_approval_pending'))
                 {
                     $ajax['status']=false;
-                    $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-success">FDB Did not Approved/Requested yet</div>');
+                    $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-success">FDB Did not Approved yet</div>');
                     $this->jsonReturn($ajax);
                 }
                 else
@@ -83,12 +83,8 @@ class Sys_reset_approved_fdb extends Root_Controller
                     $this->db->trans_start();  //DB Transaction Handle START
                     $data=array();
                     $data['status_approved']=$this->config->item('system_status_po_approval_pending');
-                    $data['status_requested']=$this->config->item('system_status_po_approval_pending');
-                    $data['remarks_requested']=null;
                     $data['remarks_approved']=null;
-                    $data['user_requested']=null;
                     $data['user_approved']=null;
-                    $data['date_requested']=null;
                     $data['date_approved']=null;
                     $data['user_updated'] = $user->user_id;
                     $data['date_updated'] = $time;
@@ -124,5 +120,3 @@ class Sys_reset_approved_fdb extends Root_Controller
 
     }
 }
-
-

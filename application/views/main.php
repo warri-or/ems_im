@@ -31,6 +31,7 @@ foreach($results as $result)
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,6 +50,7 @@ foreach($results as $result)
         <link rel="stylesheet" href="<?php echo base_url(); ?>css/jquery-ui/jquery-ui.theme.css">
 
         <link rel="stylesheet" href="<?php echo base_url(); ?>/css/jqx/jqx.base.css">
+
 
     </head>
     <body>
@@ -94,6 +96,7 @@ foreach($results as $result)
             var display_date_format = "dd-M-yy";
             var SELCET_ONE_ITEM = "<?php echo $CI->lang->line('SELECT_ONE_ITEM'); ?>";
             var DELETE_CONFIRM = "<?php echo $CI->lang->line('DELETE_CONFIRM'); ?>";
+            var resized_image_files=[];
             var system_crops=JSON.parse('<?php echo json_encode($system_crops);?>');
             var system_types=JSON.parse('<?php echo json_encode($system_types);?>');
             var system_divisions=JSON.parse('<?php echo json_encode($system_divisions);?>');

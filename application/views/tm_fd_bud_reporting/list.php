@@ -1,30 +1,61 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 $CI = & get_instance();
-$action_data=array();
+$action_buttons=array();
 
 if((isset($CI->permissions['add'])&&($CI->permissions['add']==1)) || (isset($CI->permissions['edit'])&&($CI->permissions['edit']==1)))
 {
-    $action_data["action_edit"]=base_url($CI->controller_url."/index/edit");
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_EDIT"),
+        'class'=>'button_action_batch',
+        'id'=>'button_action_edit',
+        'data-action-link'=>base_url($CI->controller_url.'/index/edit')
+    );
 }
 if(isset($CI->permissions['view'])&&($CI->permissions['view']==1))
 {
-    $action_data["action_details"]=base_url($CI->controller_url."/index/details");
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_DETAILS"),
+        'class'=>'button_action_batch',
+        'id'=>'button_action_details',
+        'data-action-link'=>base_url($CI->controller_url.'/index/details')
+    );
 }
 if(isset($CI->permissions['edit'])&&($CI->permissions['edit']==1))
 {
-    $action_data["action_forward"]=base_url($CI->controller_url."/index/forward");
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_FORWARD"),
+        'class'=>'btn button_action_batch',
+        'id'=>'button_action_forward',
+        'data-action-link'=>base_url($CI->controller_url."/index/forward"),
+    );
 }
 if(isset($CI->permissions['print'])&&($CI->permissions['print']==1))
 {
-    $action_data["action_print"]='FIELD DAY BUDGET LIST';
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_PRINT"),
+        'id'=>'button_action_print',
+        'data-title'=>'FIELD DAY BUDGET LIST'
+    );
 }
 if(isset($CI->permissions['download'])&&($CI->permissions['download']==1))
 {
-    $action_data["action_csv"]='FIELD DAY BUDGET LIST';
+    $action_buttons[]=array(
+        'type'=>'button',
+        'label'=>$CI->lang->line("ACTION_DOWNLOAD"),
+        'id'=>'button_action_csv',
+        'data-title'=>'FIELD DAY BUDGET LIST'
+    );
 }
 
-$action_data["action_refresh"]=base_url($CI->controller_url."/index/list");
-$CI->load->view("action_buttons",$action_data);
+$action_buttons[]=array(
+    'label'=>$CI->lang->line("ACTION_REFRESH"),
+    'href'=>base_url($CI->controller_url."/index/list")
+);
+$CI->load->view('action_buttons',array('action_buttons'=>$action_buttons));
 ?>
 
 <div class="row widget">
