@@ -104,7 +104,6 @@ class Sys_reset_approved_fdb extends Root_Controller
                         $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'<div class="alert alert-danger">'.$this->lang->line("MSG_SAVED_FAIL").'</div>');
                         $this->jsonReturn($ajax);
                     }
-
                 }
                 $ajax['status']=false;
                 $ajax['system_content'][]=array("id"=>"#fdb_reset_message_container","html"=>'ON Process');

@@ -61,3 +61,8 @@ $config['system_bank_type_expense']='Expense';
 
 //field_day
 $config['LABEL_FDR_FORWARDED'] = 'Forwarded';
+
+//mail recipients setup
+$config['MANAGING_DIRECTOR'] = 'md@malikseeds.com';
+$config['ACCOUNTS_OFFICER'] = 'accounts@malikseeds.com';
+$config['MARKETING_COORDINATOR'] = 'coordinator.marketing@malikseeds.com';

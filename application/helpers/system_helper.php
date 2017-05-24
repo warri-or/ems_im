@@ -80,6 +80,16 @@ class System_helper
     }*/
 
 
+
+    /*
+     * Perform file upload
+     * maximum file size 10MB
+     * default file types gif,jpg,png allowed
+     *
+     * @params string $save_dir[,string $allowed_types]
+     *
+     * return array('key1'=>array('status'=>boolean,'info'=>array or string),...);
+     */
     public static function upload_file($save_dir="images",$allowed_types='gif|jpg|png')
     {
         $CI = & get_instance();
@@ -216,6 +226,90 @@ class System_helper
             $CI->jsonReturn($ajax);
             return null;
         }
+    }
+
+
+    /*
+     * Perform to Send Email
+     *
+     * @param array $mail_data
+     * $mail_data=array('to','message',['from','name','cc'=>mixed,'bcc'=>mixed,'subject','attachments'=>array or string]);
+     *
+     * return an array('status','message')
+     * status=>boolean, message=>string
+     */
+    public static function send_email($mail_data)
+    {
+        $CI =& get_instance();
+        if(isset($mail_data['to']) && isset($mail_data['message']))
+        {
+            $CI->load->library('email');
+            $config['protocol'] = 'mail';
+            $config['smtp_host'] = '216.172.184.107';
+            $config['smtp_user'] = 'program4@malikseeds.com';
+            $config['smtp_pass'] = 'm@l!k_0186';
+            $config['smtp_port'] = '465';
+            $config['charset'] = 'utf-8';
+            $CI->email->initialize($config);
+            if(!isset($mail_data['from']))
+            {
+                $mail_data['from']='info@malikseeds.com';
+            }
+            if(!isset($mail_data['name']))
+            {
+                $mail_data['name']='Unknown';
+            }
+            $CI->email->from($mail_data['from'],$mail_data['name']);
+            $CI->email->to($mail_data['to']); //Comma-delimited string or an array
+            if(isset($mail_data['cc']))
+            {
+                $CI->email->cc($mail_data['cc']); //Comma-delimited string or an array
+            }
+            if(isset($mail_data['bcc']))
+            {
+                $CI->email->bcc($mail_data['bcc']); //Comma-delimited string or an array
+            }
+            if(!isset($mail_data['subject']))
+            {
+                $mail_data['subject']='';
+            }
+            $CI->email->subject($mail_data['subject']);
+            $CI->email->message($mail_data['message']);
+            $CI->email->set_mailtype("html");
+            $CI->email->set_newline("\r\n");
+            $CI->email->set_crlf("\r\n");
+            if(isset($mail_data['attachments']))
+            {
+                if(is_array($mail_data['attachments']))
+                {
+                    foreach($mail_data['attachments'] as $attach)
+                    {
+                        $CI->email->attach($attach);
+                    }
+                }
+                else
+                {
+                    $CI->email->attach($mail_data['attachments']);
+                }
+            }
+            $result=array();
+            if($CI->email->send())
+            {
+                $result['status']=true;
+                $result['message']='Mail Sent Successfully';
+            }
+            else
+            {
+                $result['status']=false;
+                $result['message']='Mail Sending Failed';
+            }
+        }
+        else
+        {
+            $result['status']=false;
+            $result['message']='Receipients Detail or Mail Information Not Found';
+        }
+        return $result;
     }
 
 }

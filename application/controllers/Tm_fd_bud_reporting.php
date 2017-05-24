@@ -199,11 +199,101 @@ class Tm_fd_bud_reporting extends Root_Controller
                 }
                 else
                 {
-                    $this->db->where('id',$id);
-                    $this->db->set('status_reporting',$this->config->item('LABEL_FDR_FORWARDED'));
-                    $this->db->update($this->config->item('table_tm_fd_bud_budget'));
-                    $this->message='Report Forwarded Successfully';
-                    $this->system_list();
+                    $data=array();
+                    $data['status_reporting'] = $this->config->item('LABEL_FDR_FORWARDED');
+                    $this->db->trans_start();  //DB Transaction Handle START
+
+                    Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$data,array("id = ".$id));
+
+                    $this->db->trans_complete();   //DB Transaction Handle END
+                    if($this->db->trans_status() === TRUE)
+                    {
+                        // mailing portion start
+                        $this->db->from($this->config->item('table_tm_fd_bud_info_details').' fdb_details');
+                        $this->db->select('fdb_details.upazilla_id');
+                        $this->db->select('u.district_id');
+                        $this->db->select('d.territory_id');
+                        $this->db->select('t.zone_id zone_id');
+                        $this->db->select('zone.division_id division_id');
+
+                        $this->db->join($this->config->item('table_setup_location_upazillas').' u','u.id = fdb_details.upazilla_id','INNER');
+                        $this->db->join($this->config->item('table_setup_location_districts').' d','d.id = u.district_id','INNER');
+                        $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
+                        $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
+                        $this->db->where('fdb_details.budget_id',$id);
+                        $this->db->where('fdb_details.revision',1);
+                        $data['item_info']=$this->db->get()->row_array();
+
+                        // For DI
+                        $DI=array();
+                        $this->db->from($this->config->item('table_system_assigned_group').' assigned_group');
+                        $this->db->select('assigned_group.user_id');
+                        $this->db->select('user.status');
+                        $this->db->select('user_info.name,user_info.email');
+
+                        $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user').' user','user.id = assigned_group.user_id ','INNER');
+                        $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user_info').' user_info','user_info.user_id = user.id ','INNER');
+                        $this->db->join($this->config->item('table_system_assigned_area').' assigned_area','assigned_area.user_id = user_info.user_id ','INNER');
+                        $this->db->where('assigned_group.user_group',4);
+                        $this->db->where('assigned_group.revision',1);
+                        $this->db->where('user.status',$this->config->item('system_status_active'));
+                        $this->db->where('user_info.revision',1);
+                        $this->db->where('assigned_area.division_id',$data['item_info']['division_id']);
+                        $this->db->where('assigned_area.zone_id',0);
+                        $this->db->where('assigned_area.revision',1);
+                        $DI=$this->db->get()->row_array();
+
+                        //For ZI
+                        $ZI=array();
+                        $this->db->from($this->config->item('table_system_assigned_group').' assigned_group');
+                        $this->db->select('assigned_group.user_id');
+                        $this->db->select('user.status');
+                        $this->db->select('user_info.name,user_info.email');
+
+                        $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user').' user','user.id = assigned_group.user_id ','INNER');
+                        $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user_info').' user_info','user_info.user_id = user.id ','INNER');
+                        $this->db->join($this->config->item('table_system_assigned_area').' assigned_area','assigned_area.user_id = user_info.user_id ','INNER');
+                        $this->db->where('assigned_group.user_group',5);
+                        $this->db->where('assigned_group.revision',1);
+                        $this->db->where('user.status',$this->config->item('system_status_active'));
+                        $this->db->where('user_info.revision',1);
+                        $this->db->where('assigned_area.division_id',$data['item_info']['division_id']);
+                        $this->db->where('assigned_area.zone_id',$data['item_info']['zone_id']);
+                        $this->db->where('assigned_area.territory_id',0);
+                        $this->db->where('assigned_area.revision',1);
+                        $ZI=$this->db->get()->row_array();
+
+                        $logged_in_user=User_helper::get_user();
+                        if(isset($logged_in_user->email))
+                        {
+                            $mail_data['from']=$logged_in_user->email;
+                        }
+                        if(isset($DI['email']))
+                        {
+                            $mail_data['to'][]=$DI['email'];
+                        }
+                        if(isset($ZI['email']))
+                        {
+                            $mail_data['to'][]=$ZI['email'];
+                        }
+
+                        $mail_data['subject']='Field Day Report';
+                        $mail_data['message']='Field Day Report Forwarded';
+                        $mail_data['name']=$logged_in_user->name;
+                        $result=System_helper::send_email($mail_data);
+
+                        if($result['status']==true)
+                        {
+                            $this->message='Report Forwarded and '.$result['message'];
+                            $this->system_list();
+                        }
+                        else
+                        {
+                            $this->message='Report Forwarded but '.$result['message'];
+                            $this->system_list();
+                        }
+                        // mailing portion end
+                    }
                 }
             }
             else

@@ -949,7 +949,6 @@ class Tm_fd_bud_approve extends Root_Controller
             $this->db->join($this->config->item('table_setup_location_territories').' t','t.id = d.territory_id','INNER');
             $this->db->join($this->config->item('table_setup_location_zones').' zone','zone.id = t.zone_id','INNER');
             $this->db->where('fdb_details.budget_id',$id);
-            //$this->db->where('fdb_details.id',$id);
             $this->db->where('fdb_details.revision',1);
             $data['item_info']=$this->db->get()->row_array();
             if(!$this->check_my_editable($data['item_info']))
@@ -987,19 +986,93 @@ class Tm_fd_bud_approve extends Root_Controller
         else
         {
             $time=time();
-
-            $data=$this->input->post('approve');
-            $data['user_approved'] = $user->user_id;
-            $data['date_approved'] = $time;
+            $post_data=array();
+            $post_data=$this->input->post('approve');
+            $post_data['user_approved'] = $user->user_id;
+            $post_data['date_approved'] = $time;
             $this->db->trans_start();  //DB Transaction Handle START
 
-            Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$data,array("id = ".$id));
+            Query_helper::update($this->config->item('table_tm_fd_bud_budget'),$post_data,array("id = ".$id));
 
             $this->db->trans_complete();   //DB Transaction Handle END
             if ($this->db->trans_status() === TRUE)
             {
-                $this->message=$this->lang->line("MSG_SAVED_SUCCESS");
-                $this->system_list();
+//                 mailing portion start
+//                 For ZI
+                $ZI=array();
+                $this->db->from($this->config->item('table_system_assigned_group').' assigned_group');
+                $this->db->select('assigned_group.user_id');
+                $this->db->select('user.status');
+                $this->db->select('user_info.name,user_info.email');
+
+                $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user').' user','user.id = assigned_group.user_id ','INNER');
+                $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user_info').' user_info','user_info.user_id = user.id ','INNER');
+                $this->db->join($this->config->item('table_system_assigned_area').' assigned_area','assigned_area.user_id = user_info.user_id ','INNER');
+                $this->db->where('assigned_group.user_group',5);
+                $this->db->where('assigned_group.revision',1);
+                $this->db->where('user.status',$this->config->item('system_status_active'));
+                $this->db->where('user_info.revision',1);
+                $this->db->where('assigned_area.division_id',$data['item_info']['division_id']);
+                $this->db->where('assigned_area.zone_id',$data['item_info']['zone_id']);
+                $this->db->where('assigned_area.territory_id',0);
+                $this->db->where('assigned_area.revision',1);
+                $ZI=$this->db->get()->row_array();
+
+                //For TI
+                $TI=array();
+                $this->db->from($this->config->item('table_system_assigned_group').' assigned_group');
+                $this->db->select('assigned_group.user_id');
+                $this->db->select('user.status');
+                $this->db->select('user_info.name,user_info.email');
+
+                $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user').' user','user.id = assigned_group.user_id ','INNER');
+                $this->db->join('shaiful_arm_login.'.$this->config->item('table_setup_user_info').' user_info','user_info.user_id = user.id ','INNER');
+                $this->db->join($this->config->item('table_system_assigned_area').' assigned_area','assigned_area.user_id = user_info.user_id ','INNER');
+                $this->db->where('assigned_group.user_group',6);
+                $this->db->where('assigned_group.revision',1);
+                $this->db->where('user.status',$this->config->item('system_status_active'));
+                $this->db->where('user_info.revision',1);
+                $this->db->where('assigned_area.division_id',$data['item_info']['division_id']);
+                $this->db->where('assigned_area.zone_id',$data['item_info']['zone_id']);
+                $this->db->where('assigned_area.territory_id',$data['item_info']['territory_id']);
+                $this->db->where('assigned_area.district_id',0);
+                $this->db->where('assigned_area.revision',1);
+                $TI=$this->db->get()->row_array();
+
+                if(isset($user->email))
+                {
+                    $mail_data['from']=$user->email;
+                }
+                if(isset($ZI['email']))
+                {
+                    $mail_data['to'][]=$ZI['email'];
+                }
+                if(isset($TI['email']))
+                {
+                    $mail_data['to'][]=$TI['email'];
+                }
+                if($post_data['status_approved']==$this->config->item('system_status_approved'))
+                {
+                    $mail_data['cc'][]=$this->config->item('MARKETING_COORDINATOR');
+                    $mail_data['cc'][]=$this->config->item('ACCOUNTS_OFFICER');
+                    $mail_data['cc'][]=$this->config->item('MANAGING_DIRECTOR');
+                }
+
+                $mail_data['subject']='Field Day Budget';
+                $mail_data['message']='Field Day Budget '.$post_data['status_approved'];
+                $mail_data['name']=$user->name;
+                $result=System_helper::send_email($mail_data);
+
+                if($result['status']==true)
+                {
+                    $this->message='Budget '.$post_data['status_approved'].' and '.$result['message'];
+                    $this->system_list();
+                }
+                else
+                {
+                    $this->message='Budget '.$post_data['status_approved'].' but '.$result['message'];
+                    $this->system_list();
+                }
             }
             else
             {
