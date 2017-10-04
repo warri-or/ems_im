@@ -7,6 +7,7 @@ if($item['id']==0){
     $action_data["action_clear"]='#save_form';
 }
 $CI->load->view("action_buttons",$action_data);
+
 ?>
 <style>
     .arm_remarks{
@@ -391,12 +392,12 @@ foreach($expense_budget as $key=>$budget)
             <input type="hidden" class="hidden_file" name="video_file[file_type]" value="<?php echo $video_file_details['file_type'];?>">
             <h4 id="video">
                 <?php
-                if($is_video)
-                {
-                    echo $video_file_details['file_name'];
-                }
-
-                ?></h4>
+                    if($is_video)
+                    {
+                        echo $video_file_details['file_name'];
+                    }
+                ?>
+            </h4>
         </div>
     </div>
 </div>
@@ -502,6 +503,7 @@ foreach($expense_budget as $key=>$budget)
         turn_off_triggers();
         $(document).off("input",".expense_budget");
         $(document).off("input",".participant_budget");
+        $(document).off("click",".system_button_exp_add_more");
 
         $('.expense_file').filestyle({
             input: false,
@@ -516,7 +518,7 @@ foreach($expense_budget as $key=>$budget)
             var current_id=parseInt($(this).attr('data-current-id'));
             var dynamic_id=parseInt($(this).attr('data-dynamic-id'));
             dynamic_id=dynamic_id+1;
-            $(this).attr('data-dynamic-id',dynamic_id)
+            $(this).attr('data-dynamic-id',dynamic_id);
             var content_id='#expense_add_more_file_contents tbody';
             $(content_id+' .input_type_file').attr('name','expense_file_'+current_id+'_'+dynamic_id);
             $(content_id+' .demo').attr('name','demo['+current_id+']['+dynamic_id+']');
